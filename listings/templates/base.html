@@ -46,7 +46,7 @@
             transition: color 0.2s ease;
         }
 
-        /* 🚨 BOOTSTRAP UTILITY FORCE-RESET (FIXES THE INVISIBILITY IN IMAGE_3F2813.PNG) */
+        /* 🚨 BOOTSTRAP UTILITY FORCE-RESET */
         [data-theme="dark"] .text-dark,
         [data-theme="dark"] .text-muted,
         [data-theme="dark"] .text-secondary,
@@ -99,86 +99,90 @@
             }
         }
 
-        /* 🖨️ NEW PRINT ENGINE LAYER: Strips clutter for clean paper trail printouts */
-       /* 🖨️ ADVANCED PRINT ENGINE: Strips clutter while retaining document visibility */
-@media print {
-    /* Hide non-essential layout blocks completely */
-    .navbar, .btn, .alert, .ticker-wrap, #settingsModal, .scrollable-feed-panel, form .btn, .container py-2 > div:first-child {
-        display: none !important;
-    }
-    
-    /* Reset background colors for printer ink preservation */
-    body {
-        background: #ffffff !important;
-        color: #000000 !important;
-    }
+        /* 📱 NATIVE APP VIEWPANEL NAVIGATION BADGE OPTIMIZATIONS */
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 0.95rem !important;
+                letter-spacing: -0.3px;
+            }
+            .mobile-nav-btn-text {
+                display: none !important; /* Conceals extensive text labels inside narrow APK screens */
+            }
+            .mobile-nav-btn-icon {
+                font-size: 0.9rem !important;
+                padding: 4px 8px !important;
+            }
+        }
 
-    /* Force parent containers to stay active but hide their un-targeted siblings */
-    .container, .row, .col-lg-4 {
-        display: block !important;
-        width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    /* Isolate the transaction ledger target card */
-    .card:not(.card-print-target) {
-        display: none !important;
-    }
-
-    .card-print-target {
-        display: block !important;
-        width: 100% !important;
-        border: 1px solid #dee2e6 !important;
-        box-shadow: none !important;
-        background: #ffffff !important;
-    }
-
-    /* Ensure tables stretch cleanly and print black ink text */
-    .table-responsive {
-        overflow: visible !important;
-    }
-    table {
-        width: 100% !important;
-        border-collapse: collapse !important;
-    }
-    th, td {
-        border-bottom: 1px solid #dee2e6 !important;
-        padding: 8px !important;
-        color: #000000 !important;
-    }
-    th {
-        background-color: #f8f9fa !important;
-    }
-}
+        /* 🖨️ ADVANCED PRINT ENGINE: Strips clutter while retaining document visibility */
+        @media print {
+            .navbar, .btn, .alert, .ticker-wrap, #settingsModal, .scrollable-feed-panel, form .btn, .container py-2 > div:first-child {
+                display: none !important;
+            }
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+            .container, .row, .col-lg-4 {
+                display: block !important;
+                width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .card:not(.card-print-target) {
+                display: none !important;
+            }
+            .card-print-target {
+                display: block !important;
+                width: 100% !important;
+                border: 1px solid #dee2e6 !important;
+                box-shadow: none !important;
+                background: #ffffff !important;
+            }
+            .table-responsive {
+                overflow: visible !important;
+            }
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+            }
+            th, td {
+                border-bottom: 1px solid #dee2e6 !important;
+                padding: 8px !important;
+                color: #000000 !important;
+            }
+            th {
+                background-color: #f8f9fa !important;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Dynamic Ticker Engine -->
     <div class="ticker-wrap w-100">
         <div class="ticker-move">
             💥 {{ TEXT.live_feed }} (Mid-Rate 1 USD : {{ ZIG_MID_RATE }} ZiG) ——— {{ DYNAMIC_PRODUCT_MARQUEE }}
         </div>
     </div>
 
-    <!-- Navigation Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-success" href="{% url 'listings:list' %}">🚫 NO MIDDLEMEN</a>
-            <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#settingsModal">⚙️ {{ TEXT.settings }}</button>
-                <a href="{% url 'listings:create' %}" class="btn btn-sm btn-success">+ {{ TEXT.list_asset }}</a>
+    <nav class="navbar navbar-dark bg-dark shadow-sm mb-4 py-2">
+        <div class="container d-flex flex-row justify-content-between align-items-center flex-nowrap">
+            <a class="navbar-brand fw-bold text-success text-nowrap m-0" href="{% url 'listings:list' %}">🚫 NO MIDDLEMEN</a>
+            <div class="d-flex align-items-center gap-1.5 text-nowrap">
+                <button class="btn btn-sm btn-outline-light mobile-nav-btn-icon" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                    ⚙️ <span class="mobile-nav-btn-text">{{ TEXT.settings }}</span>
+                </button>
+                <a href="{% url 'listings:create' %}" class="btn btn-sm btn-success mobile-nav-btn-icon fw-bold">
+                    + <span class="mobile-nav-btn-text">{{ TEXT.list_asset }}</span><span class="d-sm-none">📝</span>
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- Content Workspace Frame -->
     <main class="container">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Core App Preferences and Legal Modal Drawer Layout -->
     <div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
         <div class="modal-content modal-dialog p-3 shadow-lg rounded-4">
             <div class="modal-header border-0 pb-1">
@@ -187,7 +191,6 @@
             </div>
             <div class="modal-body">
                 
-                <!-- Language Selector -->
                 <form action="{% url 'listings:set_language' %}" method="POST" id="langForm" class="mb-3">
                     {% csrf_token %}
                     <label class="small fw-bold mb-1">{{ TEXT.lang_label }}</label>
@@ -199,7 +202,6 @@
                     <button type="submit" class="btn btn-sm btn-success w-100 fw-bold">{{ TEXT.apply_btn }}</button>
                 </form>
 
-                <!-- Brightness Toggles -->
                 <div class="mb-3">
                     <label class="small fw-bold mb-1">{{ TEXT.display_mode }}</label>
                     <div class="d-flex gap-2">
@@ -208,15 +210,13 @@
                     </div>
                 </div>
                 
-                <!-- ⚙️ COMPLIANT DYNAMIC LEGAL COMPONENT -->
                 <div class="mb-3">
                     <label class="small fw-bold mb-1 text-uppercase text-success font-monospace">{{ TEXT.legal_tab }}</label>
                     <div class="accordion" id="modalLegalAccordion">
                         
-                        <!-- Accordion Card Block 1: FAQs -->
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalFaqCollapse">
+                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-collapse="collapse" data-bs-target="#modalFaqCollapse">
                                     ❓ {{ LEGAL.faq_title }}
                                 </button>
                             </h2>
@@ -228,10 +228,9 @@
                             </div>
                         </div>
 
-                        <!-- Accordion Card Block 2: Terms of Service -->
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalTermsCollapse">
+                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-collapse="collapse" data-bs-target="#modalTermsCollapse">
                                     📜 {{ LEGAL.terms_title }}
                                 </button>
                             </h2>
@@ -247,7 +246,6 @@
                     </div>
                 </div>
 
-                <!-- Help Desk Link Grid -->
                 <div class="p-3 rounded mb-3 border border-success" style="background-color: rgba(25, 135, 84, 0.08);">
                     <h6 class="small fw-bold text-success text-uppercase mb-2">🚨 Operational Helpline Desk</h6>
                     <div class="list-group list-group-flush gap-1">
@@ -283,15 +281,15 @@
                 document.getElementById('langSelector').value = match[2];
             }
         });
-        // Automatically initialize and display system toast messages on page compile
-document.addEventListener('DOMContentLoaded', function () {
-    var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-    var toastList = toastElList.map(function (toastEl) {
-        var toast = new bootstrap.Toast(toastEl);
-        toast.show();
-        return toast;
-    });
-});
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+            var toastList = toastElList.map(function (toastEl) {
+                var toast = new bootstrap.Toast(toastEl);
+                toast.show();
+                return toast;
+            });
+        });
     </script>
     <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
     {% if messages %}
