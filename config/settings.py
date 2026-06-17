@@ -165,3 +165,12 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CSRF_TRUSTED_ORIGINS = [
     'https://no-middlemen-market.onrender.com',
 ]
+# 🛡️ CUSTOM AUTHENTICATION BACKENDS
+# Force authentication backends to accept your custom model properties
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+# Tell Django where to send users automatically after a successful login
+LOGIN_REDIRECT_URL = 'listings:list'
+LOGOUT_REDIRECT_URL = 'listings:list'
