@@ -171,3 +171,31 @@ def set_language_view(request):
                 request.session['_language'] = lang_code
                 
     return response
+
+# Fragment for listings/views.py
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .billing import check_posting_limit, get_listing_fee
+
+def create_listing_view(request):
+    if request.method == 'POST':
+        category = request.POST.get('category')
+        
+        # Run our automated limit interceptor check
+        is_allowed, total_posts, max_limit = check_posting_limit(request.user, category)
+        
+        if not is_allowed:
+            # Enforce automatic suspension block rule
+            messages.error(
+                request, 
+                f"🚫 Limit Reached: You have reached your max allocation limit of {max_limit} posts per month "
+                f"for this asset classification type. Posting access will automatically restore as older ads expire."
+            )
+            return redirect('listings:list')
+            
+        # If passed, calculate the upfront fee due
+        fee_info = get_listing_fee(category)
+        fee_due = fee_info['fee_usd']
+        
+        # Proceed with form save tracking...
+        # Then redirect directly onto your incoming payment screen pipeline!
