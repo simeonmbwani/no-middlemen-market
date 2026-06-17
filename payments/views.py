@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 
 from listings.models import Listing
 from .models import Payment, EscrowInvoice
-from .billing import get_listing_fee, check_posting_limit
+from listings.billing import get_listing_fee, check_posting_limit
 
 # Active custom User model namespace
 User = get_user_model()
