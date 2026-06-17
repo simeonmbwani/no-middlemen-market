@@ -10,4 +10,6 @@ urlpatterns = [
     path('release/<int:invoice_id>/', views.release_escrow_view, name='release_escrow'),
     path('invoice/<int:invoice_id>/secure/', views.secure_payment_view, name='secure_payment'),
     path('invoice/<int:invoice_id>/release/', views.release_escrow_view, name='release_escrow'),
+    path('create/', views.create_listing_view, name='create'),
+    path('payment/<int:listing_id>/', views.payment_gate_view, name='payment_gate'),
 ]

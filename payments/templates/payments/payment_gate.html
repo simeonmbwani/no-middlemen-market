@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Upfront Fee Verification - No Middlemen{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-md-6 col-lg-5">
+        
+        <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+            <div class="bg-success text-white p-4 text-center">
+                <div class="display-6 fw-bold">${{ fee_usd|stringformat:".2f" }}</div>
+                <div class="small opacity-75 mt-1">Upfront Service Fee Due</div>
+            </div>
+            
+            <div class="card-body p-4">
+                <h5 class="fw-bold text-center mb-3">Verify Your Asset Listing</h5>
+                <p class="text-muted small text-center mb-4">
+                    To maintain a clean database free of untrusted brokers and middlemen, listings require a small value-based verification fee before going live.
+                </p>
+                
+                <div class="list-group list-group-flush mb-4 rounded-3 border">
+                    <div class="list-group-item d-flex justify-content-between align-items-center bg-transparent py-2.5">
+                        <span class="small text-muted">Asset Title:</span>
+                        <span class="fw-semibold small text-end">{{ listing.title }}</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center bg-transparent py-2.5">
+                        <span class="small text-muted">Classification:</span>
+                        <span class="badge bg-secondary">{{ label }}</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center bg-transparent py-2.5">
+                        <span class="small text-muted">Monthly Allocation Used:</span>
+                        <span class="small fw-bold">{{ current_count }} of {{ max_allowed }} Posts</span>
+                    </div>
+                </div>
+
+                <form action="#" method="POST" id="paymentForm">
+                    {% csrf_token %}
+                    <label class="small fw-bold mb-2 text-uppercase font-monospace text-success">Select Payment Method</label>
+                    
+                    <div class="d-flex flex-column gap-2 mb-4">
+                        <label class="p-3 border rounded-3 d-flex align-items-center justify-content-between style-payment-radio context-clickable" style="cursor: pointer;">
+                            <div class="d-flex align-items-center gap-3">
+                                <input type="radio" name="payment_method" value="ecocash" checked class="form-check-input text-success">
+                                <div>
+                                    <div class="fw-bold small">EcoCash / OneMoney Wallet</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Direct mobile money push prompt</div>
+                                </div>
+                            </div>
+                            <span class="fs-4">📱</span>
+                        </label>
+
+                        <label class="p-3 border rounded-3 d-flex align-items-center justify-content-between style-payment-radio context-clickable" style="cursor: pointer;">
+                            <div class="d-flex align-items-center gap-3">
+                                <input type="radio" name="payment_method" value="innbucks" class="form-check-input text-success">
+                                <div>
+                                    <div class="fw-bold small">InnBucks Voucher</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Pay using your InnBucks app profile</div>
+                                </div>
+                            </div>
+                            <span class="fs-4">💵</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 fw-bold py-2.5 rounded-3 mb-2 shadow-sm">
+                        Proceed to Secure Checkout ($USD)
+                    </button>
+                    <a href="{% url 'listings:list' %}" class="btn btn-sm btn-link text-muted w-100 text-center text-decoration-none small">
+                        Cancel and Discard Post
+                    </a>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
