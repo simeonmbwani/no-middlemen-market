@@ -21,15 +21,22 @@
             <form method="POST">
                 {% csrf_token %}
                 
-                <div class="mb-3">
-                    <label for="gateway" class="fw-bold text-secondary mb-2">Select Your Payment Provider</label>
-                    <select name="gateway" id="gateway" class="form-select border-2 py-2" required>
-                        <option value="" disabled selected>-- Choose Provider --</option>
-                        <option value="ecocash">EcoCash</option>
-                        <option value="onemoney">OneMoney</option>
-                        <option value="innbucks">InnBucks</option>
-                    </select>
-                </div>
+                <div class="d-flex flex-column gap-2 mb-3">
+    <div class="form-check p-3 border rounded bg-light d-flex align-items-center">
+        <input class="form-check-input ms-1 me-3" type="radio" name="gateway" id="gate-ecocash" value="ecocash" checked required>
+        <label class="form-check-label fw-semibold text-dark" for="gate-ecocash">EcoCash Wallet</label>
+    </div>
+    
+    <div class="form-check p-3 border rounded bg-light d-flex align-items-center">
+        <input class="form-check-input ms-1 me-3" type="radio" name="gateway" id="gate-onemoney" value="onemoney" required>
+        <label class="form-check-label fw-semibold text-dark" for="gate-onemoney">OneMoney Wallet</label>
+    </div>
+
+    <div class="form-check p-3 border rounded bg-light d-flex align-items-center">
+        <input class="form-check-input ms-1 me-3" type="radio" name="gateway" id="gate-innbucks" value="innbucks" required>
+        <label class="form-check-label fw-semibold text-dark" for="gate-innbucks">InnBucks Voucher</label>
+    </div>
+</div>
 
                 <div class="mt-3 mb-4">
                     <label class="small fw-bold text-muted mb-1">Mobile Money Phone Number</label>
