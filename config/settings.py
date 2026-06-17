@@ -161,3 +161,7 @@ STATIC_URL = 'static/'
 # 🔧 FIXED: Setting up dedicated local media file asset folders
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+# 🛡️ Trust security parameters originating from your live web server domain
+CSRF_TRUSTED_ORIGINS = [
+    'https://no-middlemen-market.onrender.com',
+]
