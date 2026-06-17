@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+
+{% block title %}Owner Control Panel - No Middlemen{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-0">Management Dashboard</h3>
+            <p class="text-muted small mb-0">Track your directly owned properties, mining gear, and text negotiations.</p>
+        </div>
+        <span class="badge bg-success px-3 py-2 rounded-3 text-uppercase fw-bold">Verified Profile</span>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm p-3 rounded-4 bg-white text-center">
+                <span class="text-uppercase text-muted fw-bold d-block mb-1" style="font-size: 0.7rem;">Total Assets</span>
+                <h2 class="fw-extrabold text-dark mb-0">{{ total_count }}</h2>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm p-3 rounded-4 bg-white text-center border-bottom border-success border-3">
+                <span class="text-uppercase text-success fw-bold d-block mb-1" style="font-size: 0.7rem;">Active Now</span>
+                <h2 class="fw-extrabold text-success mb-0">{{ active_count }}</h2>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm p-3 rounded-4 bg-white text-center border-bottom border-warning border-3">
+                <span class="text-uppercase text-warning fw-bold d-block mb-1" style="font-size: 0.7rem;">Offline / Expired</span>
+                <h2 class="fw-extrabold text-warning mb-0">{{ expired_count }}</h2>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm p-3 rounded-4 bg-white text-center border-bottom border-danger border-3">
+                <span class="text-uppercase text-danger fw-bold d-block mb-1" style="font-size: 0.7rem;">Unpaid Bills</span>
+                <h2 class="fw-extrabold text-danger mb-0">{{ pending_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        
+        <div class="col-lg-8">
+            
+            <div class="card border-0 shadow-sm p-4 rounded-4 bg-white mb-4">
+                <h5 class="fw-bold text-dark mb-3">Your Asset Inventory</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light small text-uppercase">
+                            <tr>
+                                <th>Asset Details</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            {% for listing in listings %}
+                            <tr>
+                                <td>
+                                    <div class="fw-bold text-dark">{{ listing.title }}</div>
+                                    <span class="text-muted text-capitalize" style="font-size: 0.75rem;">📍 {{ listing.district }}</span>
+                                </td>
+                                <td class="text-muted">{{ listing.get_category_display }}</td>
+                                <td class="fw-bold text-success">${{ listing.price }}</td>
+                                <td>
+                                    {% if listing.is_active and listing.is_paid %}
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Live Feed</span>
+                                    {% elif not listing.is_paid %}
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">Awaiting Pay</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1">Suspended</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-1 flex-wrap">
+                                        <a href="{% url 'payments:create_invoice' listing.id %}" class="btn btn-xs btn-success py-1 px-2 fw-semibold" style="font-size: 0.75rem;">Issue Invoice</a>
+                                        <a href="{% url 'listings:detail' listing.id %}" class="btn btn-xs btn-outline-dark py-1 px-2" style="font-size: 0.75rem;">View</a>
+                                        <a href="{% url 'listings:edit_listing' listing.id %}" class="btn btn-xs btn-outline-warning py-1 px-2 fw-semibold" style="font-size: 0.75rem;">Edit</a>
+                                        <a href="{% url 'listings:delete_listing' listing.id %}" class="btn btn-xs btn-outline-danger py-1 px-2 fw-semibold" style="font-size: 0.75rem;">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">You have not registered any equipment or properties yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                
+                <div class="col-12 col-md-6">
+                    <div class="card border-0 shadow-sm p-4 rounded-4 bg-white h-100">
+                        <div class="d-flex align-items-center gap-2 mb-3 border-bottom pb-2">
+                            <span>📤</span>
+                            <h6 class="fw-bold text-dark mb-0">Sales & Outbound Invoices</h6>
+                        </div>
+                        <div class="list-group list-group-flush gap-2">
+                            {% for invoice in my_sales %}
+                                <div class="p-3 rounded-3 border bg-light small">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <strong class="text-dark text-truncate d-block" style="max-width: 70%;">{{ invoice.listing.title }}</strong>
+                                        <span class="badge {% if invoice.status == 'released' %}bg-success{% elif invoice.status == 'secured' %}bg-primary{% else %}bg-secondary{% endif %}" style="font-size: 0.65rem;">
+                                            {{ invoice.get_status_display }}
+                                        </span>
+                                    </div>
+                                    <div class="text-muted mb-1" style="font-size: 0.75rem;">
+                                        Buyer: @{{ invoice.buyer.username }} | <strong>${{ invoice.amount_usd }} USD</strong>
+                                    </div>
+                                    <span class="text-muted d-block xsmall" style="font-size: 0.65rem;">Issued: {{ invoice.created_at|date:"d M, H:i" }}</span>
+                                </div>
+                            {% empty %}
+                                <div class="text-center py-3 text-muted small">No outbound escrow bills created yet.</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="card border-0 shadow-sm p-4 rounded-4 bg-white h-100">
+                        <div class="d-flex align-items-center gap-2 mb-3 border-bottom pb-2">
+                            <span>📥</span>
+                            <h6 class="fw-bold text-dark mb-0">Purchases & Inbound Invoices</h6>
+                        </div>
+                        <div class="list-group list-group-flush gap-2">
+                            {% for invoice in my_purchases %}
+                                <div class="p-3 rounded-3 border bg-light small">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <strong class="text-dark text-truncate d-block" style="max-width: 70%;">{{ invoice.listing.title }}</strong>
+                                        <span class="badge {% if invoice.status == 'released' %}bg-success{% elif invoice.status == 'secured' %}bg-primary{% else %}bg-secondary{% endif %}" style="font-size: 0.65rem;">
+                                            {{ invoice.get_status_display }}
+                                        </span>
+                                    </div>
+                                    <div class="text-muted mb-2" style="font-size: 0.75rem;">
+                                        Owner: @{{ invoice.seller.username }} | <strong>${{ invoice.amount_usd }} USD</strong>
+                                    </div>
+                                    
+                                    <div class="d-grid mt-2">
+                                        {% if invoice.status == 'pending' %}
+                                            <a href="{% url 'payments:secure_payment' invoice.id %}" class="btn btn-sm btn-primary fw-bold py-1 rounded-2">
+                                                🔒 Secure Funds in Escrow
+                                            </a>
+                                        {% elif invoice.status == 'secured' %}
+                                            <a href="{% url 'payments:release_escrow' invoice.id %}" class="btn btn-sm btn-success fw-bold py-1 rounded-2">
+                                                ✅ Inspect & Release Funds
+                                            </a>
+                                        {% else %}
+                                            <button class="btn btn-sm btn-light border py-1 rounded-2 text-muted small" disabled>Transaction Finalized</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <div class="text-center py-3 text-muted small">No incoming purchase billing received yet.</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            
+            <div class="card border-0 shadow-sm p-3 rounded-4 bg-white mb-3">
+                <h6 class="fw-bold text-dark border-bottom pb-2 mb-2">📩 Recent Direct Inquiries</h6>
+                
+                <div class="scrollable-feed-panel" style="max-height: 380px; overflow-y: auto;">
+                    {% for message in inquiries %}
+                        <div class="p-3 mb-2 rounded-3 border bg-light position-relative">
+                            <div class="d-flex justify-content-between text-muted align-items-center" style="font-size: 0.7rem;">
+                                <strong>From: @{{ message.sender.username }}</strong>
+                                
+                                <div class="d-flex align-items-center gap-1">
+                                    <span>{{ message.created_at|date:"d M H:i" }}</span>
+                                    
+                                    {% if message.is_read %}
+                                        <span class="text-primary fw-bold" title="Read" style="font-size: 0.85rem; letter-spacing: -2px;">✓✓</span>
+                                    {% elif message.is_delivered %}
+                                        <span class="text-danger fw-bold" title="Delivered" style="font-size: 0.85rem;">✓</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <span class="badge bg-secondary-subtle text-secondary font-monospace my-1" style="font-size: 0.6rem;">
+                                Asset: {{ message.listing.title|truncatechars:20 }}
+                            </span>
+                            
+                            <p class="text-dark small mb-2 mt-1">"{{ message.message_text }}"</p>
+                            
+                            <div class="mt-2">
+                                <button class="btn btn-xs btn-outline-success border py-0 px-2 rounded-2" type="button" data-bs-toggle="collapse" data-bs-target="#replyForm{{ message.id }}" style="font-size: 0.7rem;">
+                                    ↩ Reply
+                                </button>
+                                
+                                <div class="collapse mt-2" id="replyForm{{ message.id }}">
+                                    <form method="POST" action="{% url 'messaging:reply' message.id %}">
+                                        {% csrf_token %}
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" name="reply_text" class="form-control border-2 form-control-sm text-xs" placeholder="Type response here..." required>
+                                            <button type="submit" class="btn btn-success btn-sm px-2">Send</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted text-center py-3 small mb-0">No incoming client texts yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm p-3 rounded-4 bg-white card-print-target">
+                <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                    <h6 class="fw-bold text-dark mb-0">💵 Recent Transactions Ledger</h6>
+                    <button onclick="window.print()" class="btn btn-xs btn-outline-success fw-bold py-1 px-2 d-flex align-items-center gap-1 shadow-sm" style="font-size: 0.7rem;">
+                        🖨️ Print Sheet
+                    </button>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover align-middle mb-0" style="font-size: 0.8rem;">
+                        <thead class="table-light text-uppercase small" style="font-size: 0.65rem;">
+                            <tr>
+                                <th>Reference</th>
+                                <th>Date/Time (CAT)</th>
+                                <th>Amt</th>
+                                <th class="text-end">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in payments %}
+                                <tr class="border-bottom">
+                                    <td class="align-middle">
+                                        <div class="fw-bold text-dark font-monospace" style="font-size: 0.7rem;">{{ payment.reference }}</div>
+                                        <span class="text-muted xsmall" style="font-size: 0.65rem;">{{ payment.get_gateway_display|upper }}</span>
+                                    </td>
+                                    <td class="text-muted align-middle" style="font-size: 0.7rem;">{{ payment.created_at|date:"d M H:i" }}</td>
+                                    <td class="fw-bold text-dark align-middle">${{ payment.amount }}</td>
+                                    <td class="text-end align-middle">
+                                        <span class="fw-bold {% if payment.status == 'success' %}text-success{% elif payment.status == 'pending' %}text-warning{% else %}text-danger{% endif %}" style="font-size: 0.7rem;">
+                                            {% if payment.status == 'success' %}✓ Live{% elif payment.status == 'pending' %}⏳ Hold{% else %}✕ Fail{% endif %}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-3 text-muted small">No transaction logs available.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

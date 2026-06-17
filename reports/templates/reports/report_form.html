@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Flag Listing Violation - No Middlemen{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-12 col-md-6">
+        <div class="card shadow-sm border-0 p-4 rounded-4 bg-white">
+            
+            <div class="d-flex align-items-center gap-2 mb-3 border-bottom pb-3">
+                <span class="fs-4">🚨</span>
+                <div>
+                    <h5 class="fw-bold mb-0 text-danger">Report Marketplace Violation</h5>
+                    <p class="text-muted small mb-0">Help keep this platform peer-to-peer and completely direct.</p>
+                </div>
+            </div>
+
+            <div class="alert alert-warning border-0 small py-2 px-3 rounded-3 mb-4" style="background-color: rgba(255, 193, 7, 0.15);">
+                <strong>Community Guidelines:</strong> False reporting or intentionally flagging legitimate direct owners out of malice or competitive spite can result in account suspension and strike accrual.
+            </div>
+
+            <form method="POST" class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="small fw-bold text-secondary mb-1" for="{{ form.reason.id_for_label }}">
+                        {{ form.reason.label }}
+                    </label>
+                    {{ form.reason }}
+                    {% if form.reason.errors %}
+                        <div class="text-danger small mt-1">{{ form.reason.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label class="small fw-bold text-secondary mb-1" for="{{ form.details.id_for_label }}">
+                        {{ form.details.label }}
+                    </label>
+                    {{ form.details }}
+                    {% if form.details.errors %}
+                        <div class="text-danger small mt-1">{{ form.details.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a href="{% url 'listings:list' %}" class="btn btn-light border w-50 fw-bold py-2 rounded-3 text-decoration-none text-center">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger w-50 fw-bold py-2 rounded-3 shadow-sm">
+                        Submit Violation Flag
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

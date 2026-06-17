@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Issue Secure Escrow Invoice - No Middlemen{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-12 col-md-6">
+        <div class="card shadow-sm border-0 p-4 rounded-4 bg-white">
+            
+            <!-- Context Header Block -->
+            <div class="d-flex align-items-center gap-2 mb-3 border-bottom pb-3">
+                <span class="fs-4">📄</span>
+                <div>
+                    <h5 class="fw-bold mb-0">Generate Escrow Verification Invoice</h5>
+                    <p class="text-muted small mb-0">Linked Asset: <strong>{{ listing.title }}</strong></p>
+                </div>
+            </div>
+
+            <!-- Escrow Safety Alert Box -->
+            <div class="alert alert-info border-0 small py-2 px-3 rounded-3 mb-4" style="background-color: rgba(25, 135, 84, 0.08);">
+                🛡️ Funds will remain protected within the system pool layout until the target buyer physically certifies equipment delivery on-site.
+            </div>
+
+            <!-- Form Wrapper Layout Interface Container -->
+            <form method="POST" action="{% url 'payments:create_invoice' listing.id %}">
+                {% csrf_token %}
+                
+                <!-- Target Buyer Field Layout Block -->
+                <div class="mb-3">
+                    <label class="small fw-bold text-secondary mb-1">Target Buyer Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-2">@</span>
+                        <input type="text" name="buyer_username" class="form-control border-2" placeholder="e.g. simeonmbwani" required>
+                    </div>
+                </div>
+
+                <!-- Price Field Layout Block (🔧 FIXED: Restructured inside form wrappers cleanly) -->
+                <div class="mb-4">
+                    <label class="small fw-bold text-secondary mb-1">Agreed Transaction Price (USD)</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-2">$</span>
+                        <input type="number" name="amount_usd" step="0.01" class="form-control border-2" placeholder="0.00" value="{{ listing.price }}" required>
+                    </div>
+                    <div class="form-text text-muted small mt-1">
+                        A standard platform execution fee of 1.5% will be applied to this transaction dynamically.
+                    </div>
+                </div>
+
+                <!-- Submission Control Button Row Matrix -->
+                <div class="d-flex gap-2">
+                    <a href="{% url 'listings:detail' listing.id %}" class="btn btn-light border w-50 fw-bold py-2 rounded-3 text-decoration-none text-center">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-success w-50 fw-bold py-2 rounded-3 shadow-sm">
+                        Issue Invoice
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

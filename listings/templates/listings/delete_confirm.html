@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Remove Asset - No Middlemen{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4 pt-2">
+    <div class="col-12 col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0 p-4 rounded-4 bg-white border-top border-danger border-4">
+            
+            <div class="text-center py-2">
+                <span class="fs-1 mb-2 d-block">🗑️</span>
+                <h5 class="fw-bold text-danger mb-1">Permanent Asset Removal Request</h5>
+                <p class="text-muted small px-3">Are you absolutely certain you want to remove this property entry log from the live marketplace data feed loop across Zimbabwe?</p>
+            </div>
+
+            <div class="bg-light p-3 rounded-3 my-3 text-center border">
+                <span class="text-uppercase text-secondary fw-bold font-monospace d-block mb-1" style="font-size: 0.65rem;">Selected Database Target</span>
+                <h6 class="fw-bold text-dark mb-1">{{ listing.title }}</h6>
+                <span class="badge bg-success-subtle text-success border border-success-subtle mb-0 font-monospace">${{ listing.price }} USD</span>
+            </div>
+
+            <div class="alert alert-warning border-0 small py-2 px-3 rounded-3 mb-4 d-flex align-items-center gap-2">
+                ⚠️ <strong>Warning:</strong> This lifecycle elimination action cannot be reversed. Active negotiation logs and text threads linked here will detach immediately.
+            </div>
+
+            <form method="POST" action="{% url 'listings:delete_listing' listing.id %}">
+                {% csrf_token %}
+                <div class="d-flex gap-2">
+                    <a href="{% url 'dashboard:index' %}" class="btn btn-light border w-50 fw-bold py-2 rounded-3 text-decoration-none text-center">
+                        Abort and Leave Live
+                    </a>
+                    <button type="submit" class="btn btn-danger w-50 fw-bold py-2 rounded-3 shadow-sm">
+                        Confirm Destruction
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

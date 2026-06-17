@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify My Identity - No Middlemen{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-12 col-md-6">
+        <div class="card shadow-sm border-0 p-4 rounded-4 bg-white">
+            
+            <!-- Context Header Row -->
+            <div class="d-flex align-items-center gap-2 mb-3 border-bottom pb-3">
+                <span class="fs-4">🪪</span>
+                <div>
+                    <h5 class="fw-bold mb-0">National ID Profile Verification</h5>
+                    <p class="text-muted small mb-0">Account: <strong>@{{ user.username }}</strong></p>
+                </div>
+            </div>
+
+            <!-- Conditional Status Notice Blocks Layout Engine -->
+            {% if existing_verification %}
+                {% if existing_verification.status == 'pending' %}
+                    <div class="alert alert-warning border-0 small py-2 px-3 rounded-3 mb-4">
+                        ⏳ <strong>Under Review:</strong> Your uploaded documents are currently in the queue awaiting administrative checklist sign-off.
+                    </div>
+                {% elif existing_verification.status == 'rejected' %}
+                    <div class="alert alert-danger border-0 small py-2 px-3 rounded-3 mb-4">
+                        ❌ <strong>Submission Rejected:</strong> Your identification was not approved. <br>
+                        <strong>Notes:</strong> {{ existing_verification.admin_notes }}
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-info border-0 small py-2 px-3 rounded-3 mb-4" style="background-color: rgba(13, 110, 253, 0.08);">
+                    💡 Verification prevents middleman fraud by matching your profile with your official national registration cards.
+                </div>
+            {% endif %}
+
+            <!-- Multi-part Data Upload Form Handling Logic -->
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="small fw-bold text-secondary mb-1" for="{{ form.id_document_front.id_for_label }}">
+                        {{ form.id_document_front.label }}
+                    </label>
+                    {{ form.id_document_front }}
+                    {% if form.id_document_front.errors %}
+                        <div class="text-danger small mt-1">{{ form.id_document_front.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label class="small fw-bold text-secondary mb-1" for="{{ form.id_document_back.id_for_label }}">
+                        {{ form.id_document_back.label }}
+                    </label>
+                    {{ form.id_document_back }}
+                    {% if form.id_document_back.errors %}
+                        <div class="text-danger small mt-1">{{ form.id_document_back.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex gap-2">
+                   <!-- 🔧 FIXED: Pointed url shortcut path away from 'my-control-panel' to clear template rendering crash -->
+<a href="{% url 'dashboard:index' %}" class="btn btn-light border w-50 fw-bold py-2 rounded-3 text-decoration-none text-center">
+    Back to Panel
+</a>
+                        Back to Panel
+                    </a>
+                    <button type="submit" class="btn btn-primary w-50 fw-bold py-2 rounded-3 shadow-sm" {% if existing_verification.status == 'pending' %}disabled{% endif %}>
+                        Upload Document
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

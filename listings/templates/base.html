@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" id="theme-root" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}No Middlemen Marketplace{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* 🌗 PRECISE COMMERCIAL PREFERENCES THEME SYSTEM */
+        [data-theme="light"] { 
+            --bg-main: #f8f9fa; 
+            --text-main: #212529; 
+            --card-bg: #ffffff;
+            --border-line: #dee2e6;
+            --input-bg: #ffffff;
+            --input-text: #212529;
+            --accordion-btn-bg: #ffffff;
+        }
+        [data-theme="dark"] { 
+            --bg-main: #14161f;            /* Rich dark premium charcoal-navy */
+            --text-main: #ffffff;          /* Radiant white text for crisp readability */
+            --card-bg: #222533;            /* Clear, lighter slate contrast surface area for cards */
+            --border-line: #34394f;         /* Distinct theme structural boundaries */
+            --input-bg: #1a1c26;
+            --input-text: #ffffff;
+            --accordion-btn-bg: #222533;
+        }
+        
+        body { 
+            background-color: var(--bg-main) !important; 
+            color: var(--text-main) !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        
+        /* 🔥 THEME STABILITY INTERCEPTORS: Ensures content blocks respect active theme colors */
+        .card, .modal-content, .accordion-item, .list-group-item { 
+            background-color: var(--card-bg) !important; 
+            color: var(--text-main) !important;
+            border-color: var(--border-line) !important;
+        }
+
+        /* 💡 Dynamic Header & Text Readability Layer Override */
+        p, span, label, h1, h2, h3, h4, h5, h6, td, th {
+            color: var(--text-main) !important;
+            transition: color 0.2s ease;
+        }
+
+        /* 🚨 BOOTSTRAP UTILITY FORCE-RESET (FIXES THE INVISIBILITY IN IMAGE_3F2813.PNG) */
+        [data-theme="dark"] .text-dark,
+        [data-theme="dark"] .text-muted,
+        [data-theme="dark"] .text-secondary,
+        [data-theme="dark"] .card-body p,
+        [data-theme="dark"] .card-body h5,
+        [data-theme="dark"] h5.text-dark,
+        [data-theme="dark"] div.text-muted {
+            color: #ffffff !important;
+        }
+        
+        /* Give secondary/muted elements a slightly softer white color in dark mode so hierarchy remains nice */
+        [data-theme="dark"] .text-muted,
+        [data-theme="dark"] .text-secondary {
+            color: #cbd5e1 !important;
+        }
+
+        /* 📝 Text Inputs & Dropdown Select Option Overrides (Light & Dark) */
+        .form-control, .form-select, .form-select option {
+            background-color: var(--input-bg) !important;
+            color: var(--input-text) !important;
+            border-color: var(--border-line) !important;
+        }
+
+        /* Resolves text visibility while user is typing inside text fields */
+        .form-control:focus, .form-select:focus {
+            background-color: var(--input-bg) !important;
+            color: var(--input-text) !important;
+            box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+        }
+
+        /* 📜 Bootstrap Accordion Dynamic Header Fixes */
+        .accordion-button {
+            background-color: var(--accordion-btn-bg) !important;
+            color: var(--text-main) !important;
+        }
+        .accordion-button:not(.collapsed) {
+            background-color: rgba(25, 135, 84, 0.15) !important;
+            color: #198754 !important;
+        }
+        
+        /* 📈 Rate Ticker Styling */
+        .ticker-wrap { background: #198754; color: #ffffff; overflow: hidden; padding: 6px 0; font-size: 0.85rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: marquee 45s linear infinite; }
+        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+        
+        /* 📐 Responsive Vertical Border Divider Rule */
+        @media (min-width: 768px) {
+            .border-start-desktop {
+                border-left: 2px solid var(--border-line) !important;
+            }
+        }
+
+        /* 🖨️ NEW PRINT ENGINE LAYER: Strips clutter for clean paper trail printouts */
+       /* 🖨️ ADVANCED PRINT ENGINE: Strips clutter while retaining document visibility */
+@media print {
+    /* Hide non-essential layout blocks completely */
+    .navbar, .btn, .alert, .ticker-wrap, #settingsModal, .scrollable-feed-panel, form .btn, .container py-2 > div:first-child {
+        display: none !important;
+    }
+    
+    /* Reset background colors for printer ink preservation */
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+
+    /* Force parent containers to stay active but hide their un-targeted siblings */
+    .container, .row, .col-lg-4 {
+        display: block !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Isolate the transaction ledger target card */
+    .card:not(.card-print-target) {
+        display: none !important;
+    }
+
+    .card-print-target {
+        display: block !important;
+        width: 100% !important;
+        border: 1px solid #dee2e6 !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+    }
+
+    /* Ensure tables stretch cleanly and print black ink text */
+    .table-responsive {
+        overflow: visible !important;
+    }
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+    th, td {
+        border-bottom: 1px solid #dee2e6 !important;
+        padding: 8px !important;
+        color: #000000 !important;
+    }
+    th {
+        background-color: #f8f9fa !important;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Ticker Engine -->
+    <div class="ticker-wrap w-100">
+        <div class="ticker-move">
+            💥 {{ TEXT.live_feed }} (Mid-Rate 1 USD : {{ ZIG_MID_RATE }} ZiG) ——— {{ DYNAMIC_PRODUCT_MARQUEE }}
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-success" href="{% url 'listings:list' %}">🚫 NO MIDDLEMEN</a>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#settingsModal">⚙️ {{ TEXT.settings }}</button>
+                <a href="{% url 'listings:create' %}" class="btn btn-sm btn-success">+ {{ TEXT.list_asset }}</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Workspace Frame -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Core App Preferences and Legal Modal Drawer Layout -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-content modal-dialog p-3 shadow-lg rounded-4">
+            <div class="modal-header border-0 pb-1">
+                <h5 class="modal-title fw-bold">{{ TEXT.sys_pref }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                
+                <!-- Language Selector -->
+                <form action="{% url 'listings:set_language' %}" method="POST" id="langForm" class="mb-3">
+                    {% csrf_token %}
+                    <label class="small fw-bold mb-1">{{ TEXT.lang_label }}</label>
+                    <select class="form-select form-select-sm mb-2" id="langSelector" name="language">
+                        <option value="en">English</option>
+                        <option value="sn">ChiShona</option>
+                        <option value="nd">isiNdebele</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success w-100 fw-bold">{{ TEXT.apply_btn }}</button>
+                </form>
+
+                <!-- Brightness Toggles -->
+                <div class="mb-3">
+                    <label class="small fw-bold mb-1">{{ TEXT.display_mode }}</label>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-secondary w-50" onclick="setBrightness('light')">☀️ Light</button>
+                        <button class="btn btn-sm btn-dark border w-50" onclick="setBrightness('dark')">🌙 Dark Mode</button>
+                    </div>
+                </div>
+                
+                <!-- ⚙️ COMPLIANT DYNAMIC LEGAL COMPONENT -->
+                <div class="mb-3">
+                    <label class="small fw-bold mb-1 text-uppercase text-success font-monospace">{{ TEXT.legal_tab }}</label>
+                    <div class="accordion" id="modalLegalAccordion">
+                        
+                        <!-- Accordion Card Block 1: FAQs -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalFaqCollapse">
+                                    ❓ {{ LEGAL.faq_title }}
+                                </button>
+                            </h2>
+                            <div id="modalFaqCollapse" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
+                                <div class="accordion-body small" style="max-height: 150px; overflow-y: auto; font-size: 0.8rem;">
+                                    <p class="mb-2"><strong>{{ LEGAL.faq_q1 }}</strong><br>{{ LEGAL.faq_a1 }}</p>
+                                    <p class="mb-0"><strong>{{ LEGAL.faq_q2 }}</strong><br>{{ LEGAL.faq_a2 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Accordion Card Block 2: Terms of Service -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalTermsCollapse">
+                                    📜 {{ LEGAL.terms_title }}
+                                </button>
+                            </h2>
+                            <div id="modalTermsCollapse" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
+                                <div class="accordion-body small" style="max-height: 150px; overflow-y: auto; font-size: 0.75rem; line-height: 1.4;">
+                                    <p class="mb-2">{{ LEGAL.terms_p1 }}</p>
+                                    <p class="mb-2">{{ LEGAL.terms_p2 }}</p>
+                                    <p class="mb-0">{{ LEGAL.terms_p3 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Help Desk Link Grid -->
+                <div class="p-3 rounded mb-3 border border-success" style="background-color: rgba(25, 135, 84, 0.08);">
+                    <h6 class="small fw-bold text-success text-uppercase mb-2">🚨 Operational Helpline Desk</h6>
+                    <div class="list-group list-group-flush gap-1">
+                        <a href="https://simeonmbwani.co.zw" class="list-group-item list-group-item-action border-0 p-1 rounded bg-transparent text-primary fw-bold small">👤 Administrator: Simeon Mbwani</a>
+                        <a href="tel:+263775493710" class="list-group-item list-group-item-action border-0 p-1 rounded bg-transparent text-primary small">📞 Phone Line 1: +263 775 493 710</a>
+                        <a href="tel:+263786120826" class="list-group-item list-group-item-action border-0 p-1 rounded bg-transparent text-primary small">📞 Phone Line 2: +263 786 120 826</a>
+                        <a href="mailto:simeonmbwani@gmail.com" class="list-group-item list-group-item-action border-0 p-1 rounded bg-transparent text-primary small">📧 Email Desk: simeonmbwani@gmail.com</a>
+                        <a href="https://wa.me/263775493710?text=Hello%20Simeon" target="_blank" class="list-group-item list-group-item-action border-0 p-1 rounded bg-success text-white small px-2 text-center mt-1">💬 Message Directly on WhatsApp</a>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center text-muted pt-2 border-top" style="font-size: 0.75rem;">
+                    <span>Version: <strong>{{ PLATFORM_VERSION }}</strong></span>
+                    <span class="badge bg-secondary">🔓 Open Source Project</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function setBrightness(theme) {
+            document.getElementById('theme-root').setAttribute('data-theme', theme);
+            localStorage.setItem('user-theme', theme);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const cachedTheme = localStorage.getItem('user-theme') || 'light';
+            document.getElementById('theme-root').setAttribute('data-theme', cachedTheme);
+            
+            const match = document.cookie.match(new RegExp('(^| )django_language=([^;]+)'));
+            if (match) {
+                document.getElementById('langSelector').value = match[2];
+            }
+        });
+        // Automatically initialize and display system toast messages on page compile
+document.addEventListener('DOMContentLoaded', function () {
+    var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+    var toastList = toastElList.map(function (toastEl) {
+        var toast = new bootstrap.Toast(toastEl);
+        toast.show();
+        return toast;
+    });
+});
+    </script>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="toast align-items-center text-white {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-danger{% else %}bg-dark{% endif %} border-0 shadow rounded-3 mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+                <div class="d-flex">
+                    <div class="toast-body small fw-semibold">
+                        {% if message.tags == 'success' %}✓{% else %}⚠️{% endif %} {{ message }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white m-auto me-2" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+</body>
+</html>

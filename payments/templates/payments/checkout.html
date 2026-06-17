@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Complete Listing Fee - No Middlemen{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 p-4 bg-white rounded">
+            <h4 class="fw-bold text-dark mb-1">Secure Publication Invoice</h4>
+            <p class="text-muted small">Your listing will be activated once payment is confirmed.</p>
+            
+            <div class="bg-light p-3 rounded mb-4 border-start border-success border-3">
+                <h6 class="fw-bold mb-1">{{ listing.title }}</h6>
+                <p class="small text-muted mb-2">Category: {{ listing.get_category_display }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold text-secondary">One-time Listing Cost:</span>
+                    <span class="fs-5 fw-bold text-success">${{ fee }} USD</span>
+                </div>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <h6 class="fw-bold text-secondary mb-2">Select Your Payment Provider</h6>
+                
+                {% for code, name in gateway_choices %}
+                <div class="form-check p-3 border rounded mb-2 bg-white shadow-xs d-flex align-items-center justify-content-between">
+                    <div>
+                        <input class="form-check-input ms-0 me-2" type="radio" name="gateway" id="gate-{{ code }}" value="{{ code }}" required>
+                        <label class="form-check-label fw-semibold text-dark" for="gate-{{ code }}">{{ name }}</label>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="mt-3 mb-4">
+                    <label class="small fw-bold text-muted mb-1">Mobile Money Phone Number</label>
+                    <input type="text" name="phone_number" class="form-control" placeholder="e.g. 0771234567" required>
+                    <small class="text-muted d-block mt-1" style="font-size: 0.7rem;">For EcoCash / OneMoney push notifications.</small>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100 fw-bold py-2">Initiate Secure Payment</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

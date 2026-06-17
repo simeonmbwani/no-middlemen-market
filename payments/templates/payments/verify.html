@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Verifying Transaction...{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-md-5 text-center">
+        <div class="card shadow-sm border-0 p-4 bg-white rounded">
+            <div class="spinner-border text-success my-3" role="status" style="width: 3rem; height: 3rem;"></div>
+            
+            <h4 class="fw-bold text-dark mt-2">Processing Transaction...</h4>
+            <p class="text-secondary small mb-3">Please check your phone for the pin prompt if you selected Mobile Money.</p>
+            
+            <div class="bg-light p-2 rounded small text-start border mb-4">
+                <strong>Reference:</strong> {{ payment.reference }}<br>
+                <strong>Provider:</strong> {{ payment.get_gateway_display }}<br>
+                <strong>Total Billing:</strong> ${{ payment.amount }} USD
+            </div>
+
+            <!-- Testing Control Sandbox -->
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="action" value="confirm_simulation" class="btn btn-sm btn-success w-100 fw-bold mb-2">
+                    ✅ Simulate Payment Success Confirm
+                </button>
+                <button type="submit" name="action" value="fail_simulation" class="btn btn-sm btn-outline-danger w-100 text-decoration-none small">
+                    ❌ Simulate Payment Failure/Cancel
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

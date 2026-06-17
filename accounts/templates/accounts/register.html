@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Owner Account Registration - No Middlemen{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center my-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 p-4 bg-white rounded">
+            <h4 class="fw-bold text-dark mb-1">Create Owner Profile</h4>
+            <p class="text-muted small">Register once to directly manage your properties and machinery assets.</p>
+            
+            <form method="POST">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary mb-1">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="text-muted d-block mt-1" style="font-size: 0.7rem;">{{ field.help_text }}</small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="accordion my-3" id="legalAccordion">
+                    <div class="accordion-item border rounded">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed py-2 small fw-bold text-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTerms">
+                                📜 Read Platform Terms, Conditions & FAQs
+                            </button>
+                        </h2>
+                        <div id="collapseTerms" class="accordion-collapse collapse" data-bs-parent="#legalAccordion">
+                            <div class="accordion-body small text-muted bg-light" style="max-height: 180px; overflow-y: scroll; font-size: 0.75rem;">
+                                <h6>❓ FAQ Overview</h6>
+                                <strong>Q: Who is allowed to publish assets here?</strong><br>
+                                A: Only the verified legal title owners or authorized representatives. Middlemen and brokers are strictly forbidden.<br><br>
+                                
+                                <h6>⚖️ Legally Articulated Terms of Service</h6>
+                                1. **Anti-Broker Mandate:** By checking the validation box below, you swear under penalty of immediate platform banning that you are the primary legal owner of the item or estate being listed.<br><br>
+                                2. **Verification Requirements:** Every listing requires a flat, up-front listing maintenance fee. No commission fees or backend transaction pricing percentages will ever be demanded by the network.<br><br>
+                                3. **Three-Strike Policy Enforcements:** If multiple public tenants or buyers flag your profile for acting as an unverified broker or middleman, your profile will receive strikes, culminating in a permanent ban and national ID blacklist.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="legalCheck" required>
+                    <label class="form-check-label text-secondary" for="legalCheck" style="font-size: 0.8rem;">
+                        I agree to the legally articulated Terms & Conditions, and confirm that all items I list belong entirely to me.
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100 fw-bold py-2">Complete Profile Registration</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

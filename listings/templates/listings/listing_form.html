@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ TEXT.list_asset }} - No Middlemen Marketplace{% endblock %}
+
+{% block content %}
+<div class="row g-4 my-2">
+    <div class="col-md-8">
+        <div class="card shadow border-0 p-4 rounded-4 bg-white">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <div class="bg-success text-white px-3 py-2 rounded-3 fw-bold">➕</div>
+                <div>
+                    <h4 class="fw-bold text-dark mb-0">{{ TEXT.list_asset }}</h4>
+                    <p class="text-muted small mb-0">Direct peer-to-peer sharing ecosystem. No hidden agent loops.</p>
+                </div>
+            </div>
+            
+            <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <h6 class="fw-bold text-success text-uppercase border-bottom pb-2 mb-3" style="font-size: 0.8rem;">📦 1. Core Identification Parameters</h6>
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label class="form-label small fw-bold text-secondary mb-1">Asset Title Name</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold text-secondary mb-1">Category Group</label>
+                        {{ form.category }}
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-2">
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold text-secondary mb-1">Price (USD / Day or Month)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-2">$</span>
+                            {{ form.price }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold text-secondary mb-1">Target Province</label>
+                        {{ form.province }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold text-secondary mb-1">District Area</label>
+                        {{ form.district }}
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <label class="form-label small fw-bold text-secondary mb-1">Verifiable Asset Specifications</label>
+                    {{ form.description }}
+                </div>
+
+                <h6 class="fw-bold text-success text-uppercase border-bottom pb-2 mt-4 mb-3" style="font-size: 0.8rem;">🖼️ 2. Data-Optimized Image Capture (Max 3)</h6>
+                <p class="text-muted" style="font-size: 0.75rem;">Images are heavily compressed to Quality 75 and capped at 1200x800 resolution to preserve internet bundles across Zimbabwe.</p>
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <div class="p-2 border rounded bg-light">
+                            <label class="small fw-bold text-dark d-block mb-1">Primary Face view *</label>
+                            {{ form.image1 }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-2 border rounded bg-light">
+                            <label class="small fw-bold text-muted d-block mb-1">Optional Aspect 2</label>
+                            {{ form.image2 }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-2 border rounded bg-light">
+                            <label class="small fw-bold text-muted d-block mb-1">Optional Aspect 3</label>
+                            {{ form.image3 }}
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+                
+                <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm rounded-3">
+                    🚀 Save Listing & Continue to Checkout
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow border-0 p-3 rounded-4 bg-light text-dark h-100 border-start border-success border-4">
+            <h5 class="fw-bold text-success mb-2">Listing Rules</h5>
+            <p class="small text-secondary mb-3">Please verify your data aligns with community anti-middleman safety mandates before processing compilation pipelines.</p>
+            
+            <div class="list-group list-group-flush gap-2 bg-transparent">
+                <div class="list-group-item border-0 p-0 bg-transparent mb-2">
+                    <div class="d-flex gap-2">
+                        <span class="fs-4">🛡️</span>
+                        <div>
+                            <h6 class="fw-bold mb-0 small">Direct Accountability</h6>
+                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">Your registered National ID is automatically attached as the underlying guarantor behind this digital asset.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="list-group-item border-0 p-0 bg-transparent mb-2">
+                    <div class="d-flex gap-2">
+                        <span class="fs-4">💵</span>
+                        <div>
+                            <h6 class="fw-bold mb-0 small">Revenue Before Publishing</h6>
+                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">Listing fees are paid once up front. Borrowers and tenants search completely free of charge.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="list-group-item border-0 p-0 bg-transparent">
+                    <div class="d-flex gap-2">
+                        <span class="fs-4">⚠️</span>
+                        <div>
+                            <h6 class="fw-bold mb-0 small">Duplicate Interception Engine</h6>
+                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">Uploading matching photos, descriptions, or the same title across multiple account IDs flags the system and will lock your dashboard profile.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

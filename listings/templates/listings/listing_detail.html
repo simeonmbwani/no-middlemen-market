@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load currency_tags %} {% block title %}{{ listing.title }} - No Middlemen Marketplace{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mb-4">
+        <div class="card shadow-sm border-0 p-4 bg-white rounded-4">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <span class="badge bg-success text-uppercase mb-1" style="font-size: 0.75rem;">
+                        {{ listing.get_category_display }}
+                    </span>
+                    <h3 class="fw-bold text-dark mb-0">{{ listing.title }}</h3>
+                    <p class="text-muted small mb-0">📍 {{ listing.district|title }} District, {{ listing.get_province_display }} Province</p>
+                </div>
+                <div class="text-end">
+                    <h3 class="fw-extrabold text-success mb-0">${{ listing.price }} <span class="small text-muted fw-normal" style="font-size: 0.75rem;">USD</span></h3>
+                    <small class="text-muted fw-bold font-monospace d-block" style="font-size: 0.8rem;">
+                        ≈ {{ listing.price|to_zig:ZIG_MID_RATE }} ZiG
+                    </small>
+                </div>
+            </div>
+
+            <div class="row g-2 mb-4">
+                <div class="{% if listing.image2 or listing.image3 %}col-md-8{% else %}col-12{% endif %}">
+                    {% if listing.image1 %}
+                        <img src="{{ listing.image1.url }}" class="img-fluid rounded-3 w-100 object-fit-cover" style="max-height: 400px;" alt="Primary view of {{ listing.title }}">
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center bg-light text-muted rounded-3 w-100" style="height: 300px;">No Primary Image Available</div>
+                    {% endif %}
+                </div>
+                {% if listing.image2 or listing.image3 %}
+                <div class="col-md-4 d-flex flex-column gap-2">
+                    {% if listing.image2 %}
+                        <img src="{{ listing.image2.url }}" class="img-fluid rounded-3 w-100 object-fit-cover flex-grow-1" style="max-height: 196px;" alt="Secondary view">
+                    {% endif %}
+                    {% if listing.image3 %}
+                        <img src="{{ listing.image3.url }}" class="img-fluid rounded-3 w-100 object-fit-cover flex-grow-1" style="max-height: 196px;" alt="Additional details view">
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            <hr class="text-muted my-3">
+
+            <h5 class="fw-bold text-dark mb-2">Asset Description</h5>
+            <p class="text-secondary small" style="white-space: pre-wrap; line-height: 1.6;">{{ listing.description }}</p>
+            
+            <div class="bg-light p-2 rounded-3 d-flex justify-content-between align-items-center mt-3">
+                <span class="small text-muted">Listed: {{ listing.created_at|date:"d M Y" }}</span>
+                
+                {% if listing.owner.is_verified_owner %}
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">✓ Verified Owner Account</span>
+                {% else %}
+                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle">⏳ Owner ID Verification Pending</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+            <div class="card-header bg-dark border-0 py-3 px-3">
+                <h6 class="fw-bold text-white mb-0">Message Owner</h6>
+                <small class="text-white-50" style="font-size: 0.7rem;">Deals are negotiated directly. No hidden broker loops.</small>
+            </div>
+            <div class="card-body p-3">
+                {% if request.user.is_authenticated %}
+                    
+                    {% if request.user != listing.owner %}
+                        <form action="{% url 'messaging:send' listing.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-secondary mb-1">Your Message</label>
+                                <textarea name="message_text" class="form-control border-2 p-2 rounded-3 text-sm" rows="3" placeholder="Ask about daily rental rates..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-sm w-100 fw-bold py-2 rounded-3 shadow-sm">
+                                🚀 Send Secure Instant Message
+                            </button>
+                        </form>
+                    
+                    {% else %}
+                        <div class="text-center py-2">
+                            <span class="fs-2 mb-1 d-block">🛡️</span>
+                            <h6 class="fw-bold mb-1" style="font-size: 0.9rem;">Management Console</h6>
+                            <p class="text-muted small mb-2">This asset listing is registered to your account.</p>
+                            <a href="{% url 'dashboard:index' %}" class="btn btn-sm btn-outline-success fw-bold w-100 rounded-3">
+                                📊 Open My Inbox Dashboard
+                            </a>
+                        </div>
+                    {% endif %}
+
+                {% else %}
+                    <div class="text-center py-2">
+                        <p class="small text-muted mb-2">You must log in to text owners securely.</p>
+                        <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-sm btn-success w-100 fw-bold rounded-3">Sign In to Message</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 p-3 bg-light rounded-4 border-start border-danger border-4">
+            <h6 class="fw-bold text-danger mb-1" style="font-size: 0.9rem;">Is this an agent or a middleman?</h6>
+            <p class="text-muted mb-3" style="font-size: 0.75rem;">If this person asks for viewing fees, commissions, or flags fake records, report them instantly to defend the community platform framework.</p>
+            
+            <form method="POST" action="{% url 'reports:report_listing' listing.id %}">
+                {% csrf_token %}
+                <div class="mb-2">
+                    <select name="reason" class="form-select border-2 p-2 rounded-3 text-sm" required>
+                        <option value="">-- Select Violation Reason --</option>
+                        <option value="middleman">Disguised Broker / Charging Commission</option>
+                        <option value="viewing_fee">Demanding Upfront Viewing Fees</option>
+                        <option value="fraud">Fraudulent / Inaccurate Property Details</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <textarea name="details" class="form-control border-2 p-2 rounded-3 text-sm" rows="2" placeholder="Provide extra notes or phone contacts left in descriptions..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-sm btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-1 rounded-3 fw-bold">
+                    ⚠️ Report Middleman Profile
+                </button>
+            </form>
+        </div>
+        
+    </div>
+</div>
+
+<div class="row mt-4 border-top pt-4">
+    <div class="col-12">
+        <h5 class="fw-bold text-dark mb-3">🔄 Other Options Available in {{ listing.district|title }}</h5>
+    </div>
+    <div class="row g-3">
+        {% for item in related_items %}
+            <div class="col-md-3 col-sm-6">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                    <div style="height: 130px; background-color: #f1f3f5;">
+                        {% if item.image1 %}
+                            <img src="{{ item.image1.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ item.title }}">
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center h-100 text-muted small">No Image</div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body p-3 d-flex flex-column justify-content-between">
+                        <div>
+                            <h6 class="fw-bold mb-1 text-truncate text-dark" style="font-size: 0.85rem;">{{ item.title }}</h6>
+                            <div class="text-success fw-bold small mb-1">${{ item.price }} USD</div>
+                            <div class="text-muted font-monospace xsmall mb-2" style="font-size: 0.7rem;">≈ {{ item.price|to_zig:ZIG_MID_RATE }} ZiG</div>
+                        </div>
+                        <a href="{% url 'listings:detail' item.id %}" class="btn btn-sm btn-outline-success w-100 py-1 rounded-3" style="font-size: 0.75rem;">Check Asset</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-muted small bg-light p-3 rounded-3 text-center">No secondary alternative assets registered inside {{ listing.district|title }} district area loops yet.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-2">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-12">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-header bg-dark text-white p-3 fw-bold d-flex align-items-center gap-2">
+                    <span>👤</span> Conversation with @{{ partner.username }}
+                </div>
+                
+                <div class="card-body bg-light p-3" style="height: 350px; overflow-y: scroll;">
+                    {% for msg in messages_stream %}
+                        <div class="d-flex mb-3 {% if msg.sender == request.user %}justify-content-end{% else %}justify-content-start{% endif %}">
+                            <div class="p-3 rounded-4 shadow-sm text-sm" style="max-width: 80%; {% if msg.sender == request.user %}background: #198754; color: white; border-top-right-radius: 0;{% else %}background: white; color: #212529; border-top-left-radius: 0;{% endif %}">
+                                <p class="mb-1 small">{{ msg.message_text }}</p>
+                                <small class="d-block text-end opacity-50 font-monospace" style="font-size: 0.6rem;">{{ msg.created_at|date:"H:i" }}</small>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted text-center py-5">Start your direct broker-free negotiation trade string below!</p>
+                    {% endfor %}
+                </div>
+
+                <div class="card-footer bg-white border-0 p-3">
+                    <form action="{% url 'messaging:send' 1 %}" method="POST" class="d-flex gap-2">
+                        {% csrf_token %}
+                        <input type="text" name="message_text" class="form-control border-2 rounded-pill" placeholder="Type your reply text string here..." required>
+                        <button type="submit" class="btn btn-success rounded-circle px-3">🚀</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
