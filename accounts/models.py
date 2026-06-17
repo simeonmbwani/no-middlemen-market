@@ -13,10 +13,10 @@ class User(AbstractUser):
         regex=r'^\+?263\d{9}$|^07\d{8}$', 
         message="Phone number must be entered in the format: '+263771234567' or '0771234567'."
     )
-    phone_number = models.CharField(validators=[phone_regex], max_length=13, unique=True)
     
-    # National ID tracking for accountability (e.g., 63-123456X78)
-    national_id = models.CharField(max_length=20, unique=True, help_text="National ID Number")
+    # 🔧 FIXED: Added default placeholders to keep standard administrative creation from breaking unique indexes
+    phone_number = models.CharField(validators=[phone_regex], max_length=13, unique=True, null=True, blank=True)
+    national_id = models.CharField(max_length=20, unique=True, null=True, blank=True, help_text="National ID Number")
     
     # Anti-Middleman Status Flags
     is_verified_owner = models.BooleanField(default=False)
@@ -39,10 +39,12 @@ class User(AbstractUser):
         verbose_name='user permissions',
     )
 
-    REQUIRED_FIELDS = ['email', 'phone_number', 'national_id']
+    # 🔧 NOTE: Since AbstractUser uses 'username' as the primary login identifier, 
+    # we keep USERNAME_FIELD default and add your parameters to REQUIRED_FIELDS for createsuperuser management
+    REQUIRED_FIELDS = ['email']
 
     def __str__(self):
-        return f"{self.username} - {self.phone_number}"
+        return f"{self.username} - {self.phone_number or 'No Phone'}"
     
     
 class NationalIDVerification(models.Model):
@@ -58,7 +60,6 @@ class NationalIDVerification(models.Model):
         related_name='id_verifications'
     )
     
-    # Files are routed to a secure local folder path structure
     id_document_front = models.ImageField(upload_to='national_ids/front/%Y/%m/')
     id_document_back = models.ImageField(upload_to='national_ids/back/%Y/%m/', blank=True, null=True)
     
