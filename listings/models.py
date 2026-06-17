@@ -4,20 +4,7 @@ import io
 from PIL import Image
 from django.core.files.base import ContentFile
 
-
 class Listing(models.Model):
-    # Core Metadata Fields
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='listings')
-    title = models.CharField(max_length=100)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2, help_text="Rental rate per day in USD")
-    district = models.CharField(max_length=50) 
-    province = models.CharField(max_length=50)
-    
-    is_active = models.BooleanField(default=False)
-    is_paid = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
     # 🗂️ COMPREHENSIVE Southern Africa Asset Grouping Choice Matrix
     CATEGORY_CHOICES = [
         ('Property', (
@@ -146,11 +133,6 @@ class Listing(models.Model):
         ))
     ]
 
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='other_asset')
-
-    def __str__(self):
-        return f"{self.title} ({self.get_category_display()})"
-
     PROVINCE_CHOICES = [
         ('harare', 'Harare'), 
         ('bulawayo', 'Bulawayo'), 
@@ -164,6 +146,12 @@ class Listing(models.Model):
         ('midlands', 'Midlands'),
     ]
 
+    # 🪙 MONETIZATION VISIBILITY TIERS
+    TIER_CHOICES = [
+        ('standard', 'Standard Listing'),
+        ('featured', 'Featured Boost (Pinned To Top)'),
+    ]
+
     # Relationships & Ownership
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
@@ -173,9 +161,9 @@ class Listing(models.Model):
     
     # Text Details
     title = models.CharField(max_length=100)
-    category = models.CharField(max_length=30, choices=CATEGORY_CHOICES)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='other_asset')
     description = models.TextField(max_length=1000)
-    price = models.DecimalField(max_digits=10, decimal_places=2, help_text="Price in USD")
+    price = models.DecimalField(max_digits=10, decimal_places=2, help_text="Rental rate per day in USD")
     
     # Location fields tailored for Zimbabwe
     province = models.CharField(max_length=20, choices=PROVINCE_CHOICES)
@@ -186,19 +174,21 @@ class Listing(models.Model):
     image2 = models.ImageField(upload_to='listings/%Y/%m/%d/', blank=True, null=True)
     image3 = models.ImageField(upload_to='listings/%Y/%m/%d/', blank=True, null=True)
     
-    # Anti-Middleman Business Logic Flags
+    # Anti-Middleman & Financial Business Logic Flags
     is_paid = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False) # Only True after payment and admin review
-    
+    is_active = models.BooleanField(default=False) # Only True after payment verification & admin approval
+    market_tier = models.CharField(max_length=15, choices=TIER_CHOICES, default='standard')
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-market_tier', '-created_at'] # Automatically floats Featured posts to the top engine
 
     def __str__(self):
-        return f"{self.title} (${self.price}) - {self.district}"
+        return f"{self.title} (${self.price}) - {self.district} [{self.market_tier.upper()}]"
+
     def save(self, *args, **kwargs):
         """Override save method to automatically compress uploaded images."""
         for image_attr in ['image1', 'image2', 'image3']:
