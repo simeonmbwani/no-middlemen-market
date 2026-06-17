@@ -1,0 +1,18 @@
+﻿{
+    "name": "No-Middlemen Marketplace",
+    "short_name": "NoMiddlemen",
+    "description": "Direct-owner peer-to-peer verified asset marketplace in Zimbabwe.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#198754",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "https://cdn-icons-png.flaticon.com/512/3514/3514491.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
