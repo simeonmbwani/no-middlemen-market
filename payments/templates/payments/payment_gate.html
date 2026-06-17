@@ -13,9 +13,9 @@
             </div>
             
             <div class="card-body p-4">
-                <h5 class="fw-bold text-center mb-3">Verify Your Asset Listing</h5>
+                <h5 class="fw-bold text-center mb-3">Secure Publication Invoice</h5>
                 <p class="text-muted small text-center mb-4">
-                    To maintain a clean database free of untrusted brokers and middlemen, listings require a small value-based verification fee before going live.
+                    Your listing will be activated once payment is confirmed.
                 </p>
                 
                 <div class="list-group list-group-flush mb-4 rounded-3 border">
@@ -33,14 +33,15 @@
                     </div>
                 </div>
 
-                <form action="#" method="POST" id="paymentForm">
+                <form action="" method="POST" id="paymentForm">
                     {% csrf_token %}
-                    <label class="small fw-bold mb-2 text-uppercase font-monospace text-success">Select Payment Method</label>
                     
-                    <div class="d-flex flex-column gap-2 mb-4">
+                    <label class="small fw-bold mb-2 text-uppercase font-monospace text-success">Select Your Payment Provider</label>
+                    
+                    <div class="d-flex flex-column gap-2 mb-3">
                         <label class="p-3 border rounded-3 d-flex align-items-center justify-content-between style-payment-radio context-clickable" style="cursor: pointer;">
                             <div class="d-flex align-items-center gap-3">
-                                <input type="radio" name="payment_method" value="ecocash" checked class="form-check-input text-success">
+                                <input type="radio" name="gateway" value="ecocash" checked class="form-check-input text-success">
                                 <div>
                                     <div class="fw-bold small">EcoCash / OneMoney Wallet</div>
                                     <div class="text-muted" style="font-size: 0.75rem;">Direct mobile money push prompt</div>
@@ -51,7 +52,7 @@
 
                         <label class="p-3 border rounded-3 d-flex align-items-center justify-content-between style-payment-radio context-clickable" style="cursor: pointer;">
                             <div class="d-flex align-items-center gap-3">
-                                <input type="radio" name="payment_method" value="innbucks" class="form-check-input text-success">
+                                <input type="radio" name="gateway" value="innbucks" class="form-check-input text-success">
                                 <div>
                                     <div class="fw-bold small">InnBucks Voucher</div>
                                     <div class="text-muted" style="font-size: 0.75rem;">Pay using your InnBucks app profile</div>
@@ -61,8 +62,14 @@
                         </label>
                     </div>
 
+                    <div class="mb-4">
+                        <label for="phone_number" class="small fw-bold text-muted mb-1">Mobile Money Phone Number</label>
+                        <input type="text" name="phone_number" id="phone_number" class="form-control border p-2" placeholder="e.g. 0771234567">
+                        <div class="text-muted mt-1" style="font-size: 0.75rem;">For EcoCash / OneMoney push notifications.</div>
+                    </div>
+
                     <button type="submit" class="btn btn-success w-100 fw-bold py-2.5 rounded-3 mb-2 shadow-sm">
-                        Proceed to Secure Checkout ($USD)
+                        Initiate Secure Payment
                     </button>
                     <a href="{% url 'listings:list' %}" class="btn btn-sm btn-link text-muted w-100 text-center text-decoration-none small">
                         Cancel and Discard Post
