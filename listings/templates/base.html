@@ -6,11 +6,13 @@
     <title>{% block title %}No Middlemen Marketplace{% endblock %}</title>
     
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#198754">
+    <meta name="theme-color" content="#101214">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <style>
-        /* 🌗 PRECISE COMMERCIAL PREFERENCES THEME SYSTEM */
+        /* 🌗 MODERN COMMERCIAL GRADIENT ENGINE SYSTEM */
         [data-theme="light"] { 
             --bg-main: #f8f9fa; 
             --text-main: #212529; 
@@ -18,16 +20,16 @@
             --border-line: #dee2e6;
             --input-bg: #ffffff;
             --input-text: #212529;
-            --accordion-btn-bg: #ffffff;
+            --nav-gradient: linear-gradient(135deg, #1b1f24 0%, #101214 100%);
         }
         [data-theme="dark"] { 
-            --bg-main: #14161f;            /* Rich dark premium charcoal-navy */
-            --text-main: #ffffff;          /* Radiant white text for crisp readability */
-            --card-bg: #222533;            /* Clear, lighter slate contrast surface area for cards */
-            --border-line: #34394f;         /* Distinct theme structural boundaries */
-            --input-bg: #1a1c26;
+            --bg-main: #0d0f12; 
+            --text-main: #f8fafc; 
+            --card-bg: #161920; 
+            --border-line: #242936; 
+            --input-bg: #1c212b;
             --input-text: #ffffff;
-            --accordion-btn-bg: #222533;
+            --nav-gradient: linear-gradient(135deg, #0d0f12 0%, #050608 100%);
         }
         
         body { 
@@ -35,153 +37,171 @@
             color: var(--text-main) !important;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             transition: background 0.2s ease, color 0.2s ease;
+            padding-top: 125px; /* Offset for sticky premium top navigation panels */
         }
         
-        /* 🔥 THEME STABILITY INTERCEPTORS: Ensures content blocks respect active theme colors */
-        .card, .modal-content, .accordion-item, .list-group-item { 
+        /* 💎 PREMIUM NAVBAR GLASSMORPHISM & ACCENTS */
+        .navbar-premium {
+            background: var(--nav-gradient) !important;
+            border-bottom: 2px solid #198754;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-link-custom {
+            color: #cbd5e1 !important;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .nav-link-custom:hover {
+            color: #198754 !important;
+            transform: translateY(-1px);
+        }
+        
+        /* 🎨 MODERN INTERACTIVE HOVER UTILITIES */
+        .btn-rounded {
+            border-radius: 50px !important;
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+        }
+        
+        .animated-btn {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+        }
+        .animated-btn:hover {
+            transform: scale(1.04);
+            box-shadow: 0 4px 12px rgba(25, 135, 84, 0.25);
+        }
+        
+        /* 👤 AVATAR IDENTIFIER INNER CONES */
+        .avatar-circle {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #198754 0%, #115e3b 100%);
+            color: #ffffff;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        /* 🔔 BADGE OVERLAY ALIGNMENT */
+        .badge-notification {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            font-size: 0.65rem;
+            padding: 3px 5px;
+        }
+        
+        .card, .modal-content, .accordion-item { 
             background-color: var(--card-bg) !important; 
             color: var(--text-main) !important;
             border-color: var(--border-line) !important;
+            border-radius: 16px !important;
         }
 
-        /* 💡 Dynamic Header & Text Readability Layer Override */
-        p, span, label, h1, h2, h3, h4, h5, h6, td, th {
-            color: var(--text-main) !important;
-            transition: color 0.2s ease;
-        }
-
-        /* 🚨 BOOTSTRAP UTILITY FORCE-RESET */
-        [data-theme="dark"] .text-dark,
-        [data-theme="dark"] .text-muted,
-        [data-theme="dark"] .text-secondary,
-        [data-theme="dark"] .card-body p,
-        [data-theme="dark"] .card-body h5,
-        [data-theme="dark"] h5.text-dark,
-        [data-theme="dark"] div.text-muted {
-            color: #ffffff !important;
-        }
-        
-        /* Give secondary/muted elements a slightly softer white color in dark mode so hierarchy remains nice */
-        [data-theme="dark"] .text-muted,
-        [data-theme="dark"] .text-secondary {
-            color: #cbd5e1 !important;
-        }
-
-        /* 📝 Text Inputs & Dropdown Select Option Overrides (Light & Dark) */
-        .form-control, .form-select, .form-select option {
-            background-color: var(--input-bg) !important;
-            color: var(--input-text) !important;
-            border-color: var(--border-line) !important;
-        }
-
-        /* Resolves text visibility while user is typing inside text fields */
-        .form-control:focus, .form-select:focus {
-            background-color: var(--input-bg) !important;
-            color: var(--input-text) !important;
-            box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
-        }
-
-        /* 📜 Bootstrap Accordion Dynamic Header Fixes */
-        .accordion-button {
-            background-color: var(--accordion-btn-bg) !important;
-            color: var(--text-main) !important;
-        }
-        .accordion-button:not(.collapsed) {
-            background-color: rgba(25, 135, 84, 0.15) !important;
-            color: #198754 !important;
-        }
-        
-        /* 📈 Rate Ticker Styling */
+        /* 📈 Rate Ticker Engine Layout */
         .ticker-wrap { background: #198754; color: #ffffff; overflow: hidden; padding: 6px 0; font-size: 0.85rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: marquee 45s linear infinite; }
         @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-        
-        /* 📐 Responsive Vertical Border Divider Rule */
-        @media (min-width: 768px) {
-            .border-start-desktop {
-                border-left: 2px solid var(--border-line) !important;
-            }
-        }
-
-        /* 📱 NATIVE APP VIEWPANEL NAVIGATION BADGE OPTIMIZATIONS */
-        @media (max-width: 576px) {
-            .navbar-brand {
-                font-size: 0.95rem !important;
-                letter-spacing: -0.3px;
-            }
-            .mobile-nav-btn-text {
-                display: none !important; /* Conceals extensive text labels inside narrow APK screens */
-            }
-            .mobile-nav-btn-icon {
-                font-size: 0.9rem !important;
-                padding: 4px 8px !important;
-            }
-        }
-
-        /* 🖨️ ADVANCED PRINT ENGINE: Strips clutter while retaining document visibility */
-        @media print {
-            .navbar, .btn, .alert, .ticker-wrap, #settingsModal, .scrollable-feed-panel, form .btn, .container py-2 > div:first-child {
-                display: none !important;
-            }
-            body {
-                background: #ffffff !important;
-                color: #000000 !important;
-            }
-            .container, .row, .col-lg-4 {
-                display: block !important;
-                width: 100% !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            .card:not(.card-print-target) {
-                display: none !important;
-            }
-            .card-print-target {
-                display: block !important;
-                width: 100% !important;
-                border: 1px solid #dee2e6 !important;
-                box-shadow: none !important;
-                background: #ffffff !important;
-            }
-            .table-responsive {
-                overflow: visible !important;
-            }
-            table {
-                width: 100% !important;
-                border-collapse: collapse !important;
-            }
-            th, td {
-                border-bottom: 1px solid #dee2e6 !important;
-                padding: 8px !important;
-                color: #000000 !important;
-            }
-            th {
-                background-color: #f8f9fa !important;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <div class="ticker-wrap w-100">
-        <div class="ticker-move">
-            💥 {{ TEXT.live_feed }} (Mid-Rate 1 USD : {{ ZIG_MID_RATE }} ZiG) ——— {{ DYNAMIC_PRODUCT_MARQUEE }}
-        </div>
-    </div>
-
-    <nav class="navbar navbar-dark bg-dark shadow-sm mb-4 py-2">
-        <div class="container d-flex flex-row justify-content-between align-items-center flex-nowrap">
-            <a class="navbar-brand fw-bold text-success text-nowrap m-0" href="{% url 'listings:list' %}">🚫 NO MIDDLEMEN</a>
-            <div class="d-flex align-items-center gap-1.5 text-nowrap">
-                <button class="btn class-trigger btn-sm btn-outline-light mobile-nav-btn-icon" data-bs-toggle="modal" data-bs-target="#settingsModal">
-                    ⚙️ <span class="mobile-nav-btn-text">{{ TEXT.settings }}</span>
-                </button>
-                <a href="{% url 'listings:create' %}" class="btn btn-sm btn-success mobile-nav-btn-icon fw-bold">
-                    + <span class="mobile-nav-btn-text">{{ TEXT.list_asset }}</span><span class="d-sm-none">📝</span>
-                </a>
+    <div class="fixed-top">
+        <div class="ticker-wrap w-100">
+            <div class="ticker-move">
+                💥 {{ TEXT.live_feed }} (Mid-Rate 1 USD : {{ ZIG_MID_RATE }} ZiG) ——— {{ DYNAMIC_PRODUCT_MARQUEE }}
             </div>
         </div>
-    </nav>
+
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-premium py-2 shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-success m-0 fs-4" href="{% url 'listings:list' %}">🛑 NO MIDDLEMEN</a>
+                
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#premiumMarketNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="premiumMarketNavbar">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="{% url 'listings:list' %}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="{% url 'listings:list' %}?browse=true">Browse Assets</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#categories-section">Categories</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#pricing">Pricing</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-custom" href="#" data-bs-toggle="modal" data-bs-target="#settingsModal">Help Center</a></li>
+                    </ul>
+
+                    <div class="d-flex align-items-center gap-3">
+                        
+                        <button class="btn btn-link text-light p-1 position-relative" data-bs-toggle="modal" data-bs-target="#settingsModal" title="System Settings">
+                            <i class="bi bi-gear-fill fs-5 text-secondary"></i>
+                        </button>
+
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'dashboard:index' %}?tab=messages" class="text-light p-1 position-relative" title="Direct Messages">
+                                <i class="bi bi-chat-left-text-fill fs-5 text-secondary"></i>
+                                <span class="badge rounded-pill bg-danger badge-notification">3</span>
+                            </a>
+
+                            <a href="{% url 'dashboard:index' %}?tab=alerts" class="text-light p-1 position-relative me-1" title="System Notifications">
+                                <i class="bi bi-bell-fill fs-5 text-secondary"></i>
+                                <span class="badge rounded-pill bg-success badge-notification">●</span>
+                            </a>
+
+                            <div class="dropdown">
+                                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="avatar-circle">
+                                        {{ user.username|slice:":1"|upper }}
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-3">
+                                    <li><div class="dropdown-header small text-muted">Signed in as <strong>@{{ user.username }}</strong></div></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{% url 'dashboard:index' %}"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'dashboard:index' %}?view=my_listings"><i class="bi bi-collection-fill me-2"></i> My Listings</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'dashboard:index' %}?view=saved"><i class="bi bi-heart-fill me-2"></i> Saved Assets</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'accounts:verify_identity' %}"><i class="bi bi-person-vcard-fill me-2"></i> Account Clearance</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            <div class="dropdown">
+                                <button class="btn btn-outline-light btn-sm btn-rounded dropdown-toggle px-3" type="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-people-fill me-1"></i> Users
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-3">
+                                    <li><a class="dropdown-item fw-bold text-success" href="{% url 'accounts:login' %}">Login to Profile</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'accounts:register' %}">Register New Account</a></li>
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        {% if user.is_authenticated and user.is_staff %}
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-warning btn-rounded dropdown-toggle px-3" type="button" data-bs-toggle="dropdown">
+                                    👑 Admin
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-3">
+                                    <li><a class="dropdown-item fw-bold text-primary" href="{% url 'accounts:compliance_dashboard' %}">🛡️ Compliance Core</a></li>
+                                    <li><a class="dropdown-item" href="/admin/">Django Suite Panel</a></li>
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        <a href="{% url 'listings:create' %}" class="btn btn-success btn-sm btn-rounded animated-btn fw-bold px-3 py-2">
+                            <i class="bi bi-plus-circle-fill me-1"></i> List Asset
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
 
     <main class="container">
         {% block content %}{% endblock %}
@@ -190,8 +210,8 @@
     <div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
         <div class="modal-content modal-dialog p-3 shadow-lg rounded-4">
             <div class="modal-header border-0 pb-1">
-                <h5 class="modal-title fw-bold">{{ TEXT.sys_pref }}</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title fw-bold">Preferences Hub</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 
@@ -199,9 +219,9 @@
                     <div class="p-3 rounded mb-3 border border-warning" style="background-color: rgba(255, 193, 7, 0.08);">
                         <h6 class="small fw-bold text-warning text-uppercase mb-1">🪪 Identity Clearance Hub</h6>
                         {% if user.is_verified_owner %}
-                            <p class="small mb-0 text-success fw-bold">✓ Account Profile Status: Verified Owner</p>
+                            <p class="small mb-0 text-success fw-bold">✓ Profile Status: Verified Owner</p>
                         {% else %}
-                            <p class="small mb-2 text-muted" style="font-size: 0.8rem;">Verify your account to publish listings directly and confirm non-broker compliance status.</p>
+                            <p class="small mb-2 text-muted" style="font-size: 0.8rem;">Submit your legal identification to publish direct peer listings safely.</p>
                             <a href="{% url 'accounts:verify_identity' %}" class="btn btn-sm btn-warning w-100 fw-bold rounded-3">Access Verification Portal</a>
                         {% endif %}
                     </div>
@@ -209,73 +229,21 @@
 
                 <form action="{% url 'listings:set_language' %}" method="POST" id="langForm" class="mb-3">
                     {% csrf_token %}
-                    <label class="small fw-bold mb-1">{{ TEXT.lang_label }}</label>
+                    <label class="small fw-bold mb-1">Language Option</label>
                     <select class="form-select form-select-sm mb-2" id="langSelector" name="language">
                         <option value="en">English</option>
                         <option value="sn">ChiShona</option>
                         <option value="nd">isiNdebele</option>
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success w-100 fw-bold">{{ TEXT.apply_btn }}</button>
+                    <button type="submit" class="btn btn-sm btn-success w-100 fw-bold">Apply Updates</button>
                 </form>
 
                 <div class="mb-3">
-                    <label class="small fw-bold mb-1">{{ TEXT.display_mode }}</label>
+                    <label class="small fw-bold mb-1">Display Surface Tier</label>
                     <div class="d-flex gap-2">
                         <button class="btn btn-sm btn-outline-secondary w-50" onclick="setBrightness('light')">☀️ Light</button>
                         <button class="btn btn-sm btn-dark border w-50" onclick="setBrightness('dark')">🌙 Dark Mode</button>
                     </div>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="small fw-bold mb-1 text-uppercase text-success font-monospace">{{ TEXT.legal_tab }}</label>
-                    <div class="accordion" id="modalLegalAccordion">
-                        
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalFaqCollapse">
-                                    ❓ {{ LEGAL.faq_title }}
-                                </button>
-                            </h2>
-                            <div id="modalFaqCollapse" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
-                                <div class="accordion-body small" style="max-height: 150px; overflow-y: auto; font-size: 0.8rem;">
-                                    <p class="mb-2"><strong>{{ LEGAL.faq_q1 }}</strong><br>{{ LEGAL.faq_a1 }}</p>
-                                    <p class="mb-0"><strong>{{ LEGAL.faq_q2 }}</strong><br>{{ LEGAL.faq_a2 }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalTermsCollapse">
-                                    📜 {{ LEGAL.terms_title }}
-                                </button>
-                            </h2>
-                            <div id="modalTermsCollapse" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
-                                <div class="accordion-body small" style="max-height: 150px; overflow-y: auto; font-size: 0.75rem; line-height: 1.4;">
-                                    <p class="mb-2">{{ LEGAL.terms_p1 }}</p>
-                                    <p class="mb-2">{{ LEGAL.terms_p2 }}</p>
-                                    <p class="mb-0">{{ LEGAL.terms_p3 }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="p-3 rounded mb-3 border border-success" style="background-color: rgba(25, 135, 84, 0.08);">
-                    <h6 class="small fw-bold text-success text-uppercase mb-2">🚨 Operational Helpline Desk</h6>
-                    <div class="list-group list-group-flush gap-1">
-                        <a href="https://simeonmbwani.co.zw" class="list-group-item list-group-item-action border-0 p-1 rounded bg-transparent text-primary fw-bold small">👤 Administrator: Simeon Mbwani</a>
-                        <a href="tel:+263775493710" class="list-group-item list-group-item-action border-0 p-1 rounded bg-transparent text-primary small">📞 Phone Line 1: +263 775 493 710</a>
-                        <a href="tel:+263786120826" class="list-group-item list-group-item-action border-0 p-1 rounded bg-transparent text-primary small">📞 Phone Line 2: +263 786 120 826</a>
-                        <a href="mailto:simeonmbwani@gmail.com" class="list-group-item list-group-item-action border-0 p-1 rounded bg-transparent text-primary small">📧 Email Desk: simeonmbwani@gmail.com</a>
-                        <a href="https://wa.me/263775493710?text=Hello%20Simeon" target="_blank" class="list-group-item list-group-item-action border-0 p-1 rounded bg-success text-white small px-2 text-center mt-1">💬 Message Directly on WhatsApp</a>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center text-muted pt-2 border-top" style="font-size: 0.75rem;">
-                    <span>Version: <strong>{{ PLATFORM_VERSION }}</strong></span>
-                    <span class="badge bg-secondary">🔓 Open Source Project</span>
                 </div>
             </div>
         </div>
@@ -287,24 +255,9 @@
             document.getElementById('theme-root').setAttribute('data-theme', theme);
             localStorage.setItem('user-theme', theme);
         }
-
         document.addEventListener('DOMContentLoaded', function () {
             const cachedTheme = localStorage.getItem('user-theme') || 'light';
             document.getElementById('theme-root').setAttribute('data-theme', cachedTheme);
-            
-            const match = document.cookie.match(new RegExp('(^| )django_language=([^;]+)'));
-            if (match) {
-                document.getElementById('langSelector').value = match[2];
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-            var toastList = toastElList.map(function (toastEl) {
-                var toast = new bootstrap.Toast(toastEl);
-                toast.show();
-                return toast;
-            });
         });
     </script>
 
@@ -312,26 +265,10 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js')
-                    .then((reg) => console.log('PWA Service Worker Operational!'))
-                    .catch((err) => console.log('Service worker deployment fallback: ', err));
+                    .then((reg) => console.log('PWA Native Core Online.'))
+                    .catch((err) => console.log('PWA registration error: ', err));
             });
         }
     </script>
-
-    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="toast align-items-center text-white {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-danger{% else %}bg-dark{% endif %} border-0 shadow rounded-3 mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
-                    <div class="d-flex">
-                        <div class="toast-body small fw-semibold">
-                            {% if message.tags == 'success' %}✓{% else %}⚠️{% endif %} {{ message }}
-                        </div>
-                        <button type="button" class="btn-close btn-close-white m-auto me-2" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                </div>
-            {% endfor %}
-        {% endif %}
-    </div>
-    </div>
 </body>
 </html>
