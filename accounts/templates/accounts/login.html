@@ -11,7 +11,7 @@
                 <p class="text-muted small">Sign in to manage your active assets and direct messages.</p>
             </div>
 
-            <form method="POST">
+            <form method="POST" action="{% url 'accounts:login' %}">
                 {% csrf_token %}
                 
                 {% if form.errors %}
