@@ -108,6 +108,34 @@
         .ticker-wrap { background: #198754; color: #ffffff; overflow: hidden; padding: 6px 0; font-size: 0.85rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: marquee 45s linear infinite; }
         @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+
+        /* 🔧 FIXED: CRITICAL DARK MODE TEXT INTERCEPTOR INTERACTION ENGINE */
+        [data-theme="dark"] .text-dark,
+        [data-theme="dark"] .card-title,
+        [data-theme="dark"] .modal-title,
+        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, 
+        [data-theme="dark"] h4, [data-theme="dark"] h5, [data-theme="dark"] h6,
+        [data-theme="dark"] .form-label, [data-theme="dark"] label {
+            color: #f8fafc !important;
+        }
+        
+        [data-theme="dark"] .text-muted,
+        [data-theme="dark"] .text-secondary,
+        [data-theme="dark"] .accordion-body,
+        [data-theme="dark"] small {
+            color: #cbd5e1 !important;
+        }
+
+        [data-theme="dark"] .dropdown-menu {
+            background-color: #161920 !important;
+            border: 1px solid #242936 !important;
+        }
+        [data-theme="dark"] .dropdown-item {
+            color: #f8fafc !important;
+        }
+        [data-theme="dark"] .dropdown-item:hover {
+            background-color: #242936 !important;
+        }
     </style>
 </head>
 <body>
@@ -145,7 +173,7 @@
                         {% if user.is_authenticated %}
                             <a href="{% url 'dashboard:index' %}?tab=messages" class="text-light p-1 position-relative" title="Direct Messages">
                                 <i class="bi bi-chat-left-text-fill fs-5 text-secondary"></i>
-                                <span class="badge rounded-pill bg-danger badge-notification">3</span>
+                                <span id="dm-badge-counter" class="badge rounded-pill bg-danger badge-notification">0</span>
                             </a>
 
                             <a href="{% url 'dashboard:index' %}?tab=alerts" class="text-light p-1 position-relative me-1" title="System Notifications">
@@ -167,7 +195,14 @@
                                     <li><a class="dropdown-item" href="{% url 'dashboard:index' %}?view=saved"><i class="bi bi-heart-fill me-2"></i> Saved Assets</a></li>
                                     <li><a class="dropdown-item" href="{% url 'accounts:verify_identity' %}"><i class="bi bi-person-vcard-fill me-2"></i> Account Clearance</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                                    <li>
+                                        <form method="POST" action="{% url 'accounts:logout' %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">
+                                                <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                            </button>
+                                        </form>
+                                    </li>
                                 </ul>
                             </div>
                         {% else %}
@@ -210,7 +245,7 @@
     <div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
         <div class="modal-content modal-dialog p-3 shadow-lg rounded-4">
             <div class="modal-header border-0 pb-1">
-                <h5 class="modal-title fw-bold text-main">Preferences Hub & Help Center</h5>
+                <h5 class="modal-title fw-bold">Preferences Hub & Help Center</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -313,6 +348,28 @@
             document.getElementById('theme-root').setAttribute('data-theme', cachedTheme);
         });
     </script>
+
+    {% if user.is_authenticated %}
+    <script>
+        function checkUnreadDirectMessages() {
+            fetch("{% url 'dashboard:index' %}?check_unread_async=true", {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.getElementById('dm-badge-counter');
+                if (badge && data.unread_count !== undefined) {
+                    badge.textContent = data.unread_count;
+                    badge.style.display = data.unread_count > 0 ? "inline-block" : "none";
+                }
+            })
+            .catch(err => console.log('Async notification background sync failed container skip.'));
+        }
+        // Initialize active checker thread interval running every 10 seconds smoothly
+        setInterval(checkUnreadDirectMessages, 10000);
+        document.addEventListener('DOMContentLoaded', checkUnreadDirectMessages);
+    </script>
+    {% endif %}
 
     <script>
         if ('serviceWorker' in navigator) {

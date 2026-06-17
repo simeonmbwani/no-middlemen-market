@@ -32,6 +32,31 @@
     .rounded-select {
         border-radius: 10px !important;
     }
+
+    /* 🌗 HIGH-CONTRAST DARK MODE OVERRIDES FOR CARDS & PLAIN TEXT */
+    [data-theme="dark"] .asset-market-card, 
+    [data-theme="dark"] .premium-filter-card,
+    [data-theme="dark"] .pricing-card-box {
+        background-color: var(--card-bg) !important;
+        color: var(--text-main) !important;
+    }
+
+    [data-theme="dark"] .text-dark,
+    [data-theme="dark"] .text-main,
+    [data-theme="dark"] h5, 
+    [data-theme="dark"] h6 {
+        color: #f8fafc !important;
+    }
+
+    [data-theme="dark"] .text-muted,
+    [data-theme="dark"] .text-secondary,
+    [data-theme="dark"] label {
+        color: #cbd5e1 !important;
+    }
+
+    [data-theme="dark"] .bg-white {
+        background-color: var(--card-bg) !important;
+    }
 </style>
 
 <div class="row mb-4">
@@ -243,14 +268,14 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card border-success shadow-sm p-4 text-center bg-white h-100 position-relative" style="border-width: 2px;">
+            <div class="card pricing-card-box border-success shadow-sm p-4 text-center h-100 position-relative" style="border-width: 2px;">
                 <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-success px-3 py-1">POPULAR</span>
                 <h5 class="fw-bold text-main mt-2">Verified Asset Listing</h5>
                 <p class="text-muted small mb-3">For authentic title owners & business managers</p>
                 <h2 class="fw-black text-success mb-3">$10 <span class="fs-6 text-muted fw-normal">/ One-time maintenance fee</span></h2>
                 <hr>
                 <ul class="list-unstyled text-start small text-muted mb-4 ps-2">
-                    <li class="mb-2">✓ <strong class="text-dark">100% Free Search</strong> for all buyers/tenants forever</li>
+                    <li class="mb-2">✓ <strong class="text-main">100% Free Search</strong> for all buyers/tenants forever</li>
                     <li class="mb-2">✓ Direct peer messaging with no intermediary platform interception</li>
                     <li class="mb-2">✓ Dynamic ZiG / USD real-time currency conversion tool display</li>
                     <li class="mb-2">✓ Strict Anti-Broker ID Verification vetting for high-trust scoring</li>
