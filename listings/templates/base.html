@@ -210,7 +210,7 @@
     <div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
         <div class="modal-content modal-dialog p-3 shadow-lg rounded-4">
             <div class="modal-header border-0 pb-1">
-                <h5 class="modal-title fw-bold">Preferences Hub</h5>
+                <h5 class="modal-title fw-bold text-main">Preferences Hub & Help Center</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -245,6 +245,59 @@
                         <button class="btn btn-sm btn-dark border w-50" onclick="setBrightness('dark')">🌙 Dark Mode</button>
                     </div>
                 </div>
+
+                <div class="mb-3">
+                    <label class="small fw-bold mb-1 text-uppercase text-success font-monospace">⚖️ Legal & Documentation</label>
+                    <div class="accordion" id="modalLegalAccordion">
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalFaqCollapse">
+                                    ❓ Platform FAQ Overview
+                                </button>
+                            </h2>
+                            <div id="modalFaqCollapse" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
+                                <div class="accordion-body small text-muted" style="max-height: 150px; overflow-y: auto; font-size: 0.8rem;">
+                                    <p class="mb-2"><strong>Q: Who is allowed to publish assets here?</strong><br>A: Only verified legal title owners or authorized representatives. Middlemen and commission brokers are strictly forbidden.</p>
+                                    <p class="mb-0"><strong>Q: How do we prevent fraud?</strong><br>A: By matching user listing registration details against official Zimbabwean National ID data during compliance vetting.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalTermsCollapse">
+                                    📜 Terms of Service
+                                </button>
+                            </h2>
+                            <div id="modalTermsCollapse" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
+                                <div class="accordion-body small text-muted" style="max-height: 150px; overflow-y: auto; font-size: 0.75rem; line-height: 1.4;">
+                                    <p class="mb-2">1. <strong>Anti-Broker Mandate:</strong> You confirm under penalty of platform banning that you own or possess formal legal rights to items listed.</p>
+                                    <p class="mb-2">2. <strong>Flat Maintenance Pricing:</strong> No commission percentages or backend fees will ever be demanded by the network.</p>
+                                    <p class="mb-0">3. <strong>Three-Strike Enforcement:</strong> Profiles reported or discovered acting as unverified brokers face immediate blacklist bans.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="p-3 rounded mb-3 border border-success" style="background-color: rgba(25, 135, 84, 0.08);">
+                    <h6 class="small fw-bold text-success text-uppercase mb-2">🚨 Operational Helpline Desk</h6>
+                    <div class="list-group list-group-flush gap-1">
+                        <span class="list-group-item border-0 p-1 bg-transparent text-main small">👤 Administrator: Simeon Mbwani</span>
+                        <a href="tel:+263775493710" class="list-group-item list-group-item-action border-0 p-1 bg-transparent text-primary small">📞 Phone Line 1: +263 775 493 710</a>
+                        <a href="tel:+263786120826" class="list-group-item list-group-item-action border-0 p-1 bg-transparent text-primary small">📞 Phone Line 2: +263 786 120 826</a>
+                        <a href="mailto:simeonmbwani@gmail.com" class="list-group-item list-group-item-action border-0 p-1 bg-transparent text-primary small">📧 Email Desk: simeonmbwani@gmail.com</a>
+                        <a href="https://wa.me/263775493710?text=Hello%20Simeon" target="_blank" class="list-group-item list-group-item-action border-0 p-1 rounded bg-success text-white small px-2 text-center mt-1"><i class="bi bi-whatsapp me-1"></i> Message Directly on WhatsApp</a>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center text-muted pt-2 border-top" style="font-size: 0.75rem;">
+                    <span>Version: <strong>v2.0.6 (Stable)</strong></span>
+                    <span class="badge bg-secondary">🔓 Open Source Project</span>
+                </div>
+
             </div>
         </div>
     </div>

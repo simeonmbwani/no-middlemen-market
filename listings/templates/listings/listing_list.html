@@ -220,4 +220,44 @@
 
     </div>
 </div>
+
+<div class="container my-5 pt-4 border-top" id="categories-section">
+    <div class="text-center mb-4">
+        <h3 class="fw-bold text-main">Explore Marketplace Verticals</h3>
+        <p class="text-muted small">Select an ecosystem layer to browse listings completely free of broker agents</p>
+    </div>
+    <div class="row g-3 row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6">
+        <a href="?category=property" class="text-decoration-none col"><div class="card text-center p-3 asset-market-card h-100"><div class="fs-2 mb-1">🏠</div><span class="small fw-bold text-main">Property</span></div></a>
+        <a href="?category=vehicles" class="text-decoration-none col"><div class="card text-center p-3 asset-market-card h-100"><div class="fs-2 mb-1">🚗</div><span class="small fw-bold text-main">Vehicles</span></div></a>
+        <a href="?category=mining" class="text-decoration-none col"><div class="card text-center p-3 asset-market-card h-100"><div class="fs-2 mb-1">⛏️</div><span class="small fw-bold text-main">Mining</span></div></a>
+        <a href="?category=farming" class="text-decoration-none col"><div class="card text-center p-3 asset-market-card h-100"><div class="fs-2 mb-1">🚜</div><span class="small fw-bold text-main">Farming</span></div></a>
+        <a href="?category=commerce" class="text-decoration-none col"><div class="card text-center p-3 asset-market-card h-100"><div class="fs-2 mb-1">🏪</div><span class="small fw-bold text-main">Commerce</span></div></a>
+        <a href="?category=equipment" class="text-decoration-none col"><div class="card text-center p-3 asset-market-card h-100"><div class="fs-2 mb-1">🔧</div><span class="small fw-bold text-main">Equipment</span></div></a>
+    </div>
+</div>
+
+<div class="container my-5 py-4 border-top" id="pricing">
+    <div class="text-center mb-4">
+        <h3 class="fw-black text-main">Simple, Transparent Pricing</h3>
+        <p class="text-muted small">No hidden agent percentages. No commissions. Ever.</p>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-success shadow-sm p-4 text-center bg-white h-100 position-relative" style="border-width: 2px;">
+                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-success px-3 py-1">POPULAR</span>
+                <h5 class="fw-bold text-main mt-2">Verified Asset Listing</h5>
+                <p class="text-muted small mb-3">For authentic title owners & business managers</p>
+                <h2 class="fw-black text-success mb-3">$10 <span class="fs-6 text-muted fw-normal">/ One-time maintenance fee</span></h2>
+                <hr>
+                <ul class="list-unstyled text-start small text-muted mb-4 ps-2">
+                    <li class="mb-2">✓ <strong class="text-dark">100% Free Search</strong> for all buyers/tenants forever</li>
+                    <li class="mb-2">✓ Direct peer messaging with no intermediary platform interception</li>
+                    <li class="mb-2">✓ Dynamic ZiG / USD real-time currency conversion tool display</li>
+                    <li class="mb-2">✓ Strict Anti-Broker ID Verification vetting for high-trust scoring</li>
+                </ul>
+                <a href="{% url 'listings:create' %}" class="btn btn-success btn-rounded animated-btn w-100 fw-bold py-2">Create Listing Now</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
