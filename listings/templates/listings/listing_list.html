@@ -1,16 +1,48 @@
 {% extends 'base.html' %}
-{% load currency_tags %} {% block title %}Verified Owner Asset Stream - No Middlemen{% endblock %}
+{% load currency_tags %}
+
+{% block title %}Verified Owner Asset Stream - No Middlemen{% endblock %}
 
 {% block content %}
+<style>
+    /* 🎯 THEME & HOVER LAYER ALIGNMENTS */
+    .premium-filter-card {
+        background: var(--card-bg) !important;
+        border: 1px solid var(--border-line) !important;
+        border-radius: 20px !important;
+    }
+    
+    .asset-market-card {
+        background: var(--card-bg) !important;
+        border: 1px solid var(--border-line) !important;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1), box-shadow 0.3s ease, border-color 0.3s ease;
+        overflow: hidden;
+    }
+    .asset-market-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(25, 135, 84, 0.15) !important;
+        border-color: #198754 !important;
+    }
+
+    .badge-price-tag {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
+    
+    .rounded-select {
+        border-radius: 10px !important;
+    }
+</style>
+
 <div class="row mb-4">
     <div class="col-12">
-        <div class="p-4 rounded-4 shadow-sm text-white" style="background: linear-gradient(135deg, #198754 0%, #115c39 100%);">
+        <div class="p-4 rounded-4 shadow-sm text-white" style="background: linear-gradient(135deg, #1b1f24 0%, #101214 100%); border-left: 5px solid #198754;">
             {% if request.user.is_authenticated %}
-                <h4 class="fw-bold mb-1">Welcome,Siyamukela,Mauya @{{ request.user.username }}! 👋</h4>
-                <p class="small mb-0 text-warning fw-semibold">You are logged in. Manage your assets or chat directly with verified owners without any broker fees.</p>
+                <h4 class="fw-black mb-1 text-white">Welcome, Siyamukela, Mauya @{{ request.user.username }}! 👋</h4>
+                <p class="small mb-0 text-success fw-bold">Direct Peer-To-Peer System Active &bull; No Broker Fees</p>
             {% else %}
-                <h4 class="fw-bold mb-1">Welcome to No-Middlemen Marketplace 👋</h4>
-                <p class="small mb-0 text-warning fw-semibold">Find mining gear, land, and vehicles straight from their legal owners across Zimbabwe.</p>
+                <h4 class="fw-black mb-1 text-white">Welcome to No-Middlemen Marketplace 👋</h4>
+                <p class="small mb-0 text-success fw-bold">Find equipment, housing, and assets straight from legal title owners across Zimbabwe.</p>
             {% endif %}
         </div>
     </div>
@@ -19,24 +51,24 @@
 <div class="row g-4">
     
     <div class="col-12 col-md-4">
-        <div class="card shadow-sm border-0 p-4 rounded-4 sticky-md-top" style="top: 20px; z-index: 10;">
+        <div class="card premium-filter-card shadow-sm p-4 sticky-md-top" style="top: 135px; z-index: 10;">
             <div class="d-flex align-items-center gap-2 mb-3">
-                <span class="fs-5">🎯</span>
-                <h5 class="fw-bold mb-0">Filter Direct Assets</h5>
+                <i class="bi bi-sliders text-success fs-5"></i>
+                <h5 class="fw-bold mb-0 text-main">Filter Direct Assets</h5>
             </div>
             
             <form method="GET" action="{% url 'listings:list' %}">
                 <div class="mb-3">
-                    <label class="small fw-bold text-secondary mb-1">Search Products / Keyword</label>
+                    <label class="small fw-bold text-secondary mb-1">Search Keyword</label>
                     <div class="input-group">
-                        <span class="input-group-text bg-light border-2">🔍</span>
-                        <input type="text" name="search_text" class="form-control border-2" placeholder="e.g. Compressor, Mill, Truck" value="{{ request.GET.search_text }}">
+                        <span class="input-group-text border-2 bg-transparent text-secondary"><i class="bi bi-search"></i></span>
+                        <input type="text" name="search_text" class="form-control border-2" placeholder="Compressor, Mill, Truck..." value="{{ request.GET.search_text|default:'' }}">
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="small fw-bold text-secondary mb-1">Asset Classification</label>
-                    <select name="category" class="form-select border-2">
+                    <select name="category" class="form-select border-2 rounded-select">
                         <option value="">All Classifications</option>
                         {% for group_name, subcategories in category_choices %}
                             <optgroup label="{{ group_name }}">
@@ -50,7 +82,7 @@
 
                 <div class="mb-3">
                     <label class="small fw-bold text-secondary mb-1">Province Location</label>
-                    <select name="province" class="form-select border-2">
+                    <select name="province" class="form-select border-2 rounded-select">
                         <option value="">All Provinces</option>
                         <option value="Harare" {% if request.GET.province == 'Harare' %}selected{% endif %}>Harare</option>
                         <option value="Bulawayo" {% if request.GET.province == 'Bulawayo' %}selected{% endif %}>Bulawayo</option>
@@ -67,48 +99,48 @@
 
                 <div class="mb-3">
                     <label class="small fw-bold text-secondary mb-1">District / Town</label>
-                    <input type="text" name="district" class="form-control border-2" placeholder="e.g. Shurugwi, Kadoma" value="{{ request.GET.district }}">
+                    <input type="text" name="district" class="form-control border-2" placeholder="e.g. Shurugwi, Chinhoyi" value="{{ request.GET.district|default:'' }}">
                 </div>
 
                 <div class="mb-4">
                     <label class="small fw-bold text-secondary mb-1">Max Budget Limit (USD)</label>
                     <div class="input-group">
-                        <span class="input-group-text bg-light border-2">$</span>
-                        <input type="number" name="max_price" class="form-control border-2" placeholder="Budget cap" value="{{ request.GET.max_price }}">
+                        <span class="input-group-text border-2 bg-transparent text-secondary">$</span>
+                        <input type="number" name="max_price" class="form-control border-2" placeholder="Budget cap" value="{{ request.GET.max_price|default:'' }}">
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-success w-100 fw-bold py-2 rounded-3 shadow-sm">
+                <button type="submit" class="btn btn-success w-100 btn-rounded animated-btn fw-bold py-2 shadow-sm">
                     🔍 Filter Market Feed
                 </button>
-                <a href="{% url 'listings:list' %}" class="btn btn-link btn-sm d-block text-center mt-2 text-decoration-none text-muted">Clear Filters</a>
+                <a href="{% url 'listings:list' %}" class="btn btn-link btn-sm d-block text-center mt-2 text-decoration-none text-muted small">Clear Active Filters</a>
             </form>
         </div>
     </div>
 
-    <div class="col-12 col-md-8 scrollable-feed-panel">
+    <div class="col-12 col-md-8">
         <div class="d-flex justify-content-between align-items-center mb-3 ps-md-2">
-            <h5 class="fw-bold mb-0">Latest Verified Owner Listings</h5>
-            <span class="badge bg-light text-dark border small py-1 px-2 fw-semibold">Real-Time Data Feed</span>
+            <h5 class="fw-bold mb-0 text-main">Latest Verified Listings</h5>
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 small rounded-pill font-monospace fw-bold">Live Data Feed</span>
         </div>
 
         <div class="row g-3 ps-md-2">
             {% for item in listings %}
                 <div class="col-12 col-sm-6">
-                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white hover-up transition-all" style="transition: transform 0.2s ease;">
+                    <div class="card h-100 asset-market-card rounded-4">
                         
-                        <div style="position: relative; height: 180px; background-color: #f1f3f5;">
+                        <div style="position: relative; height: 180px; background-color: var(--input-bg);">
                             {% if item.image1 %}
                                 <img src="{{ item.image1.url }}" alt="{{ item.title }}" class="w-100 h-100" style="object-fit: cover;">
                             {% else %}
-                                <div class="d-flex align-items-center justify-content-center h-100 text-muted small bg-light">No Image Available</div>
+                                <div class="d-flex align-items-center justify-content-center h-100 text-muted small"><i class="bi bi-images fs-2 opacity-50"></i></div>
                             {% endif %}
                             
                             <div class="position-absolute d-flex flex-column align-items-start gap-1" style="top: 12px; left: 12px;">
-                                <span class="badge bg-success fs-6 fw-bold text-white border border-success" style="box-shadow: 0 4px 8px rgba(0,0,0,0.3); text-shadow: 1px 1px 2px rgba(0,0,0,0.4);">
+                                <span class="badge bg-success fs-6 fw-bold text-white border border-success badge-price-tag">
                                     ${{ item.price }} <span class="small fw-normal opacity-90" style="font-size: 0.65rem;">USD</span>
                                 </span>
-                                <span class="badge fw-bold font-monospace text-white border border-secondary" style="font-size: 0.75rem; background-color: rgba(20, 22, 31, 0.9) !important; box-shadow: 0 4px 8px rgba(0,0,0,0.3); letter-spacing: 0.5px;">
+                                <span class="badge fw-bold font-monospace text-white border border-secondary badge-price-tag" style="font-size: 0.75rem; background-color: rgba(16, 18, 20, 0.85) !important;">
                                     ≈ {{ item.price|to_zig:ZIG_MID_RATE }} ZiG
                                 </span>
                             </div>
@@ -117,18 +149,18 @@
                         <div class="card-body p-3 d-flex flex-column justify-content-between">
                             <div>
                                 <div class="d-flex justify-content-between align-items-start mb-1">
-                                    <h6 class="fw-bold text-dark text-truncate mb-0" style="max-width: 65%;">{{ item.title }}</h6>
+                                    <h6 class="fw-bold text-main text-truncate mb-0" style="max-width: 65%;">{{ item.title }}</h6>
                                     <span class="badge bg-light text-success border border-success-subtle rounded-pill text-capitalize text-truncate" style="font-size: 0.65rem; max-width: 35%;" title="{{ item.get_category_display }}">
                                         {{ item.get_category_display }}
                                     </span>
                                 </div>
                                 
                                 <div class="mb-2" style="font-size: 0.75rem;">
-                                    <span class="text-muted">By: @{{ item.owner.username }}</span>
+                                    <span class="text-muted">Owner: @{{ item.owner.username }}</span>
                                     {% if item.owner.is_verified_owner %}
-                                        <span class="text-success fw-bold ms-1" title="Verified Zimbabwean National ID Card Holder">✓ Verified Owner</span>
+                                        <span class="text-success fw-bold ms-1" title="Verified Zimbabwean National ID Checked"><i class="bi bi-patch-check-fill"></i> Verified</span>
                                     {% else %}
-                                        <span class="text-secondary ms-1">Pending KYC</span>
+                                        <span class="text-secondary opacity-70 ms-1">Pending Clearance</span>
                                     {% endif %}
                                 </div>
 
@@ -139,12 +171,12 @@
 
                             <div class="border-top pt-2 mt-2">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="small text-secondary fw-semibold">📍 {{ item.district|title }}, {{ item.province }}</span>
-                                    <span class="text-muted xsmall" style="font-size: 0.7rem;"> {{ item.created_at|timesince }} ago</span>
+                                    <span class="small text-secondary fw-semibold"><i class="bi bi-geo-alt-fill text-danger small"></i> {{ item.district|title }}, {{ item.province }}</span>
+                                    <span class="text-muted font-monospace" style="font-size: 0.7rem;">{{ item.created_at|timesince }} ago</span>
                                 </div>
                                 
                                 <div class="d-grid">
-                                    <a href="{% url 'listings:detail' item.id %}" class="btn btn-sm btn-outline-success fw-bold rounded-3 py-1">
+                                    <a href="{% url 'listings:detail' item.id %}" class="btn btn-sm btn-outline-success btn-rounded animated-btn fw-bold py-1.5">
                                         View Details & Connect Directly
                                     </a>
                                 </div>
@@ -155,10 +187,10 @@
                 </div>
             {% empty %}
                 <div class="col-12">
-                    <div class="card border-0 shadow-sm p-5 text-center rounded-4 bg-white">
+                    <div class="card border-0 shadow-sm p-5 text-center">
                         <span class="fs-1 mb-2 d-block">📦</span>
-                        <h5 class="fw-bold">No active entries match your criteria at the moment.</h5>
-                        <p class="text-muted small mb-0 mx-auto" style="max-width: 80%;">Be the primary owner to tap this district market niche by clicking the green "+ List Asset" link above right now!</p>
+                        <h5 class="fw-bold text-main">No active entries match your search parameters.</h5>
+                        <p class="text-muted small mb-0 mx-auto" style="max-width: 80%;">Tap into this target regional segment by creating an item listing right now using the panel indicators.</p>
                     </div>
                 </div>
             {% endfor %}
@@ -188,11 +220,4 @@
 
     </div>
 </div>
-
-<style>
-    .hover-up:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 .5rem 1rem rgba(0,0,0,0.12) !important;
-    }
-</style>
 {% endblock %}
