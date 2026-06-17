@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}No Middlemen Marketplace{% endblock %}</title>
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#198754">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* 🌗 PRECISE COMMERCIAL PREFERENCES THEME SYSTEM */
@@ -169,7 +173,7 @@
         <div class="container d-flex flex-row justify-content-between align-items-center flex-nowrap">
             <a class="navbar-brand fw-bold text-success text-nowrap m-0" href="{% url 'listings:list' %}">🚫 NO MIDDLEMEN</a>
             <div class="d-flex align-items-center gap-1.5 text-nowrap">
-                <button class="btn btn-sm btn-outline-light mobile-nav-btn-icon" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                <button class="btn class-trigger btn-sm btn-outline-light mobile-nav-btn-icon" data-bs-toggle="modal" data-bs-target="#settingsModal">
                     ⚙️ <span class="mobile-nav-btn-text">{{ TEXT.settings }}</span>
                 </button>
                 <a href="{% url 'listings:create' %}" class="btn btn-sm btn-success mobile-nav-btn-icon fw-bold">
@@ -191,6 +195,18 @@
             </div>
             <div class="modal-body">
                 
+                {% if user.is_authenticated %}
+                    <div class="p-3 rounded mb-3 border border-warning" style="background-color: rgba(255, 193, 7, 0.08);">
+                        <h6 class="small fw-bold text-warning text-uppercase mb-1">🪪 Identity Clearance Hub</h6>
+                        {% if user.is_verified_owner %}
+                            <p class="small mb-0 text-success fw-bold">✓ Account Profile Status: Verified Owner</p>
+                        {% else %}
+                            <p class="small mb-2 text-muted" style="font-size: 0.8rem;">Verify your account to publish listings directly and confirm non-broker compliance status.</p>
+                            <a href="{% url 'accounts:verify_identity' %}" class="btn btn-sm btn-warning w-100 fw-bold rounded-3">Access Verification Portal</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
                 <form action="{% url 'listings:set_language' %}" method="POST" id="langForm" class="mb-3">
                     {% csrf_token %}
                     <label class="small fw-bold mb-1">{{ TEXT.lang_label }}</label>
@@ -291,19 +307,30 @@
             });
         });
     </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((reg) => console.log('PWA Service Worker Operational!'))
+                    .catch((err) => console.log('Service worker deployment fallback: ', err));
+            });
+        }
+    </script>
+
     <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="toast align-items-center text-white {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-danger{% else %}bg-dark{% endif %} border-0 shadow rounded-3 mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
-                <div class="d-flex">
-                    <div class="toast-body small fw-semibold">
-                        {% if message.tags == 'success' %}✓{% else %}⚠️{% endif %} {{ message }}
+        {% if messages %}
+            {% endfor %} {% for message in messages %}
+                <div class="toast align-items-center text-white {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-danger{% else %}bg-dark{% endif %} border-0 shadow rounded-3 mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+                    <div class="d-flex">
+                        <div class="toast-body small fw-semibold">
+                            {% if message.tags == 'success' %}✓{% else %}⚠️{% endif %} {{ message }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white m-auto me-2" data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
-                    <button type="button" class="btn-close btn-close-white m-auto me-2" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
-            </div>
-        {% endfor %}
-    {% endif %}
-</div>
+            {% endfor %}
+        {% endif %}
+    </div>
 </body>
 </html>

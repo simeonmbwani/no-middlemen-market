@@ -77,8 +77,8 @@ LOCALE_PATHS = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'DIRS':[BASE_DIR / 'templates'],
+        # 🔧 FIXED: Removed the double 'DIRS' definition line to prevent configuration overrides
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,7 +90,6 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
@@ -174,3 +173,6 @@ AUTHENTICATION_BACKENDS = [
 # Tell Django where to send users automatically after a successful login
 LOGIN_REDIRECT_URL = 'listings:list'
 LOGOUT_REDIRECT_URL = 'listings:list'
+
+# 🔧 FIXED: Added explicit login path layout pattern so login_required decorators redirect seamlessly
+LOGIN_URL = 'accounts:login'
