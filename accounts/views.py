@@ -16,7 +16,8 @@ User = get_user_model()
 class MarketplaceUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = UserCreationForm.Meta.fields + ('email', 'phone_number', 'national_id')
+        # 🔧 FIXED: Aligned form backend field definitions with registration template inputs
+        fields = ('username', 'email')
 
     # 🔧 FIXED: Clean the parameters to convert empty strings into clean database NULL entries
     def clean_phone_number(self):

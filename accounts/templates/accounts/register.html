@@ -1,73 +1,98 @@
 {% extends 'base.html' %}
 
-{% block title %}Owner Account Registration - No Middlemen{% endblock %}
+{% block title %}Create Owner Account - No Middlemen Marketplace{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center my-4">
-    <div class="col-md-6">
-        <div class="card shadow-sm border-0 p-4 bg-white rounded">
-            <h4 class="fw-bold text-dark mb-1">Create Owner Profile</h4>
-            <p class="text-muted small">Register once to directly manage your properties and machinery assets.</p>
+<style>
+    .premium-register-card {
+        background: var(--card-bg) !important;
+        border: 1px solid var(--border-line) !important;
+        border-radius: 24px !important;
+    }
+    [data-theme="dark"] .premium-register-card {
+        background-color: var(--card-bg) !important;
+    }
+    [data-theme="dark"] .text-dark, [data-theme="dark"] h3, [data-theme="dark"] label {
+        color: #f8fafc !important;
+    }
+    [data-theme="dark"] .text-muted, [data-theme="dark"] .form-text {
+        color: #cbd5e1 !important;
+    }
+</style>
+
+<div class="row justify-content-center my-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card premium-register-card shadow-sm p-4">
             
-            <form method="POST" action="{% url 'accounts:register' %}">
-                {% csrf_token %}
-                
-                {% if form.errors %}
-                    <div class="alert alert-danger p-3 small rounded-3 mb-3">
-                        <strong class="d-block mb-1">Please correct the following errors:</strong>
-                        <ul class="mb-0 ps-3">
+            <div class="text-center mb-4">
+                <h3 class="fw-black text-dark mb-1">Create Verified Account</h3>
+                <p class="text-muted small">Join as an authentic asset owner. Brokers are strictly prohibited.</p>
+            </div>
+
+            {% if form.errors or form.non_field_errors %}
+                <div class="alert alert-danger rounded-3 p-3 mb-3 small shadow-sm">
+                    <h6 class="fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill"></i> Registration Issue Detected:</h6>
+                    <ul class="mb-2 ps-3">
                         {% for field, errors in form.errors.items %}
                             {% for error in errors %}
-                                <li>{{ field|capfirst }}: {{ error }}</li>
+                                <li><strong>{{ field|title }}:</strong> {{ error }}</li>
                             {% endfor %}
                         {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-
-                {% for field in form %}
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-secondary mb-1">{{ field.label }}</label>
-                        
-                        {{ field }}
-                        
-                        {% if field.help_text %}
-                            <small class="text-muted d-block mt-1" style="font-size: 0.7rem;">{{ field.help_text|safe }}</small>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-
-                <div class="accordion my-3" id="legalAccordion">
-                    <div class="accordion-item border rounded">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed py-2 small fw-bold text-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTerms">
-                                📜 Read Platform Terms, Conditions & FAQs
-                            </button>
-                        </h2>
-                        <div id="collapseTerms" class="accordion-collapse collapse" data-bs-parent="#legalAccordion">
-                            <div class="accordion-body small text-muted bg-light" style="max-height: 180px; overflow-y: scroll; font-size: 0.75rem;">
-                                <h6>❓ FAQ Overview</h6>
-                                <strong>Q: Who is allowed to publish assets here?</strong><br>
-                                A: Only the verified legal title owners or authorized representatives. Middlemen and brokers are strictly forbidden.<br><br>
-                                
-                                <h6>⚖️ Legally Articulated Terms of Service</h6>
-                                1. **Anti-Broker Mandate:** By checking the validation box below, you swear under penalty of immediate platform banning that you are the primary legal owner of the item or estate being listed.<br><br>
-                                2. **Verification Requirements:** Every listing requires a flat, up-front listing maintenance fee. No commission fees or backend transaction pricing percentages will ever be demanded by the network.<br><br>
-                                3. **Three-Strike Policy Enforcements:** If multiple public tenants or buyers flag your profile for acting as an unverified broker or middleman, your profile will receive strikes, culminating in a permanent ban and national ID blacklist.
-                            </div>
-                        </div>
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    <div class="border-top pt-2 mt-2 bg-transparent text-center">
+                        <span class="d-block fw-semibold text-danger mb-1">Struggling to sign up?</span>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#settingsModal" class="btn btn-xs btn-outline-danger py-1 px-3 fw-bold rounded-pill text-decoration-none">
+                            <i class="bi bi-telephone-fill me-1"></i> Contact Live Help Center
+                        </a>
                     </div>
                 </div>
+            {% endif %}
 
-                <div class="form-check mb-4">
-                    <input class="form-check-input" type="checkbox" id="legalCheck" required>
-                    <label class="form-check-label text-secondary" for="legalCheck" style="font-size: 0.8rem;">
-                        I agree to the legally articulated Terms & Conditions, and confirm that all items I list belong entirely to me.
+            <form method="POST" action="{% url 'accounts:register' %}">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1">Desired Username</label>
+                    <input type="text" name="username" class="form-control border-2" placeholder="e.g. simeon_zw" required value="{{ form.username.value|default:'' }}">
+                    <div class="form-text small opacity-75">Only letters, digits, and @/./+/-/_ are allowed.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1">Email Address</label>
+                    <input type="email" name="email" class="form-control border-2" placeholder="name@domain.com" required value="{{ form.email.value|default:'' }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1">Secure Password</label>
+                    <input type="password" name="password" class="form-control border-2" placeholder="Create strong password" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label small fw-bold mb-1">Confirm Password</label>
+                    <input type="password" name="password_confirm" class="form-control border-2" placeholder="Repeat password exactly" required>
+                </div>
+
+                <div class="mb-4 form-check bg-light-subtle p-3 rounded-3 border">
+                    <input type="checkbox" class="form-check-input ms-0 me-2" id="termsCheck" required>
+                    <label class="form-check-label small fw-semibold text-secondary" for="termsCheck">
+                        I certify that I am a direct asset owner/manager and agree to abide by the 
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#settingsModal" class="text-success text-decoration-underline fw-bold">Platform Terms & Conditions</a>.
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm rounded-3">Complete Profile Registration</button>
+                <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm rounded-3 mb-3 animated-btn">
+                    Register Verified Profile
+                </button>
             </form>
+
+            <div class="text-center border-top pt-3">
+                <p class="small text-muted mb-1">Already have an account registered?</p>
+                <a href="{% url 'accounts:login' %}" class="small text-success fw-bold text-decoration-none">Sign in to your profile instead →</a>
+            </div>
+
         </div>
     </div>
 </div>
