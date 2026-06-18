@@ -120,3 +120,11 @@ def compliance_dashboard_view(request):
         'pending': pending_verifications,
         'history': reviewed_verifications,
     })  
+    
+# 🔧 FIXED: Added the missing controller to process full-screen Terms & FAQ page requests
+def terms_faq_view(request):
+    """
+    Renders the standalone full-screen trust matrix 
+    housing platform Terms, Conditions, and FAQs.
+    """
+    return render(request, 'accounts/terms_faq.html')
