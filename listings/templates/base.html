@@ -196,13 +196,14 @@
                                     <li><a class="dropdown-item" href="{% url 'accounts:verify_identity' %}"><i class="bi bi-person-vcard-fill me-2"></i> Account Clearance</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
-                                        <form method="POST" action="{% url 'accounts:logout' %}" class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">
-                                                <i class="bi bi-box-arrow-right me-2"></i> Logout
-                                            </button>
-                                        </form>
-                                    </li>
+                                       <li>
+    <form method="POST" action="{% url 'accounts:logout' %}" class="d-block w-100 m-0 p-0">
+        {% csrf_token %}
+        <button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start py-2 px-3 fw-semibold">
+            <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </button>
+    </form>
+</li>
                                 </ul>
                             </div>
                         {% else %}
