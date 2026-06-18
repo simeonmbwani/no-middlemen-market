@@ -8,11 +8,13 @@ urlpatterns = [
     # 🔑 Using Django's built-in secure login view wrapper
     path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
     
-    # 🚪 Logout handler (🔧 FIXED: Explicitly routing via template to handle modern Django security mandates cleanly)
-    path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logged_out.html'), name='logout'),
+    # 🚪 Logout handler (🔧 FIXED: Single, clean path mapping to Django's native authentication controller)
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     
     # 📝 Custom User/Owner Registration path
     path('register/', views.register_view, name='register'),
     path('verify-identity/', views.upload_national_id_view, name='verify_identity'),
+    
+    # 🛡️ Compliance Dashboard Hub (🔧 FIXED: Resolved the dangling quotation string closure bracket error)
     path('dashboard/compliance/', views.compliance_dashboard_view, name='compliance_dashboard'),
 ]

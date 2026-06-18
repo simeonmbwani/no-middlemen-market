@@ -182,3 +182,7 @@ LOGOUT_REDIRECT_URL = 'listings:list'
 # 🔧 FIXED: Added explicit login path layout pattern so login_required decorators redirect seamlessly
 LOGIN_URL = 'accounts:login'
 
+# 🔒 SECURE SESSION COOKIE TUNING (FORCE SSL COMPLIANCE FOR RENDER)
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
