@@ -166,6 +166,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 # 🛡️ Trust security parameters originating from your live web server domain
 CSRF_TRUSTED_ORIGINS = [
+    'https://no-middlemen-market-1.onrender.com',
     'https://no-middlemen-market.onrender.com',
 ]
 # 🛡️ CUSTOM AUTHENTICATION BACKENDS
@@ -180,3 +181,4 @@ LOGOUT_REDIRECT_URL = 'listings:list'
 
 # 🔧 FIXED: Added explicit login path layout pattern so login_required decorators redirect seamlessly
 LOGIN_URL = 'accounts:login'
+
