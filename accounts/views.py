@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login
 from django.contrib import messages
+from django.contrib.auth import login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.http import require_POST
 from django.utils.timezone import now
 
-from .forms import NationalIDUploadForm # Assure this form exists inside your accounts/forms.py
+from .forms import NationalIDUploadForm  # Form handles file validation inside accounts/forms.py
 from .models import NationalIDVerification
 
 User = get_user_model()
@@ -18,15 +18,6 @@ class MarketplaceUserCreationForm(UserCreationForm):
         model = User
         # 🔧 FIXED: Aligned form backend field definitions with registration template inputs
         fields = ('username', 'email')
-
-    # 🔧 FIXED: Clean the parameters to convert empty strings into clean database NULL entries
-    def clean_phone_number(self):
-        phone = self.cleaned_data.get('phone_number')
-        return phone if phone else None
-
-    def clean_national_id(self):
-        nid = self.cleaned_data.get('national_id')
-        return nid if nid else None
 
 
 def register_view(request):
@@ -50,6 +41,17 @@ def register_view(request):
         form = MarketplaceUserCreationForm()
         
     return render(request, 'accounts/register.html', {'form': form})
+
+
+@require_POST
+def logout_view(request):
+    """
+    🔒 SECURITY ENHANCEMENT: Enforces secure POST request validation 
+    for sessions, eliminating 403 and 405 routing exceptions.
+    """
+    logout(request)
+    messages.success(request, "You have logged out securely. See you soon!")
+    return redirect('listings:list')  
 
 
 @login_required
@@ -116,4 +118,4 @@ def compliance_dashboard_view(request):
     return render(request, 'accounts/compliance_dashboard.html', {
         'pending': pending_verifications,
         'history': reviewed_verifications,
-    })
+    })  
