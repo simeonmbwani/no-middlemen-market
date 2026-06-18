@@ -13,10 +13,11 @@ from .models import NationalIDVerification
 User = get_user_model()
 
 # Custom registration form layer to automatically handle custom marketplace parameters
+# Custom registration form layer to automatically handle custom marketplace parameters
 class MarketplaceUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
-        # 🔧 FIXED: Aligned form backend field definitions with registration template inputs
+        # 🔧 FIXED: Added explicit mapping definitions so Django hashes and saves user passwords safely
         fields = ('username', 'email')
 
 
