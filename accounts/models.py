@@ -6,7 +6,8 @@ from django.conf import settings
 class User(AbstractUser):
     """
     Custom User Model for the No-Middlemen Marketplace.
-    Tracks verification, Zimbabwean phone formats, and system strikes.
+    Tracks verification, Zimbabwean phone formats, system strikes, 
+    and tabbed account preferences configuration states natively.
     """
     # Validates +263771234567, 0771234567, etc.
     phone_regex = RegexValidator(
@@ -14,9 +15,24 @@ class User(AbstractUser):
         message="Phone number must be entered in the format: '+263771234567' or '0771234567'."
     )
     
-    # 🔧 FIXED: Added default placeholders to keep standard administrative creation from breaking unique indexes
+    # Core Authentication and Identity Attributes
+    full_name = models.CharField(max_length=150, blank=True, help_text="User's real full legal name")
     phone_number = models.CharField(validators=[phone_regex], max_length=13, unique=True, null=True, blank=True)
     national_id = models.CharField(max_length=20, unique=True, null=True, blank=True, help_text="National ID Number")
+    
+    # 🌍 Regional Mapping Attributes (Airbnb / Property24 Scaling Layer)
+    province = models.CharField(max_length=50, blank=True, help_text="Zimbabwean Province location")
+    district = models.CharField(max_length=50, blank=True, help_text="Local District location mapping")
+    
+    # 🔔 Tabbed Notification Preferences Checkboxes
+    email_new_message = models.BooleanField(default=True, help_text="Notify user upon incoming DMs")
+    email_listing_approved = models.BooleanField(default=True, help_text="Notify user upon listing compliance approval")
+    sms_notifications = models.BooleanField(default=False, help_text="Enable SMS broadcast updates")
+    
+    # 🔑 Listing Privacy & Defaults Controls
+    default_price_period = models.CharField(max_length=10, default='monthly', help_text="Fallback choice: daily, weekly, monthly")
+    show_phone_number = models.BooleanField(default=True, help_text="Toggle raw phone visibility")
+    show_whatsapp = models.BooleanField(default=True, help_text="Toggle click-to-chat WhatsApp communication handles")
     
     # Anti-Middleman Status Flags
     is_verified_owner = models.BooleanField(default=False)
@@ -39,8 +55,6 @@ class User(AbstractUser):
         verbose_name='user permissions',
     )
 
-    # 🔧 NOTE: Since AbstractUser uses 'username' as the primary login identifier, 
-    # we keep USERNAME_FIELD default and add your parameters to REQUIRED_FIELDS for createsuperuser management
     REQUIRED_FIELDS = ['email']
 
     def __str__(self):
