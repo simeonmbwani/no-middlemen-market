@@ -5,7 +5,7 @@
 {% block content %}
 <div class="row justify-content-center my-5">
     <div class="col-md-5">
-        <div class="card shadow border-0 p-4 rounded-4 bg-white">
+        <div class="card shadow-sm border-0 p-4 rounded-4 bg-white">
             <div class="text-center mb-3">
                 <h3 class="fw-bold text-dark mb-1">Welcome Back</h3>
                 <p class="text-muted small">Sign in to manage your active assets and direct messages.</p>
@@ -25,12 +25,16 @@
                     <input type="text" name="username" id="id_username" class="form-control border-2" placeholder="Enter username" required value="{{ form.username.value|default:'' }}">
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-2">
                     <label class="form-label small fw-bold text-secondary mb-1">Password</label>
                     <input type="password" name="password" id="id_password" class="form-control border-2" placeholder="Enter password" required>
                 </div>
 
-                <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm rounded-3 mb-3">
+                <div class="mb-4 text-end">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#settingsModal" class="small text-muted text-decoration-underline fw-semibold"><i class="bi bi-patch-question-fill me-1"></i>Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm rounded-3 mb-3 animated-btn">
                     Sign In Securing Profile
                 </button>
             </form>

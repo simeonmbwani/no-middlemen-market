@@ -32,7 +32,7 @@
             {% if form.errors or form.non_field_errors %}
                 <div class="alert alert-danger rounded-3 p-3 mb-3 small shadow-sm">
                     <h6 class="fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill"></i> Registration Issue Detected:</h6>
-                    <ul class="mb-2 ps-3">
+                    <ul class="mb-0 ps-3">
                         {% for field, errors in form.errors.items %}
                             {% for error in errors %}
                                 <li><strong>{{ field|title }}:</strong> {{ error }}</li>
@@ -42,12 +42,6 @@
                             <li>{{ error }}</li>
                         {% endfor %}
                     </ul>
-                    <div class="border-top pt-2 mt-2 bg-transparent text-center">
-                        <span class="d-block fw-semibold text-danger mb-1">Struggling to sign up?</span>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#settingsModal" class="btn btn-xs btn-outline-danger py-1 px-3 fw-bold rounded-pill text-decoration-none">
-                            <i class="bi bi-telephone-fill me-1"></i> Contact Live Help Center
-                        </a>
-                    </div>
                 </div>
             {% endif %}
 
@@ -78,7 +72,7 @@
                 <div class="mb-4 form-check bg-light-subtle p-3 rounded-3 border">
                     <input type="checkbox" class="form-check-input ms-0 me-2" id="termsCheck" required>
                     <label class="form-check-label small fw-semibold text-secondary" for="termsCheck">
-                        I certify that I am a direct asset owner/manager and agree to abide by the 
+                        I certify that I am a direct asset owner and agree to the 
                         <a href="#" data-bs-toggle="modal" data-bs-target="#settingsModal" class="text-success text-decoration-underline fw-bold">Platform Terms & Conditions</a>.
                     </label>
                 </div>
@@ -87,6 +81,18 @@
                     Register Verified Profile
                 </button>
             </form>
+
+            <div class="p-3 rounded-3 border border-warning my-3 text-center" style="background-color: rgba(255, 193, 7, 0.05);">
+                <span class="d-block small fw-bold text-warning text-uppercase mb-1"><i class="bi bi-telephone-fill"></i> Struggling to Register? Get Help Directly</span>
+                <div class="small font-monospace text-muted mb-2" style="font-size: 0.8rem;">
+                    👤 Admin: simeonmbwani <br>
+                    📞 Lines: 0775493710 / 0786120826 <br>
+                    📧 Email: simeonmbwani@gmail.com
+                </div>
+                <a href="https://wa.me/263775493710?text=I%20am%20struggling%20to%20register%20on%20the%20marketplace" target="_blank" class="btn btn-xs btn-success fw-bold text-white py-1 px-3 rounded-pill text-decoration-none" style="font-size: 0.75rem;">
+                    <i class="bi bi-whatsapp"></i> Chat via WhatsApp (0775493710)
+                </a>
+            </div>
 
             <div class="text-center border-top pt-3">
                 <p class="small text-muted mb-1">Already have an account registered?</p>
