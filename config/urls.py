@@ -29,6 +29,8 @@ path('admin/', admin.site.urls),
     path('dashboard/', include('dashboard.urls', namespace='dashboard')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('messages/', include('messaging.urls')),
+    path('manifest.json', TemplateView.as_view(template_name='manifest.json', content_type='application/json')),
+    path('service-worker.js', TemplateView.as_view(template_name='service-worker.js', content_type='application/javascript')),
 ]
 
 if settings.DEBUG:
