@@ -243,73 +243,103 @@
     </main>
 
     <div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-content modal-dialog p-3 shadow-lg rounded-4">
+        <div class="modal-content modal-dialog modal-dialog-scrollable p-3 shadow-lg rounded-4">
             <div class="modal-header border-0 pb-1">
                 <h5 class="modal-title fw-bold">Preferences Hub & Help Center</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
                 
-                {% if user.is_authenticated %}
-                    <div class="p-3 rounded mb-3 border border-warning" style="background-color: rgba(255, 193, 7, 0.08);">
-                        <h6 class="small fw-bold text-warning text-uppercase mb-1">🪪 Identity Clearance Hub</h6>
-                        {% if user.is_verified_owner %}
-                            <p class="small mb-0 text-success fw-bold">✓ Profile Status: Verified Owner</p>
-                        {% else %}
-                            <p class="small mb-2 text-muted" style="font-size: 0.8rem;">Submit your legal identification to publish direct peer listings safely.</p>
-                            <a href="{% url 'accounts:verify_identity' %}" class="btn btn-sm btn-warning w-100 fw-bold rounded-3">Access Verification Portal</a>
-                        {% endif %}
-                    </div>
-                {% endif %}
+                <div class="p-3 rounded mb-3 border bg-light-subtle">
+                    <h6 class="small fw-bold text-success text-uppercase mb-2">⚙️ System Preferences</h6>
+                    
+                    {% if user.is_authenticated %}
+                        <div class="p-2.5 rounded mb-3 border border-warning-subtle" style="background-color: rgba(255, 193, 7, 0.04);">
+                            <span class="d-block small text-muted mb-1">Account Clearance Gate:</span>
+                            {% if user.is_verified_owner %}
+                                <span class="text-success fw-bold small">✓ Status: Verified Active Owner</span>
+                            {% else %}
+                                <a href="{% url 'accounts:verify_identity' %}" class="btn btn-sm btn-warning w-100 fw-bold rounded-3 py-1">Access Verification Portal</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
 
-                <form action="{% url 'listings:set_language' %}" method="POST" id="langForm" class="mb-3">
-                    {% csrf_token %}
-                    <label class="small fw-bold mb-1">Language Option</label>
-                    <select class="form-select form-select-sm mb-2" id="langSelector" name="language">
-                        <option value="en">English</option>
-                        <option value="sn">ChiShona</option>
-                        <option value="nd">isiNdebele</option>
-                    </select>
-                    <button type="submit" class="btn btn-sm btn-success w-100 fw-bold">Apply Updates</button>
-                </form>
+                    <form action="{% url 'listings:set_language' %}" method="POST" id="langForm" class="mb-3">
+                        {% csrf_token %}
+                        <label class="xsmall text-muted fw-bold mb-1">Language Option</label>
+                        <select class="form-select form-select-sm mb-2 rounded-3" id="langSelector" name="language">
+                            <option value="en">English</option>
+                            <option value="sn">ChiShona</option>
+                            <option value="nd">isiNdebele</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-success w-100 fw-bold rounded-3">Apply Updates</button>
+                    </form>
 
-                <div class="mb-3">
-                    <label class="small fw-bold mb-1">Display Surface Tier</label>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-outline-secondary w-50" onclick="setBrightness('light')">☀️ Light</button>
-                        <button class="btn btn-sm btn-dark border w-50" onclick="setBrightness('dark')">🌙 Dark Mode</button>
+                    <div class="mb-2">
+                        <label class="xsmall text-muted fw-bold mb-1">Display Surface Tier</label>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-secondary w-50 rounded-3" onclick="setBrightness('light')">☀️ Light</button>
+                            <button class="btn btn-sm btn-dark border w-50 rounded-3" onclick="setBrightness('dark')">🌙 Dark Mode</button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="small fw-bold mb-1 text-uppercase text-success font-monospace">⚖️ Legal & Documentation</label>
+                    <label class="small fw-bold mb-1 text-uppercase text-secondary font-monospace">⚖️ Terms & Conditions (Explicit)</label>
                     <div class="accordion" id="modalLegalAccordion">
                         
-                        <div class="accordion-item">
+                        <div class="accordion-item mb-2 border rounded-3 overflow-hidden">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalFaqCollapse">
-                                    ❓ Platform FAQ Overview
+                                <button class="accordion-button collapsed py-2.5 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalAppFlow">
+                                    🚀 How the App Works & Users
                                 </button>
                             </h2>
-                            <div id="modalFaqCollapse" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
-                                <div class="accordion-body small text-muted" style="max-height: 150px; overflow-y: auto; font-size: 0.8rem;">
-                                    <p class="mb-2"><strong>Q: Who is allowed to publish assets here?</strong><br>A: Only verified legal title owners or authorized representatives. Middlemen and commission brokers are strictly forbidden.</p>
-                                    <p class="mb-0"><strong>Q: How do we prevent fraud?</strong><br>A: By matching user listing registration details against official Zimbabwean National ID data during compliance vetting.</p>
+                            <div id="modalAppFlow" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
+                                <div class="accordion-body small text-muted" style="font-size: 0.8rem; line-height: 1.5;">
+                                    <strong>Ecosystem Design:</strong> This platform connects asset owners directly with genuine buyers/tenants across Zimbabwe. <br><br>
+                                    <strong>Platform Users:</strong> Restricted exclusively to legitimate item owners, title-holders, and direct buyers. Middlemen, unverified agents, and commission brokers are strictly banned from registering.
                                 </div>
                             </div>
                         </div>
 
-                        <div class="accordion-item">
+                        <div class="accordion-item mb-2 border rounded-3 overflow-hidden">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalTermsCollapse">
-                                    📜 Terms of Service
+                                <button class="accordion-button collapsed py-2.5 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalFeeReason">
+                                    💰 The $10 Maintenance Fee Mandate
                                 </button>
                             </h2>
-                            <div id="modalTermsCollapse" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
-                                <div class="accordion-body small text-muted" style="max-height: 150px; overflow-y: auto; font-size: 0.75rem; line-height: 1.4;">
-                                    <p class="mb-2">1. <strong>Anti-Broker Mandate:</strong> You confirm under penalty of platform banning that you own or possess formal legal rights to items listed.</p>
-                                    <p class="mb-2">2. <strong>Flat Maintenance Pricing:</strong> No commission percentages or backend fees will ever be demanded by the network.</p>
-                                    <p class="mb-0">3. <strong>Three-Strike Enforcement:</strong> Profiles reported or discovered acting as unverified brokers face immediate blacklist bans.</p>
+                            <div id="modalFeeReason" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
+                                <div class="accordion-body small text-muted" style="font-size: 0.8rem; line-height: 1.5;">
+                                    <strong>Purpose of Fee:</strong> A flat, one-time $10 maintenance fee is required to publish an asset. This funds server operational infrastructure and background KYC vetting.<br><br>
+                                    <strong>Your Advantage:</strong> We never charge commission percentages on sales. You keep 100% of your transactional earnings free from broker cuts.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-2 border rounded-3 overflow-hidden">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed py-2.5 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalUserRights">
+                                    🛡️ Your Protection & Rights Parameters
+                                </button>
+                            </h2>
+                            <div id="modalUserRights" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
+                                <div class="accordion-body small text-muted" style="font-size: 0.8rem; line-height: 1.5;">
+                                    <strong>Sellers' Protection:</strong> All sellers are fully protected via mandatory National ID clearance checks. This stops brokers from stealing your property pictures and listing them elsewhere at inflated prices.<br><br>
+                                    <strong>Your Rights:</strong> You hold complete autonomy over your listed property data, negotiations, and direct contact avenues.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-2 border rounded-3 overflow-hidden">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed py-2.5 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#modalObligations">
+                                    ❌ Obligations & Exclusions of Liability
+                                </button>
+                            </h2>
+                            <div id="modalObligations" class="accordion-collapse collapse" data-bs-parent="#modalLegalAccordion">
+                                <div class="accordion-body small text-muted" style="font-size: 0.8rem; line-height: 1.5;">
+                                    <strong>User Obligations:</strong> Users are strictly obliged to list only valid, authentic assets that they legally own. Providing fraudulent data or attempting broker manipulation will lead to immediate profile blacklisting.<br><br>
+                                    <strong>Exclusion of Liability:</strong> The administration serves solely as an identity vetting system. We are not responsible for private off-platform payments, legal contractual conditions, or property field states. Buyers must perform standard due diligence.
                                 </div>
                             </div>
                         </div>
@@ -317,20 +347,26 @@
                     </div>
                 </div>
 
-                <div class="p-3 rounded mb-3 border border-success" style="background-color: rgba(25, 135, 84, 0.08);">
-                    <h6 class="small fw-bold text-success text-uppercase mb-2">🚨 Operational Helpline Desk</h6>
-                    <div class="list-group list-group-flush gap-1">
-                        <span class="list-group-item border-0 p-1 bg-transparent text-main small">👤 Administrator: Simeon Mbwani</span>
-                        <a href="tel:+263775493710" class="list-group-item list-group-item-action border-0 p-1 bg-transparent text-primary small">📞 Phone Line 1: +263 775 493 710</a>
-                        <a href="tel:+263786120826" class="list-group-item list-group-item-action border-0 p-1 bg-transparent text-primary small">📞 Phone Line 2: +263 786 120 826</a>
-                        <a href="mailto:simeonmbwani@gmail.com" class="list-group-item list-group-item-action border-0 p-1 bg-transparent text-primary small">📧 Email Desk: simeonmbwani@gmail.com</a>
-                        <a href="https://wa.me/263775493710?text=Hello%20Simeon" target="_blank" class="list-group-item list-group-item-action border-0 p-1 rounded bg-success text-white small px-2 text-center mt-1"><i class="bi bi-whatsapp me-1"></i> Message Directly on WhatsApp</a>
+                <div class="p-3 rounded mb-3 border border-success" style="background-color: rgba(25, 135, 84, 0.05);">
+                    <h6 class="small fw-bold text-success text-uppercase mb-2"><i class="bi bi-headset"></i> Operational Helpline Links</h6>
+                    <div class="list-group list-group-flush gap-2 bg-transparent" style="font-size: 0.85rem;">
+                        <span class="list-group-item border-0 p-0 bg-transparent text-main"><strong>👤 Desk Admin:</strong> simeonmbwani</span>
+                        <a href="tel:+263775493710" class="list-group-item list-group-item-action border-0 p-0 bg-transparent text-primary fw-semibold"><i class="bi bi-telephone-fill text-success me-1"></i> Call Hotline 1: 0775493710</a>
+                        <a href="tel:+263786120826" class="list-group-item list-group-item-action border-0 p-0 bg-transparent text-primary fw-semibold"><i class="bi bi-telephone-fill text-success me-1"></i> Call Hotline 2: 0786120826</a>
+                        <a href="mailto:simeonmbwani@gmail.com" class="list-group-item list-group-item-action border-0 p-0 bg-transparent text-primary fw-semibold"><i class="bi bi-envelope-fill text-danger me-1"></i> Email Desk: simeonmbwani@gmail.com</a>
+                        
+                        <div class="border-top pt-2 mt-1">
+                            <span class="d-block xsmall text-muted mb-1">🔑 Forgot password or username credential?</span>
+                            <a href="https://wa.me/263775493710?text=Hello%20Simeon,%20I%20forgot%20my%20marketplace%20password.%20Please%20assist%20me%20with%20resetting%20it." target="_blank" class="btn btn-success btn-sm w-100 fw-bold text-white btn-rounded shadow-sm mt-1">
+                                <i class="bi bi-whatsapp me-1"></i> Reset Password via WhatsApp (0775493710)
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center text-muted pt-2 border-top" style="font-size: 0.75rem;">
-                    <span>Version: <strong>v2.0.6 (Stable)</strong></span>
-                    <span class="badge bg-secondary">🔓 Open Source Project</span>
+                    <span>Version: <strong>v2.0.6 (Stable Build)</strong></span>
+                    <span class="badge bg-secondary-subtle text-secondary rounded-pill">🔒 Secure Network</span>
                 </div>
 
             </div>
