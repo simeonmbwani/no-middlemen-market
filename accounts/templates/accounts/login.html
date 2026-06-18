@@ -31,7 +31,9 @@
                 </div>
 
                 <div class="mb-4 text-end">
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#settingsModal" class="small text-muted text-decoration-underline fw-semibold"><i class="bi bi-patch-question-fill me-1"></i>Forgot Password?</a>
+                    <a href="{% url 'accounts:password_reset' %}" class="small text-muted text-decoration-underline fw-semibold">
+                        <i class="bi bi-patch-question-fill me-1"></i>Forgot Password?
+                    </a>
                 </div>
 
                 <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm rounded-3 mb-3 animated-btn">
