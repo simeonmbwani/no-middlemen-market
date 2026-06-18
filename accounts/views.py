@@ -128,3 +128,33 @@ def terms_faq_view(request):
     housing platform Terms, Conditions, and FAQs.
     """
     return render(request, 'accounts/terms_faq.html')
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def settings_dashboard_view(request):
+    """
+    Renders and processes the premium tabbed profile settings control center
+    including localization, privacy, notifications, and danger parameters.
+    """
+    user = request.user
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        
+        if action == 'save_profile':
+            user.full_name = request.POST.get('full_name', '')
+            user.phone_number = request.POST.get('phone_number', '')
+            user.province = request.POST.get('province', '')
+            user.district = request.POST.get('district', '')
+            user.save()
+            messages.success(request, "Profile configuration saved successfully!")
+            
+        elif action == 'save_privacy':
+            user.show_phone_number = 'show_phone' in request.POST
+            user.show_whatsapp = 'show_wa' in request.POST
+            user.save()
+            messages.success(request, "Privacy visibility mapping updated.")
+            
+        return redirect('accounts:settings_dashboard')
+
+    return render(request, 'accounts/settings_dashboard.html')

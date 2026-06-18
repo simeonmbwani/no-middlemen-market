@@ -19,5 +19,7 @@ urlpatterns = [
     path('dashboard/compliance/', views.compliance_dashboard_view, name='compliance_dashboard'),
     path('terms-and-faq/', views.terms_faq_view, name='terms_faq'),
     path('password-change/', auth_views.PasswordChangeView.as_view(template_name='accounts/password_change.html'), name='password_change'),
+    path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'), name='password_change_done'),
+    path('settings/', views.settings_dashboard_view, name='settings_dashboard'),
 
 ]

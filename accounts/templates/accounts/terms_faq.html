@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Legal & Trust Hub - No Middlemen Marketplace{% endblock %}
+
+{% block content %}
+<style>
+    .trust-card {
+        background: var(--card-bg) !important;
+        border: 1px solid var(--border-line) !important;
+        border-radius: 24px !important;
+    }
+    .nav-tabs .nav-link.active {
+        border-color: var(--border-line) var(--border-line) transparent !important;
+        background-color: var(--card-bg) !important;
+    }
+    .accordion-button:not(.collapsed) {
+        background-color: rgba(25, 135, 84, 0.05) !important;
+        color: #198754 !important;
+    }
+</style>
+
+<div class="row justify-content-center my-5">
+    <div class="col-lg-10">
+        <div class="text-center mb-5">
+            <h2 class="fw-black text-success mb-2"><i class="bi bi-shield-check"></i> Legal & Trust Hub</h2>
+            <p class="text-muted">Simple, professional, and trust-focused policies built for authentic peer-to-peer asset sharing.</p>
+        </div>
+
+        <ul class="nav nav-tabs justify-content-center border-bottom mb-4" id="legalTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active fw-bold px-4 text-success" id="terms-tab" data-bs-toggle="tab" data-bs-target="#terms-pane" type="button" role="tab">
+                    📜 Terms & Conditions
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-bold px-4 text-success" id="faq-tab" data-bs-toggle="tab" data-bs-target="#faq-pane" type="button" role="tab">
+                    ❓ FAQ Hub
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="legalTabContent">
+            
+            <div class="tab-pane fade show active p-4 trust-card shadow-sm" id="terms-pane" role="tabpanel">
+                <div class="lh-lg text-secondary" style="font-size: 0.93rem;">
+                    
+                    <h5 class="fw-bold text-dark mb-2">1. Introduction</h5>
+                    <p class="mb-4">Welcome to NO MIDDLEMEN, a peer-to-peer asset sharing platform connecting owners directly with borrowers, tenants, or renters. By accessing or using this platform, you agree to comply with and be bound by these terms.</p>
+
+                    <h5 class="fw-bold text-dark mb-2">2. Eligibility</h5>
+                    <p class="mb-2">Users must strictly fulfill the following conditions to maintain ecosystem accountability:</p>
+                    <ul class="mb-4 ps-3">
+                        <li>✓ Be 18 years or older.</li>
+                        <li>✓ Provide highly accurate and truthful registration details.</li>
+                        <li>✓ Upload and use their own valid National ID.</li>
+                        <li>✓ Not impersonate another person, representative, or asset manager.</li>
+                    </ul>
+
+                    <h5 class="fw-bold text-dark mb-2">3. Platform Role</h5>
+                    <p class="mb-2">NO MIDDLEMEN operates explicitly under the following parameters:</p>
+                    <ul class="mb-4 ps-3">
+                        <li>• Provides a directory marketplace infrastructure only.</li>
+                        <li>• Is not an owner, agent, manager, broker, or middleman.</li>
+                        <li>• Does not guarantee or verify the quality, safety, or condition of listed assets.</li>
+                        <li>• Is not responsible for private transactional agreements or disputes between users.</li>
+                    </ul>
+
+                    <h5 class="fw-bold text-dark mb-2">4. Listing Rules</h5>
+                    <p class="mb-2">Users are strictly required to adhere to these publishing frameworks:</p>
+                    <ul class="mb-2 ps-3">
+                        <li>• You must legally own the asset or have verified permission to list it.</li>
+                        <li>• You must use genuine, accurate photographs of the actual item.</li>
+                        <li>• Provide truthful descriptions and specify clear rental or sharing terms.</li>
+                        <li>• Avoid creating duplicate listings for the same asset.</li>
+                    </ul>
+                    <div class="alert alert-danger py-2 px-3 small border-0 font-monospace mb-4">
+                        <strong>❌ Strictly Prohibited:</strong> Stolen property, illegal items, fake listings, fraudulent activities, and offensive marketplace content.
+                    </div>
+
+                    <h5 class="fw-bold text-dark mb-2">5. Payments</h5>
+                    <p class="mb-4">Ecosystem marketplace searching and browsing are completely free. Fixed listing maintenance fees must be paid before publishing an asset to fund baseline platform infrastructure and KYC processing. All rental payments are arranged directly between parties off-platform. Listing fees are non-refundable once approved.</p>
+
+                    <h5 class="fw-bold text-dark mb-2">6. User Responsibilities</h5>
+                    <p class="mb-2">Users assume complete responsibility for:</p>
+                    <ul class="mb-4 ps-3">
+                        <li>• Thoroughly inspecting assets physically before finalizing rentals.</li>
+                        <li>• Verifying the legitimate ownership of the counterparty.</li>
+                        <li>• Signing external legal sharing agreements where necessary.</li>
+                        <li>• Ensuring the safe handling, maintenance, and timely return of rented items.</li>
+                    </ul>
+
+                    <h5 class="fw-bold text-dark mb-2">7. Suspension and Termination</h5>
+                    <p class="mb-2">NO MIDDLEMEN reserves the right to suspend or permanently deactivate accounts for:</p>
+                    <ul class="mb-4 ps-3">
+                        <li>• Engaging in fraudulent behavior or trickery.</li>
+                        <li>• Spamming multiple duplicate listings.</li>
+                        <li>• Abuse or harassment directed at other users.</li>
+                        <li>• Providing false or un-matching verification details.</li>
+                        <li>• Violating local constitutional laws.</li>
+                    </ul>
+
+                    <h5 class="fw-bold text-dark mb-2">8. Privacy Policy Core</h5>
+                    <p class="mb-4">Personal information is fully protected under strict system storage guidelines and is exclusively utilized for: identity verification, accurate account management, and proactive platform fraud prevention.</p>
+
+                    <h5 class="fw-bold text-dark mb-2">9. Limitation of Liability</h5>
+                    <p class="mb-4">NO MIDDLEMEN shall not be held liable for financial or structural losses resulting from transactions, property damage during rentals, theft, or personal civil disputes arising among platform users.</p>
+
+                    <h5 class="fw-bold text-dark mb-2">10. Amendments</h5>
+                    <p class="mb-0">These operational terms and conditions may be updated periodically to adapt to system evolutions. Continued usage of the platform constitutes total acceptance of any revisions.</p>
+                
+                </div>
+            </div>
+
+            <div class="tab-pane fade p-4 trust-card shadow-sm" id="faq-pane" role="tabpanel">
+                <div class="accordion accordion-flush" id="faqAccordion">
+                    
+                    <div class="dropdown-header px-0 text-success fw-bold text-uppercase small mb-2"><i class="bi bi-person-badge-fill me-1"></i> Account Queries</div>
+                    
+                    <div class="accordion-item border mb-2 rounded-3 overflow-hidden">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#fa1">How do I register?</button></h2>
+                        <div id="fa1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">Register once using your accurate, real-world personal details and upload your clear National ID for system compliance approval.</div></div>
+                    </div>
+                    <div class="accordion-item border mb-2 rounded-3 overflow-hidden">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#fa2">Is registration free?</button></h2>
+                        <div id="fa2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">Yes, creating an account profile and browsing the directory assets is 100% free.</div></div>
+                    </div>
+                    <div class="accordion-item border mb-3 rounded-3 overflow-hidden">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#fa3">Can I have multiple accounts?</button></h2>
+                        <div id="fa3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">No. To maintain system security and trust metrics, each verified individual is strictly limited to one account tied to their National ID.</div></div>
+                    </div>
+
+                    <div class="dropdown-header px-0 text-success fw-bold text-uppercase small mb-2"><i class="bi bi-collection-fill me-1"></i> Listing Management</div>
+                    
+                    <div class="accordion-item border mb-2 rounded-3 overflow-hidden">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#fl1">How much does listing cost?</button></h2>
+                        <div id="fl1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">A tiny, flat one-time maintenance fee is charged before publishing an asset to support baseline platform operations, keeping your listing completely commission-free.</div></div>
+                    </div>
+                    <div class="accordion-item border mb-2 rounded-3 overflow-hidden">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#fl2">Can I edit or delete a listing?</button></h2>
+                        <div id="fl2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">Yes! You maintain full control. You can update pricing or completely remove your listed asset at any time directly through your dashboard.</div></div>
+                    </div>
+                    <div class="accordion-item border mb-3 rounded-3 overflow-hidden">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#fl3">Why was my listing rejected?</button></h2>
+                        <div id="fl3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">Common reasons include: duplicate listings, incomplete or deceptive descriptions, stock photos instead of real item images, or policy violations flag-triggered by administrators.</div></div>
+                    </div>
+
+                    <div class="dropdown-header px-0 text-success fw-bold text-uppercase small mb-2"><i class="bi bi-shield-fill-check me-1"></i> Payments & Trust Safety</div>
+                    
+                    <div class="accordion-item border mb-2 rounded-3 overflow-hidden">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#fp1">Does NO MIDDLEMEN hold rental payments?</button></h2>
+                        <div id="fp1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">No. We are not escrow intermediaries. All rental fees are transacted directly between the owner and the renter via local methods (EcoCash, InnBucks, Cash).</div></div>
+                    </div>
+                    <div class="accordion-item border mb-2 rounded-3 overflow-hidden">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#fs1">How do I avoid fraud?</button></h2>
+                        <div id="fs1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">Always request identification matches, physically inspect assets in secure public areas, utilize clear written agreements, and completely avoid making advance token payments to unverified strangers.</div></div>
+                    </div>
+                    <div class="accordion-item border mb-3 rounded-3 overflow-hidden">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#ft1">I forgot my password or need to report a problem.</button></h2>
+                        <div id="ft1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">Use the "Forgot Password" link on the sign-in panel, or click your system preferences modal to immediately access our direct support line and report system abuse.</div></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

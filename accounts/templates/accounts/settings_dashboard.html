@@ -1,0 +1,377 @@
+{% extends 'base.html' %}
+
+{% block title %}Ecosystem Controls & Settings - No Middlemen{% endblock %}
+
+{% block content %}
+<style>
+    .settings-card {
+        background: var(--card-bg) !important;
+        border: 1px solid var(--border-line) !important;
+        border-radius: 20px !important;
+    }
+    .nav-settings .nav-link {
+        color: var(--text-main);
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+    .nav-settings .nav-link.active {
+        background-color: #198754 !important;
+        color: #ffffff !important;
+    }
+    .nav-settings .nav-link:hover:not(.active) {
+        background-color: rgba(25, 135, 84, 0.08);
+        color: #198754;
+    }
+    .danger-box {
+        border: 1px solid rgba(220, 53, 69, 0.2) !important;
+        background-color: rgba(220, 53, 69, 0.02) !important;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="row">
+        
+        <div class="col-lg-3 col-md-4 mb-4">
+            <div class="card settings-card shadow-sm p-3 position-sticky" style="top: 140px;">
+                <div class="text-center mb-3 pb-3 border-bottom">
+                    <div class="avatar-circle mx-auto mb-2" style="width: 50px; height: 50px; font-size: 1.3rem;">
+                        {{ user.username|slice:":1"|upper }}
+                    </div>
+                    <h6 class="fw-bold mb-0">@{{ user.username }}</h6>
+                    <small class="text-muted text-truncate d-block">{{ user.email }}</small>
+                </div>
+                
+                <div class="nav flex-column nav-pills nav-settings gap-1" id="settingsDashboardTabs" role="tablist" aria-orientation="vertical">
+                    <button class="nav-link active text-start" id="tab-account" data-bs-toggle="tab" data-bs-target="#pane-account" type="button" role="tab"><i class="bi bi-person-fill me-2"></i> Account Info</button>
+                    <button class="nav-link text-start" id="tab-security" data-bs-toggle="tab" data-bs-target="#pane-security" type="button" role="tab"><i class="bi bi-shield-lock-fill me-2"></i> Security & 2FA</button>
+                    <button class="nav-link text-start" id="tab-notifications" data-bs-toggle="tab" data-bs-target="#pane-notifications" type="button" role="tab"><i class="bi bi-bell-fill me-2"></i> Notifications</button>
+                    <button class="nav-link text-start" id="tab-appearance" data-bs-toggle="tab" data-bs-target="#pane-appearance" type="button" role="tab"><i class="bi bi-palette-fill me-2"></i> Appearance & Lang</button>
+                    <button class="nav-link text-start" id="tab-listings" data-bs-toggle="tab" data-bs-target="#pane-listings" type="button" role="tab"><i class="bi bi-collection-play-fill me-2"></i> Listing Defaults</button>
+                    <button class="nav-link text-start" id="tab-privacy" data-bs-toggle="tab" data-bs-target="#pane-privacy" type="button" role="tab"><i class="bi bi-eye-slash-fill me-2"></i> Privacy Control</button>
+                    <button class="nav-link text-start" id="tab-payments" data-bs-toggle="tab" data-bs-target="#pane-payments" type="button" role="tab"><i class="bi bi-wallet2 me-2"></i> Payment Methods</button>
+                    <button class="nav-link text-start" id="tab-verification" data-bs-toggle="tab" data-bs-target="#pane-verification" type="button" role="tab"><i class="bi bi-patch-check-fill me-2"></i> Verification State</button>
+                    <button class="nav-link text-start" id="tab-support" data-bs-toggle="tab" data-bs-target="#pane-support" type="button" role="tab"><i class="bi bi-headset me-2"></i> Help & Support</button>
+                    {% if user.is_staff %}
+                        <button class="nav-link text-start text-primary" id="tab-admin" data-bs-toggle="tab" data-bs-target="#pane-admin" type="button" role="tab"><i class="bi bi-sliders me-2"></i> Admin Engine</button>
+                    {% endif %}
+                    <button class="nav-link text-start text-danger" id="tab-danger" data-bs-toggle="tab" data-bs-target="#pane-danger" type="button" role="tab"><i class="bi bi-exclamation-octagon-fill me-2"></i> Danger Zone</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-md-8">
+            <div class="tab-content card settings-card shadow-sm p-4 bg-white" id="settingsDashboardContent">
+                
+                <div class="tab-pane fade show active" id="pane-account" role="tabpanel">
+                    <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-person-fill text-success me-1"></i> Profile Information</h5>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="save_profile">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Full Legal Name</label>
+                                <input type="text" name="full_name" class="form-control" value="{{ user.full_name|default:'' }}" placeholder="As listed on National ID">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Username</label>
+                                <input type="text" class="form-control" value="{{ user.username }}" disabled>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Email Address</label>
+                                <input type="email" class="form-control" value="{{ user.email }}" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Phone Number</label>
+                                <input type="text" class="form-control" value="{{ user.phone_number|default:'Not Linked' }}" disabled>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">National ID Reference</label>
+                                <input type="text" class="form-control" value="{{ user.national_id|default:'Awaiting KYC' }}" disabled>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">Province</label>
+                                <input type="text" name="province" class="form-control" value="{{ user.province|default:'' }}" placeholder="e.g., Mashonaland West">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">District</label>
+                                <input type="text" name="district" class="form-control" value="{{ user.district|default:'' }}" placeholder="e.g., Chinhoyi">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-sm fw-bold px-4 rounded-3 shadow-sm">Save Profiles Changes</button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="pane-security" role="tabpanel">
+                    <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-shield-lock-fill text-success me-1"></i> Security & Cryptography Credentials</h5>
+                    <form method="POST" action="{% url 'accounts:password_change' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Current Security Password</label>
+                            <input type="password" name="old_password" class="form-control" required placeholder="••••••••">
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">New Security Password</label>
+                                <input type="password" name="new_password1" class="form-control" required placeholder="••••••••">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Confirm New Password</label>
+                                <input type="password" name="new_password2" class="form-control" required placeholder="••••••••">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning btn-sm fw-bold px-4 rounded-3 text-dark shadow-sm mb-4">Change Password Profile</button>
+                    </form>
+                    <hr>
+                    <div class="p-3 rounded-4 border bg-light-subtle mt-3">
+                        <h6 class="fw-bold text-dark mb-1"><i class="bi bi-shield-check text-primary"></i> Two-Factor Authentication (2FA)</h6>
+                        <p class="text-muted small mb-3">Secure account updates via short-code matching algorithms.</p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="otpCheck" disabled>
+                            <label class="form-check-label small text-secondary fw-semibold" for="otpCheck">Enable OTP validation tokens on incoming system actions</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pane-notifications" role="tabpanel">
+                    <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-bell-fill text-success me-1"></i> Broadcast Alert Configurations</h5>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="save_notifications">
+                        <h6 class="small fw-bold text-success text-uppercase mb-2 font-monospace">📬 Email Alerts Channels</h6>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="notif_msg" id="n1" {% if user.email_new_message %}checked{% endif %}>
+                            <label class="form-check-label small text-secondary" for="n1">New incoming direct chat message logs</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="notif_approve" id="n2" {% if user.email_listing_approved %}checked{% endif %}>
+                            <label class="form-check-label small text-secondary" for="n2">Asset directory listing compliance approval updates</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="n3" checked disabled>
+                            <label class="form-check-label small text-muted" for="n3">Asset expiration notifications tracking rules</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="n4" checked disabled>
+                            <label class="form-check-label small text-muted" for="n4">Flat maintenance invoice payment confirmations</label>
+                        </div>
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="n5" checked disabled>
+                            <label class="form-check-label small text-muted" for="n5">Relational infrastructure security tracking warnings</label>
+                        </div>
+                        
+                        <h6 class="small fw-bold text-success text-uppercase mb-2 font-monospace">📱 Short Message Service (SMS)</h6>
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" name="sms_active" id="nsms" {% if user.sms_notifications %}checked{% endif %}>
+                            <label class="form-check-label small text-secondary fw-semibold" for="nsms">Enable direct cellular network text warnings across local Zimbabwean operators</label>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-sm fw-bold px-4 rounded-3">Save Alert Channels</button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="pane-appearance" role="tabpanel">
+                    <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-palette-fill text-success me-1"></i> Visual Surface & Localization Layer</h5>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-secondary">Visual Theme Profile</label>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-secondary px-3 rounded-3" onclick="setBrightness('light')">☀️ Pure Light</button>
+                            <button class="btn btn-sm btn-dark px-3 rounded-3" onclick="setBrightness('dark')">🌙 Deep Dark Mode</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <form action="{% url 'listings:set_language' %}" method="POST" class="mt-3">
+                        {% csrf_token %}
+                        <label class="form-label small fw-bold text-secondary">Ecosystem Language Localization</label>
+                        <select class="form-select mb-3 rounded-3" name="language">
+                            <option value="en">English (Default System Map)</option>
+                            <option value="sn">ChiShona (Ecosystem Translation)</option>
+                            <option value="nd">isiNdebele (Ecosystem Translation)</option>
+                        </select>
+                        <button type="submit" class="btn btn-success btn-sm fw-bold px-4 rounded-3">Update System Translation</button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="pane-listings" role="tabpanel">
+                    <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-collection-play-fill text-success me-1"></i> Fallback Asset Listing Fields</h5>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Fallback Price Frequency Period</label>
+                            <div class="gap-2 d-flex">
+                                <input type="radio" class="btn-check" name="price_p" id="p_d" value="daily">
+                                <label class="btn btn-sm btn-outline-secondary rounded-3" for="p_d">Daily Frequency</label>
+                                <input type="radio" class="btn-check" name="price_p" id="p_w" value="weekly">
+                                <label class="btn btn-sm btn-outline-secondary rounded-3" for="p_w">Weekly Frequency</label>
+                                <input type="radio" class="btn-check" name="price_p" id="p_m" value="monthly" checked>
+                                <label class="btn btn-sm btn-outline-secondary rounded-3" for="p_m">Monthly Billing Default</label>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-secondary">Default Public Reach Staging</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="lbl1" checked disabled>
+                                <label class="form-check-label small text-secondary" for="lbl1">Public search tracking enabled</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="lbl2" disabled>
+                                <label class="form-check-label small text-secondary" for="lbl2">Featured placement visibility indexing</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-sm fw-bold px-4 rounded-3">Save Defaults Configuration</button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="pane-privacy" role="tabpanel">
+                    <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-eye-slash-fill text-success me-1"></i> Cryptographic Contact Privacy Switches</h5>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="save_privacy">
+                        <h6 class="small fw-bold text-success text-uppercase mb-2 font-monospace">📞 Communication Field Handles Visibility</h6>
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="pv1" name="show_phone" {% if user.show_phone_number %}checked{% endif %}>
+                            <label class="form-check-label small fw-semibold text-secondary" for="pv1">Display mobile cellular line to validated profile queries</label>
+                        </div>
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="pv2" checked disabled>
+                            <label class="form-check-label small text-muted" for="pv2">Display secured email endpoint records</label>
+                        </div>
+                        <div class="form-check form-switch mb-4">
+                            <input class="form-check-input" type="checkbox" id="pv3" name="show_wa" {% if user.show_whatsapp %}checked{% endif %}>
+                            <label class="form-check-label small fw-semibold text-secondary" for="pv3">Expose active click-to-chat WhatsApp link routing badges</label>
+                        </div>
+                        
+                        <h6 class="small fw-bold text-success text-uppercase mb-2 font-monospace">👥 Directory Profile Tracking Scope</h6>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="scope_p" id="sc1">
+                                <label class="form-check-label small text-secondary" for="sc1">Public Indexing (Unrestricted indexing paths)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="scope_p" id="sc2" checked>
+                                <label class="form-check-label small text-secondary" for="sc2">Registered System Users Only (Locks out public brokers)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="scope_p" id="sc3" disabled>
+                                <label class="form-check-label small text-muted" for="sc3">Hidden Cryptographic Isolation Node</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-sm fw-bold px-4 rounded-3">Update Privacy Map</button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="pane-payments" role="tabpanel">
+                    <h5 class="fw-bold mb-2 text-dark"><i class="bi bi-wallet2 text-success me-1"></i> Relational Settlement System Wallets</h5>
+                    <p class="text-muted small mb-4">Link your direct merchant receivers to clear flat listing maintenance transactions easily.</p>
+                    <div class="list-group gap-2.5">
+                        <div class="list-group-item d-flex justify-content-between align-items-center rounded-3 p-3 border">
+                            <span class="fw-bold text-secondary"><i class="bi bi-phone-fill text-success me-2"></i> EcoCash Mobile Transfer System</span>
+                            <span class="badge bg-secondary text-dark border small rounded-pill px-3">Unlinked Channel</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center rounded-3 p-3 border">
+                            <span class="fw-bold text-secondary"><i class="bi bi-box-fill text-primary me-2"></i> InnBucks Remittance Services</span>
+                            <span class="badge bg-secondary text-dark border small rounded-pill px-3">Unlinked Channel</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center rounded-3 p-3 border">
+                            <span class="fw-bold text-secondary"><i class="bi bi-coin text-warning me-2"></i> OneMoney Financial Gateway</span>
+                            <span class="badge bg-secondary text-dark border small rounded-pill px-3">Unlinked Channel</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center rounded-3 p-3 border">
+                            <span class="fw-bold text-secondary"><i class="bi bi-credit-card-2-front-fill text-dark me-2"></i> Visa / Mastercard Clearing Network</span>
+                            <span class="badge bg-secondary text-dark border small rounded-pill px-3">Unlinked Channel</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pane-verification" role="tabpanel">
+                    <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-patch-check-fill text-success me-1"></i> Trust Verification Status Metrics</h5>
+                    <div class="p-4 rounded-4 text-center mb-4 border bg-light-subtle">
+                        {% if user.is_verified_owner %}
+                            <div class="display-5 text-success mb-2"><i class="bi bi-check-circle-fill"></i></div>
+                            <h4 class="fw-black text-success mb-1">Ecosystem Status: Fully Verified Active Owner</h4>
+                            <p class="text-muted small mb-0">Your matching verification metrics are live. Anti-broker systems are cleared.</p>
+                        {% else %}
+                            <div class="display-5 text-warning mb-2"><i class="bi bi-exclamation-circle-fill"></i></div>
+                            <h4 class="fw-bold text-warning mb-1">Ecosystem Status: Unverified Testing Account Profile</h4>
+                            <p class="text-muted small mb-3">KYC compliance verification maps are pending validation parameters.</p>
+                            <a href="{% url 'accounts:verify_identity' %}" class="btn btn-warning btn-sm fw-bold px-4 rounded-3 text-dark">Access Document Upload Gate</a>
+                        {% endif %}
+                    </div>
+                    <h6 class="small fw-bold text-secondary text-uppercase mb-2 font-monospace">Core Trust Compliance Indicators</h6>
+                    <div class="list-group list-group-flush gap-2">
+                        <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom small">
+                            <span><i class="bi bi-file-earmark-vcard me-2"></i> Government Issued National ID Documentation Image</span>
+                            <span class="fw-bold {% if user.is_verified_owner %}text-success{% else %}text-warning{% endif %}">{% if user.is_verified_owner %}✓ Approved Record{% else %}🗙 Action Required{% endif %}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom small">
+                            <span><i class="bi bi-telephone-check me-2"></i> Relational Cellular Phone Link Vetted Status</span>
+                            <span class="fw-bold text-success">✓ Verified Active Channel</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-1.5 small">
+                            <span><i class="bi bi-envelope-check me-2"></i> Relational Electronic Mail Vetted Status</span>
+                            <span class="fw-bold text-success">✓ Verified Active Channel</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pane-support" role="tabpanel">
+                    <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-headset text-success me-1"></i> Dedicated Support Desk & Help Channels</h5>
+                    <div class="list-group border rounded-4 overflow-hidden mb-4 shadow-sm" style="font-size: 0.9rem;">
+                        <a href="{% url 'accounts:terms_faq' %}" class="list-group-item list-group-item-action py-2.5"><i class="bi bi-journal-text me-2 text-success"></i> Read Structural Operational Regulations Documents</a>
+                        <a href="#" class="list-group-item list-group-item-action py-2.5" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="bi bi-telephone me-2 text-primary"></i> Request Direct Assistance Calls Hotlines</a>
+                        <a href="mailto:simeonmbwani@gmail.com" class="list-group-item list-group-item-action py-2.5"><i class="bi bi-exclamation-triangle me-2 text-danger"></i> Report System Manipulation/Broker Intrusion Attempts</a>
+                    </div>
+                </div>
+
+                {% if user.is_staff %}
+                <div class="tab-pane fade" id="pane-admin" role="tabpanel">
+                    <h5 class="fw-bold mb-2 text-primary"><i class="bi bi-sliders text-primary me-1"></i> Premium Administrative Control Matrix</h5>
+                    <p class="text-muted small mb-4">Core platform structural moderation hubs visible exclusively to verified staff nodes.</p>
+                    <div class="row g-3">
+                        <div class="col-md-6"><a href="/admin/auth/user/" class="btn btn-outline-secondary w-100 text-start py-2.5 small fw-semibold"><i class="bi bi-people me-2"></i> User Profile Management Hub</a></div>
+                        <div class="col-md-6"><a href="/admin/listings/listing/" class="btn btn-outline-secondary w-100 text-start py-2.5 small fw-semibold"><i class="bi bi-tags me-2"></i> Asset Categories Directory Mapping</a></div>
+                        <div class="col-md-6"><a href="{% url 'accounts:compliance_dashboard' %}" class="btn btn-outline-primary w-100 text-start py-2.5 small fw-bold"><i class="bi bi-shield-lock me-2"></i> Frontend KYC Content Moderation Core</a></div>
+                        <div class="col-md-6"><a href="/admin/" class="btn btn-dark w-100 text-start py-2.5 small fw-bold"><i class="bi bi-database-fill-gear me-2"></i> Full System Django Suite Panel</a></div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="tab-pane fade" id="pane-danger" role="tabpanel">
+                    <h5 class="fw-bold text-danger mb-2"><i class="bi bi-exclamation-octagon-fill me-1"></i> Irreversible Account Danger Actions</h5>
+                    <p class="text-muted small mb-4">Destructive maintenance actions. Once executed, data histories are scrubbed completely from permanent system backups.</p>
+                    <div class="card danger-box p-4 rounded-4">
+                        <div class="d-flex flex-column gap-3">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 border-bottom border-danger-subtle">
+                                <div>
+                                    <h6 class="fw-bold mb-0 text-dark small">Purge Asset Listings Records</h6>
+                                    <small class="text-muted">Drops all your published and saved catalog cards instantly from memory layers.</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-danger fw-bold">Delete My Listings</button>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 border-bottom border-danger-subtle">
+                                <div>
+                                    <h6 class="fw-bold mb-0 text-dark small">Deactivate Active User Session Profile</h6>
+                                    <small class="text-muted">Temporarily suspends visibility filters across the platform network.</small>
+                                </div>
+                                <button class="btn btn-sm btn-danger fw-bold text-white">Deactivate Profile</button>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div>
+                                    <h6 class="fw-bold mb-0 text-danger small">Permanently Erase System Identity Records</h6>
+                                    <small class="text-muted">Completely removes your database tuple records, cryptographic handles, and historical trace indices.</small>
+                                </div>
+                                <button class="btn btn-sm btn-danger fw-black px-3">Erase Account Permanently</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
