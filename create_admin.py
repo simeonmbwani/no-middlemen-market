@@ -1,7 +1,7 @@
 import os
 import django
 
-# Initialize the Django ecosystem settings layer
+# Initialize Django environment settings
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
@@ -10,35 +10,34 @@ from django.contrib.auth.hashers import make_password
 
 User = get_user_model()
 
-def force_inject_clean_admin():
-    username = "simeonadmin"
-    email = "simeonmbwani@gmail.com"
-    password = "@A1n2d3y4" # 🔏 Change this to your preferred password string
+def register_brand_new_superuser():
+    # 🔏 BRAND NEW ACCOUNT PARAMETERS TO BYPASS CACHED LOGINS
+    username = "simeonmbwani"
+    email = "tavongamlauzi@gmail.com"
+    password = "@A1n2d3y4" # 👈 Change this to your preferred password string
 
-    # 1. Purge any old, broken or mismatched admin records under this username
+    # Clean out any old attempts for this specific user
     if User.objects.filter(username=username).exists():
-        print(f"🗑️ Found an existing record for @{username}. Purging to prevent field corruption...")
         User.objects.filter(username=username).delete()
 
-    print(f"🚀 Injecting cleanly configured superuser record for @{username}...")
+    print(f"🚀 Injecting brand-new, valid superuser record for @{username}...")
     
-    # 2. Build the record using a direct query to bypass custom UserManager restrictions
+    # Create the user directly by defining all custom model fields to prevent validation errors
     admin_user = User(
         username=username,
         email=email,
-        password=make_password(password), # 🔏 Explicitly hashes the password text cleanly
-        full_name="Simeon Mbwani",
-        phone_number=None,   # Set to None/Null to avoid validator flags
-        national_id=None,    # Set to None/Null to avoid unique constraint collisions
-        is_staff=True,       # 👑 Required to view Django admin suites
-        is_superuser=True,   # 👑 Grants universal permissions override
-        is_active=True,      # 🟢 Ensures the account isn't locked out by default
+        password=make_password(password),
+        full_name="System Administrator",
+        province="Mashonaland West",  # Default location text to satisfy model fields
+        district="Chinhoyi",         # Default location text to satisfy model fields
+        is_staff=True,
+        is_superuser=True,
+        is_active=True,
         is_verified_owner=True
     )
     
-    # Save the record directly to your production database instance
     admin_user.save()
-    print("🟢 Master Superuser successfully injected into your production database!")
+    print(f"🟢 Successfully created completely fresh superuser: @{username}")
 
 if __name__ == '__main__':
-    force_inject_clean_admin()
+    register_brand_new_superuser()
