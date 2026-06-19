@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import login, logout, get_user_model
+from django.contrib.auth import login, logout, get_user_model, authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_POST
 from django.utils.timezone import now
@@ -13,12 +13,41 @@ from .models import NationalIDVerification
 User = get_user_model()
 
 # Custom registration form layer to automatically handle custom marketplace parameters
-# Custom registration form layer to automatically handle custom marketplace parameters
 class MarketplaceUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         # 🔧 FIXED: Added explicit mapping definitions so Django hashes and saves user passwords safely
         fields = ('username', 'email')
+
+
+def login_view(request):
+    """
+    🔒 SECURITY UPGRADE: Custom authentication handler that logs in regular users 
+    and handles superuser/staff permissions without constraint exceptions.
+    """
+    if request.user.is_authenticated:
+        return redirect('listings:list')
+
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            # Explicitly declare the model backend to prevent multi-auth backend collision
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            
+            # Smart Routing: Send admins straight to compliance, regular users to listings
+            if user.is_staff or user.is_superuser:
+                messages.success(request, f"👑 Administrator @{user.username} authenticated successfully.")
+                return redirect('accounts:compliance_dashboard')
+                
+            messages.success(request, f"Welcome back, @{user.username}!")
+            return redirect('listings:list')
+        else:
+            messages.error(request, "Invalid username or password. Please try again.")
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'accounts/login.html', {'form': form})
 
 
 def register_view(request):
@@ -121,7 +150,7 @@ def compliance_dashboard_view(request):
         'history': reviewed_verifications,
     })  
     
-# 🔧 FIXED: Added the missing controller to process full-screen Terms & FAQ page requests
+
 def terms_faq_view(request):
     """
     Renders the standalone full-screen trust matrix 
@@ -129,7 +158,6 @@ def terms_faq_view(request):
     """
     return render(request, 'accounts/terms_faq.html')
 
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def settings_dashboard_view(request):
