@@ -186,3 +186,11 @@ def settings_dashboard_view(request):
         return redirect('accounts:settings_dashboard')
 
     return render(request, 'accounts/settings_dashboard.html')
+
+@staff_member_required
+def erp_control_center_view(request):
+    """
+    👑 MASTER CONTROL CENTER VIEW: Renders the 20-module ERP system hub.
+    Restricted strictly to administrators and staff members.
+    """
+    return render(request, 'admin/control_center.html')
