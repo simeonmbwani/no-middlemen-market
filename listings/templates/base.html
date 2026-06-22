@@ -118,7 +118,10 @@
                 <button class="btn btn-link text-white p-0 fs-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftDrawerMenu"><i class="bi bi-list"></i></button>
                 <a href="{% url 'listings:list' %}" class="text-decoration-none fw-bold fs-5 text-white ms-1">🛑 NO <span style="color: #2ecc71;">MIDDLEMEN</span></a>
             </div>
-            <a href="{% url 'dashboard:index' %}?tab=alerts" class="text-white"><i class="bi bi-bell fs-4"></i></a>
+           <!-- 🚨 Change this line inside your mobile-bottom-nav component: -->
+<a href="{% url 'messaging:chat_thread' %}" class="bottom-nav-item {% if 'messaging' in request.path %}active{% endif %}">
+    <i class="bi bi-chat-dots-fill"></i><span>Chats</span>
+</a>
         </div>
         <form method="GET" action="{% url 'listings:list' %}" class="mt-2 m-0">
             <div class="input-group input-group-sm">
