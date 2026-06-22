@@ -23,7 +23,9 @@
         </div>
         <ul class="nav nav-pills flex-column mb-auto gap-1">
             <li><a href="#overview" class="nav-link text-white active"><i class="bi bi-speedometer2 me-2 text-success"></i> Control Dashboard</a></li>
-            <li><a href="#users" class="nav-link text-white"><i class="bi bi-people me-2"></i> 1. User Management</a></li>
+            
+            <li><a href="{% url 'erp_user_management' %}" class="nav-link text-white"><i class="bi bi-people me-2"></i> 1. User Management</a></li>
+            
             <li><a href="#assets" class="nav-link text-white"><i class="bi bi-building-gear me-2"></i> 2. Asset Catalog</a></li>
             <li><a href="#chats" class="nav-link text-white"><i class="bi bi-chat-dots me-2"></i> 3. Chat Monitor</a></li>
             <li><a href="#payments" class="nav-link text-white"><i class="bi bi-currency-dollar me-2"></i> 4. Payment Center</a></li>
@@ -132,7 +134,7 @@
                             <tr>
                                 <td colspan="5" class="text-center text-muted py-4">
                                     <i class="bi bi-shield-slash d-block fs-3 mb-2"></i> No active cryptographic logs registered on this audit node loop yet.
-                                </td >
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
