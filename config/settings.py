@@ -109,6 +109,30 @@ DATABASES = {
     )
 }
 
+DATABASES = {
+    # 🛒 OPERATIONAL DATABASE: Powers users, listings, checkout channels, and DMs
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'no_middlemen_prod',
+        'USER': 'your_db_user',
+        'PASSWORD': 'your_db_password',
+        'HOST': 'production-db-uri.render.com',
+        'PORT': '5432',
+    },
+    # 📜 AUDIT & MONITORING DATABASE: Isolates heavy logs, reports, and data deletions
+    'monitoring_logs': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'no_middlemen_audit_trail',
+        'USER': 'simeonmbwani',
+        'PASSWORD': '@A1n2d3y4',
+        'HOST': 'audit-db-uri.render.com',
+        'PORT': '5432',
+    }
+}
+
+# 🗺️ ROUTER ENFORCEMENT: Tell Django exactly when to switch between database targets
+DATABASE_ROUTERS = ['accounts.routers.AuditMonitoringRouter']
+
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
