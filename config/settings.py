@@ -12,35 +12,52 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from django.contrib.messages import constants as messages
+from django.utils.translation import gettext_lazy as _
 import os
+import dj_database_url
 
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# ==============================================================================
+# 📂 BASE DIRECTORY CONFIGURATION
+# ==============================================================================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-import os
-from django.utils.translation import gettext_lazy as _
-
-# 🌐 Supported Languages Registry
+# ==============================================================================
+# 🌐 LOCALIZATION & MULTI-LANGUAGE REGISTRY
+# ==============================================================================
 LANGUAGES = [
     ('en', _('English')),
     ('sn', _('Shona')),
     ('nd', _('Ndebele')),
 ]
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
+
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
+
+# ==============================================================================
+# 🔐 CORE SECURITY SETTINGS
+# ==============================================================================
 SECRET_KEY = 'django-insecure-(ud@7y%(g#22&pbaw(#f2@!r=6v7os6n#nn^a66x=wz6fkkqn1'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.onrender.com', '.pythonanywhere.com']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://no-middlemen-market-1.onrender.com',
+]
 
-# Application definition
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
 
+# ==============================================================================
+# 📦 APPLICATION DEFINITION
+# ==============================================================================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -66,19 +83,19 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-     'accounts.middleware.AntiMiddlemanProtectionMiddleware',
+    'accounts.middleware.AntiMiddlemanProtectionMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
 
-LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'locale'),
-]
+WSGI_APPLICATION = 'config.wsgi.application'
 
+# ==============================================================================
+# 🎨 TEMPLATE ENGINE ARCHITECTURE
+# ==============================================================================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # 🔧 FIXED: Removed the double 'DIRS' definition line to prevent configuration overrides
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -91,123 +108,57 @@ TEMPLATES = [
         },
     },
 ]
-WSGI_APPLICATION = 'config.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-# 🔧 DATABASE CONFIGURATION ENGINE OVERHAUL
-# Automatically balances between local development SQLite and Render PostgreSQL production storage sets
-import dj_database_url
-
+# ==============================================================================
+# 💾 DYNAMIC AUTOMATED DUAL-DATABASE MATRIX
+# ==============================================================================
 DATABASES = {
+    # 🛒 OPERATIONAL DATABASE: Powers users, listings, checkouts, and DMs (Falls back to SQLite locally)
     'default': dj_database_url.config(
-        # Fallback to local SQLite file path only if no live server environment link is detected
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
+    ),
+    # 📜 AUDIT & MONITORING DATABASE: Spills logs, deletions, and reports into a separate pool
+    'monitoring_logs': dj_database_url.config(
+        env='AUDIT_DATABASE_URL',
+        default=f"sqlite:///{BASE_DIR / 'db_audit.sqlite3'}",
         conn_max_age=600
     )
 }
 
-DATABASES = {
-    # 🛒 OPERATIONAL DATABASE: Powers users, listings, checkout channels, and DMs
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'no_middlemen_prod',
-        'USER': 'your_db_user',
-        'PASSWORD': 'your_db_password',
-        'HOST': 'production-db-uri.render.com',
-        'PORT': '5432',
-    },
-    # 📜 AUDIT & MONITORING DATABASE: Isolates heavy logs, reports, and data deletions
-    'monitoring_logs': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'no_middlemen_audit_trail',
-        'USER': 'simeonmbwani',
-        'PASSWORD': '@A1n2d3y4',
-        'HOST': 'audit-db-uri.render.com',
-        'PORT': '5432',
-    }
-}
-
-# 🗺️ ROUTER ENFORCEMENT: Tell Django exactly when to switch between database targets
 DATABASE_ROUTERS = ['accounts.routers.AuditMonitoringRouter']
 
-# Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/6.0/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-
-STATIC_URL = 'static/'
-# Tell Django to look at your accounts app for the login/user system
+# ==============================================================================
+# 👥 AUTHENTICATION CONFIGURATIONS
+# ==============================================================================
 AUTH_USER_MODEL = 'accounts.User'
 
-# Media Files (Uploaded images configuration)
-import os
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# Default Auto Field
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# 🚀 DEVELOPMENT EMAIL BACKEND ENGINE RESET
-# Routes all system notification emails directly to your terminal console logs
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
-
-# 🔧 FIXED: Setting up dedicated local media file asset folders
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-# 🛡️ Trust security parameters originating from your live web server domain
-CSRF_TRUSTED_ORIGINS = [
-    'https://no-middlemen-market-1.onrender.com',
-
-]
-# 🛡️ CUSTOM AUTHENTICATION BACKENDS
-# Force authentication backends to accept your custom model properties
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-# Tell Django where to send users automatically after a successful login
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
+
 LOGIN_REDIRECT_URL = 'listings:list'
 LOGOUT_REDIRECT_URL = 'listings:list'
-
-# 🔧 FIXED: Added explicit login path layout pattern so login_required decorators redirect seamlessly
 LOGIN_URL = 'accounts:login'
 
-# 🔒 SECURE SESSION COOKIE TUNING (FORCE SSL COMPLIANCE FOR RENDER)
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = True
+# ==============================================================================
+# 📁 STATIC AND MEDIA ASSETS SERVICE MANAGEMENT
+# ==============================================================================
+STATIC_URL = 'static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ==============================================================================
+# ✉️ COMMUNICATIONS LAYER
+# ==============================================================================
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
