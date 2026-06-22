@@ -203,6 +203,11 @@ from listings.models import Listing
 
 User = get_user_model()
 
+from django.contrib.auth import get_user_model
+from listings.models import Listing  # 👑 FIXED: Changed from 'Asset' to 'Listing'
+
+User = get_user_model()
+
 @staff_member_required
 def erp_control_center_view(request):
     """
@@ -213,13 +218,14 @@ def erp_control_center_view(request):
     total_users = User.objects.count()
     verified_users = User.objects.filter(is_verified_owner=True).count()  
     
-    # 🔧 UPDATE THESE COUNTERS: Use your true model class name here too!
+    # 👑 FIXED: Updated queries to count real records using your Listing model
     total_assets = Listing.objects.count()
-    active_listings = Listing.objects.filter(status='active').count()  # Ensure 'status' or similar field matches your listings class
+    active_listings = Listing.objects.filter(is_active=True).count()  # Checked against your 'is_active' flag!
     
-    # 📑 Pull Real Audit Logs
+    # 📑 Pull Real Audit Logs 
     audit_logs = [] 
 
+    # 📦 Package all real data into the template context
     context = {
         'total_users': total_users,
         'verified_users': verified_users,
