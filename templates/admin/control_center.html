@@ -59,10 +59,42 @@
         </header>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 mb-5">
-            <div class="col"><div class="stat-card p-3"><span class="text-muted small uppercase d-block">Total Verified Users</span><div class="d-flex align-items-center justify-content-between mt-2"><h2 class="m-0 fw-bold text-success">4,290</h2><i class="bi bi-patch-check fs-3 opacity-30 text-success"></i></div></div></div>
-            <div class="col"><div class="stat-card p-3"><span class="text-muted small uppercase d-block">Active Direct Ad Listings</span><div class="d-flex align-items-center justify-content-between mt-2"><h2 class="m-0 fw-bold text-primary">12,481</h2><i class="bi bi-collection-play fs-3 opacity-30 text-primary"></i></div></div></div>
-            <div class="col"><div class="stat-card p-3"><span class="text-muted small uppercase d-block">Gross Billing (Monthly)</span><div class="d-flex align-items-center justify-content-between mt-2"><h2 class="m-0 fw-bold text-warning">$8,340 <span class="fs-6 fw-normal text-muted">USD</span></h2><i class="bi bi-cash-stack fs-3 opacity-30 text-warning"></i></div></div></div>
-            <div class="col"><div class="stat-card p-3"><span class="text-muted small uppercase d-block">Pending Red Flag Reports</span><div class="d-flex align-items-center justify-content-between mt-2"><h2 class="m-0 fw-bold text-danger">3 Unresolved</h2><i class="bi bi-exclamation-triangle fs-3 opacity-30 text-danger"></i></div></div></div>
+            <div class="col">
+                <div class="stat-card p-3">
+                    <span class="text-muted small uppercase d-block">Total Verified Users</span>
+                    <div class="d-flex align-items-center justify-content-between mt-2">
+                        <h2 class="m-0 fw-bold text-success">{{ verified_users }}</h2>
+                        <i class="bi bi-patch-check fs-3 opacity-30 text-success"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="stat-card p-3">
+                    <span class="text-muted small uppercase d-block">Active Direct Ad Listings</span>
+                    <div class="d-flex align-items-center justify-content-between mt-2">
+                        <h2 class="m-0 fw-bold text-primary">{{ active_listings }}</h2>
+                        <i class="bi bi-collection-play fs-3 opacity-30 text-primary"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="stat-card p-3">
+                    <span class="text-muted small uppercase d-block">Gross Billing (Monthly)</span>
+                    <div class="d-flex align-items-center justify-content-between mt-2">
+                        <h2 class="m-0 fw-bold text-warning">${{ monthly_billing }} <span class="fs-6 fw-normal text-muted">USD</span></h2>
+                        <i class="bi bi-cash-stack fs-3 opacity-30 text-warning"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="stat-card p-3">
+                    <span class="text-muted small uppercase d-block">Pending Red Flag Reports</span>
+                    <div class="d-flex align-items-center justify-content-between mt-2">
+                        <h2 class="m-0 fw-bold text-danger">{{ unresolved_reports }} Unresolved</h2>
+                        <i class="bi bi-exclamation-triangle fs-3 opacity-30 text-danger"></i>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="audit" class="card shadow mb-4">
@@ -83,20 +115,26 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for log in audit_logs %}
                             <tr>
-                                <td>2026-06-22 13:01:10</td>
-                                <td class="text-warning fw-bold">@simeonadmin</td>
-                                <td><span class="badge bg-danger me-2">SUSPEND_USER</span>Banned user profile flagged for fraudulent listing actions</td>
-                                <td class="fw-bold">User #4912</td>
-                                <td>196.2.22.104</td>
+                                <td>{{ log.timestamp|date:"Y-m-d H:i:s" }}</td>
+                                <td class="text-warning fw-bold">@{{ log.admin_username }}</td>
+                                <td>
+                                    <span class="badge {% if log.action_type == 'SUSPEND_USER' %}bg-danger{% else %}bg-success{% endif %} me-2">
+                                        {{ log.action_type }}
+                                    </span>
+                                    {{ log.description }}
+                                </td>
+                                <td class="fw-bold">{{ log.target_object }}</td>
+                                <td>{{ log.ip_address }}</td>
                             </tr>
+                            {% empty %}
                             <tr>
-                                <td>2026-06-22 12:45:22</td>
-                                <td class="text-warning fw-bold">@superadmin</td>
-                                <td><span class="badge bg-success me-2">APPROVE_KYC</span>Granted 🟢 Verified status badge to checked National ID parameters</td>
-                                <td class="fw-bold">User #8843</td>
-                                <td>196.2.22.110</td>
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    <i class="bi bi-shield-slash d-block fs-3 mb-2"></i> No active cryptographic logs registered on this audit node loop yet.
+                                </td >
                             </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
