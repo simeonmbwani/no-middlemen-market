@@ -35,10 +35,10 @@ def login_view(request):
             # Explicitly declare the model backend to prevent multi-auth backend collision
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             
-            # Smart Routing: Send admins straight to compliance, regular users to listings
+            # 👑 SMART ROUTING: Redirect administrators straight to the new 20-module ERP hub
             if user.is_staff or user.is_superuser:
                 messages.success(request, f"👑 Administrator @{user.username} authenticated successfully.")
-                return redirect('accounts:compliance_dashboard')
+                return redirect('accounts:erp_control_center')
                 
             messages.success(request, f"Welcome back, @{user.username}!")
             return redirect('listings:list')
@@ -186,6 +186,7 @@ def settings_dashboard_view(request):
         return redirect('accounts:settings_dashboard')
 
     return render(request, 'accounts/settings_dashboard.html')
+
 
 @staff_member_required
 def erp_control_center_view(request):
