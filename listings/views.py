@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User  # 💡 Injected to query real system profile counts
+from django.contrib.auth import get_user_model  # 💡 Injected to query real system profile counts
 from django.contrib import messages
 from django.db.models import Q
 from django.utils import translation
