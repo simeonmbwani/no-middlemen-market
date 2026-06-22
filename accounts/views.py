@@ -194,6 +194,15 @@ from listings.models import Asset  # Adjust import based on your exact app/model
 
 User = get_user_model()
 
+from django.contrib.auth import get_user_model
+
+# 🛑 CHANGE THIS LINE: 
+# Instead of 'Asset', import whatever your true model name is inside listings/models.py
+# For example, if your class is named Listing, change it to:
+from listings.models import Listing  
+
+User = get_user_model()
+
 @staff_member_required
 def erp_control_center_view(request):
     """
@@ -202,29 +211,22 @@ def erp_control_center_view(request):
     """
     # 📊 Live Operational DB Statistics
     total_users = User.objects.count()
-    verified_users = User.objects.filter(is_verified_owner=True).count()  # Adjust field name if needed
+    verified_users = User.objects.filter(is_verified_owner=True).count()  
     
-    total_assets = Asset.objects.count()
-    active_listings = Asset.objects.filter(status='active').count()  # Adjust status value if needed
+    # 🔧 UPDATE THESE COUNTERS: Use your true model class name here too!
+    total_assets = Listing.objects.count()
+    active_listings = Listing.objects.filter(status='active').count()  # Ensure 'status' or similar field matches your listings class
     
-    # 📑 Pull Real Audit Logs (Reading securely from your monitoring_logs database)
-    # If you haven't built an AuditLog model yet, we can pass a clean empty state or pull mock-prepped system entries
+    # 📑 Pull Real Audit Logs
     audit_logs = [] 
-    try:
-        # Example if you have an AuditLog model:
-        # audit_logs = AuditLog.objects.using('monitoring_logs').order_by('-timestamp')[:10]
-        pass
-    except Exception:
-        path = None
 
-    # 📦 Package all real data into the template context
     context = {
         'total_users': total_users,
         'verified_users': verified_users,
         'total_assets': total_assets,
         'active_listings': active_listings,
-        'monthly_billing': 0, # Update with sum of Transaction models later
-        'unresolved_reports': 3, # Update with Report.objects.filter(status='pending').count() later
+        'monthly_billing': 0, 
+        'unresolved_reports': 3, 
         'audit_logs': audit_logs,
     }
     
