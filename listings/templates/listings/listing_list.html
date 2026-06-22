@@ -3,22 +3,24 @@
 {% block content %}
 <div class="container px-1">
     
+    <!-- 2. HERO SECTION (Aligned identically to image_9d2c61.png) -->
     <div class="text-center py-4 my-2 border-0 bg-transparent">
         <h1 class="fw-bold mb-1" style="font-size: 1.8rem; letter-spacing: -0.5px;">NO MIDDLEMEN</h1>
         <p class="lead mb-2 text-secondary" style="font-size: 0.9rem; font-weight: 500;">Rent, Lend and Share Assets Directly</p>
         <div class="d-flex justify-content-center gap-3">
-            <span class="small fw-semibold text-success"><i class="bi bi-patch-check-fill"></i> No Agents</span>
-            <span class="small fw-semibold text-success"><i class="bi bi-patch-check-fill"></i> No Hidden Fees</span>
+            <span class="small fw-semibold text-success"><i class="bi bi-check-circle-fill"></i> No Agents</span>
+            <span class="small fw-semibold text-success"><i class="bi bi-check-circle-fill"></i> No Hidden Fees</span>
         </div>
     </div>
 
+    <!-- 4. SEARCH FILTERS (Preserving the exact image_9d2c61.png layout grid) -->
     <form method="GET" action="{% url 'listings:list' %}" class="row g-2 mb-4">
         {% if request.GET.q %}
             <input type="hidden" name="q" value="{{ request.GET.q }}">
         {% endif %}
         
         <div class="col-5">
-            <select name="category" class="form-select filter-select" aria-label="Filter by Category">
+            <select name="category" class="form-select filter-select">
                 <option value="">Category ▼</option>
                 <option value="property" {% if request.GET.category == 'property' %}selected{% endif %}>Property</option>
                 <option value="vehicle" {% if request.GET.category == 'vehicle' %}selected{% endif %}>Vehicles</option>
@@ -29,7 +31,7 @@
             </select>
         </div>
         <div class="col-5">
-            <select name="province" class="form-select filter-select" aria-label="Filter by Province">
+            <select name="province" class="form-select filter-select">
                 <option value="">Province ▼</option>
                 <option value="harare" {% if request.GET.province == 'harare' %}selected{% endif %}>Harare</option>
                 <option value="mash_west" {% if request.GET.province == 'mash_west' %}selected{% endif %}>Mash West</option>
@@ -37,16 +39,21 @@
                 <option value="bulawayo" {% if request.GET.province == 'bulawayo' %}selected{% endif %}>Bulawayo</option>
                 <option value="manicaland" {% if request.GET.province == 'manicaland' %}selected{% endif %}>Manicaland</option>
                 <option value="masvingo" {% if request.GET.province == 'masvingo' %}selected{% endif %}>Masvingo</option>
+                <option value="mash_central" {% if request.GET.province == 'mash_central' %}selected{% endif %}>Mash Central</option>
+                <option value="mash_east" {% if request.GET.province == 'mash_east' %}selected{% endif %}>Mash East</option>
+                <option value="mat_north" {% if request.GET.province == 'mat_north' %}selected{% endif %}>Mat North</option>
+                <option value="mat_south" {% if request.GET.province == 'mat_south' %}selected{% endif %}>Mat South</option>
             </select>
         </div>
         <div class="col-2">
-            <button type="submit" class="btn btn-success btn-sm w-100 h-100 fw-bold rounded-3 d-flex align-items-center justify-content-center" style="background-color: #198754 !important; border: none;" aria-label="Submit Filters">
+            <button type="submit" class="btn btn-success btn-sm w-100 h-100 fw-bold rounded-3 d-flex align-items-center justify-content-center" style="background-color: #198754 !important; border: none;">
                 <i class="bi bi-search text-white"></i>
             </button>
         </div>
     </form>
 
-    <h6 class="fw-bold mb-2 text-uppercase font-monospace text-muted" style="font-size: 0.7rem; tracking: 1px;">Categories</h6>
+    <!-- 3. HORIZONTAL CATEGORIES (Swipe Corridor Layout matches image_9d2c61.png) -->
+    <h6 class="fw-bold mb-2 text-uppercase font-monospace text-muted" style="font-size: 0.65rem; tracking: 1px;">Categories</h6>
     <div class="category-swiper mb-4">
         <a href="?category=property" class="category-chip">🏠 Property</a>
         <a href="?category=vehicle" class="category-chip">🚗 Vehicles</a>
@@ -56,7 +63,8 @@
         <a href="?category=fishing" class="category-chip">🎣 Fishing</a>
     </div>
 
-    <h6 class="fw-bold mb-3 text-uppercase font-monospace text-muted" style="font-size: 0.7rem; tracking: 1px;">Latest Verified Listings</h6>
+    <!-- 5. ASSET CARDS CONTAINER (Full Mobile-First Width Rows) -->
+    <h6 class="fw-bold mb-3 text-uppercase font-monospace text-muted" style="font-size: 0.65rem; tracking: 1px;">Latest Verified Listings</h6>
     <div class="row g-3">
         {% for item in listings %}
         <div class="col-12">
@@ -76,7 +84,7 @@
                     
                     <div class="d-flex justify-content-between border-top pt-2" style="border-color: var(--border-line) !important;">
                         <button class="btn btn-sm btn-outline-secondary rounded-3 text-white"><i class="bi bi-heart me-1"></i> Save</button>
-                        <a href="{% url 'dashboard:index' %}?start_chat_with={{ item.owner.id }}" class="btn btn-sm btn-success rounded-3 px-3 fw-bold" style="background-color: #198754 !important; border: none;"><i class="bi bi-chat-left-text col-2 me-1"></i> Chat Owner</a>
+                        <a href="{% url 'dashboard:index' %}?start_chat_with={{ item.owner.id }}" class="btn btn-sm btn-success rounded-3 px-3 fw-bold" style="background-color: #198754 !important; border: none;"><i class="bi bi-chat-left-text me-1"></i> Chat Owner</a>
                     </div>
                 </div>
             </div>
@@ -85,7 +93,7 @@
         <div class="col-12 text-center py-5">
             <i class="bi bi-box-seize text-muted fs-1 mb-2 d-block text-success"></i>
             <h5 class="fw-bold">No active listings match your filters.</h5>
-            <p class="small text-muted">Be the first to list an asset in this category!</p>
+            <p class="small text-muted">Be the first to list an asset across Zimbabwe!</p>
             <a href="{% url 'listings:create' %}" class="btn btn-sm btn-success rounded-3 mt-2 fw-bold" style="background-color: #198754 !important; border: none;">List First Asset</a>
         </div>
         {% endfor %}
