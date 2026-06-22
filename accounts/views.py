@@ -189,7 +189,7 @@ def settings_dashboard_view(request):
 
 
 from django.contrib.auth import get_user_model
-from listings.models import Asset  # Adjust import based on your exact app/model names
+from listings.models import Listing  # Adjust import based on your exact app/model names
 # from payments.models import Transaction  # Import when your payments app models are ready
 
 User = get_user_model()
