@@ -3,7 +3,6 @@
 {% block content %}
 <div class="container px-1">
     
-    <!-- 2. HERO SECTION (Aligned identically to image_9d2c61.png) -->
     <div class="text-center py-4 my-2 border-0 bg-transparent">
         <h1 class="fw-bold mb-1" style="font-size: 1.8rem; letter-spacing: -0.5px;">NO MIDDLEMEN</h1>
         <p class="lead mb-2 text-secondary" style="font-size: 0.9rem; font-weight: 500;">Rent, Lend and Share Assets Directly</p>
@@ -13,7 +12,6 @@
         </div>
     </div>
 
-    <!-- 4. SEARCH FILTERS (Preserving the exact image_9d2c61.png layout grid) -->
     <form method="GET" action="{% url 'listings:list' %}" class="row g-2 mb-4">
         {% if request.GET.q %}
             <input type="hidden" name="q" value="{{ request.GET.q }}">
@@ -52,7 +50,6 @@
         </div>
     </form>
 
-    <!-- 3. HORIZONTAL CATEGORIES (Swipe Corridor Layout matches image_9d2c61.png) -->
     <h6 class="fw-bold mb-2 text-uppercase font-monospace text-muted" style="font-size: 0.65rem; tracking: 1px;">Categories</h6>
     <div class="category-swiper mb-4">
         <a href="?category=property" class="category-chip">🏠 Property</a>
@@ -63,15 +60,21 @@
         <a href="?category=fishing" class="category-chip">🎣 Fishing</a>
     </div>
 
-    <!-- 5. ASSET CARDS CONTAINER (Full Mobile-First Width Rows) -->
     <h6 class="fw-bold mb-3 text-uppercase font-monospace text-muted" style="font-size: 0.65rem; tracking: 1px;">Latest Verified Listings</h6>
     <div class="row g-3">
         {% for item in listings %}
         <div class="col-12">
             <div class="asset-mobile-card shadow-sm">
-                {% if item.image1 %}
-                    <img src="{{ item.image1.url }}" class="img-fluid w-100" style="height: 210px; object-fit: cover;" alt="{{ item.title }}" loading="lazy">
-                {% endif %}
+                <div class="position-relative w-100" style="height: 210px; background-color: #161920;">
+                    {% if item.image1 %}
+                        <img src="{{ item.image1.url }}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="{{ item.title }}" loading="lazy">
+                    {% else %}
+                        <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-muted opacity-25">
+                            <i class="bi bi-image fs-1 mb-1"></i>
+                            <span style="font-size: 0.75rem;">No Image Provided</span>
+                        </div>
+                    {% endif %}
+                </div>
                 
                 <div class="p-3">
                     <div class="d-flex justify-content-between align-items-start mb-1">
@@ -84,7 +87,7 @@
                     
                     <div class="d-flex justify-content-between border-top pt-2" style="border-color: var(--border-line) !important;">
                         <button class="btn btn-sm btn-outline-secondary rounded-3 text-white"><i class="bi bi-heart me-1"></i> Save</button>
-                        <a href="{% url 'dashboard:index' %}?start_chat_with={{ item.owner.id }}" class="btn btn-sm btn-success rounded-3 px-3 fw-bold" style="background-color: #198754 !important; border: none;"><i class="bi bi-chat-left-text me-1"></i> Chat Owner</a>
+                        <a href="{% url 'dashboard:index' %}?tab=messages&start_chat_with={{ item.owner.id }}" class="btn btn-sm btn-success rounded-3 px-3 fw-bold" style="background-color: #198754 !important; border: none;"><i class="bi bi-chat-left-text me-1"></i> Chat Owner</a>
                     </div>
                 </div>
             </div>
