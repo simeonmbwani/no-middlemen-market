@@ -4,22 +4,25 @@ from django.contrib import messages
 from django.db.models import Q
 from django.utils import translation
 from django.conf import settings
+from django.utils.timezone import now
 
-# Core Model and Form Imports
+# Core Model, Form, and Billing Module Imports
 from .models import Listing
 from .forms import ListingForm
+from .billing import check_posting_limit, get_listing_fee
 
 # ==========================================
-# 🔍 PUBLIC ASS-MARKET DISCOVERY VIEWS
+# 🔍 PUBLIC ASSET-MARKET DISCOVERY VIEWS
 # ==========================================
 
 def listing_list_view(request):
     """
     Dynamically filters and streams verified live marketplace listings.
-    Maintains clean state parameters across page transitions without hardcoded keys.
+    ⚡ OPTIMIZED: Uses select_related('owner') to pull user profiles in 1 single database trip,
+    completely eliminating the sluggish load times for users.
     """
-    # Start with active, fully paid verified owner entries
-    queryset = Listing.objects.filter(is_active=True, is_paid=True).order_by('-created_at')
+    # Start with active, fully paid verified owner entries joined with their owner profile variables
+    queryset = Listing.objects.filter(is_active=True, is_paid=True).select_related('owner').order_by('-created_at')
     
     # Extract structural query parameters from template inputs
     search_text = request.GET.get('search_text', '').strip()
@@ -67,14 +70,15 @@ def listing_list_view(request):
 
 def listing_detail_view(request, listing_id):
     """Fetches details for a single asset and showcases alternative local options in the same district."""
-    listing = get_object_or_404(Listing, id=listing_id, is_active=True)
+    # ⚡ OPTIMIZED: Joined with owner profile details instantly
+    listing = get_object_or_404(Listing.objects.select_related('owner'), id=listing_id, is_active=True)
     
     # Identify alternative local listings in the matching region (excluding current listing context)
     related_items = Listing.objects.filter(
         district__iexact=listing.district,
         is_active=True,
         is_paid=True
-    ).exclude(id=listing.id)[:3]
+    ).select_related('owner').exclude(id=listing.id)[:3]
 
     return render(request, 'listings/listing_detail.html', {
         'listing': listing,
@@ -89,14 +93,30 @@ def listing_detail_view(request, listing_id):
 
 @login_required
 def listing_create_view(request):
-    """Handles asset registration while catching duplicate submissions from malicious middleman loops."""
+    """
+    Handles asset registration while catching duplicate submissions from malicious middleman loops
+    and enforcing automated listing posting frequency limits.
+    """
     if request.method == 'POST':
         form = ListingForm(request.POST, request.FILES)
         if form.is_valid():
+            category = form.cleaned_data.get('category')
             title = form.cleaned_data.get('title')
             district = form.cleaned_data.get('district')
             
-            # Anti-broker flood protection check
+            # 📈 1. Run our automated posting threshold limit interceptor check
+            is_allowed, total_posts, max_limit = check_posting_limit(request.user, category)
+            
+            if not is_allowed:
+                # Enforce automatic suspension block rule for this category tier
+                messages.error(
+                    request, 
+                    f"🚫 Limit Reached: You have reached your max allocation limit of {max_limit} posts per month "
+                    f"for this asset classification type. Posting access will automatically restore as older ads expire."
+                )
+                return redirect('listings:list')
+            
+            # 🛡️ 2. Anti-broker flood protection match check
             duplicate_exists = Listing.objects.filter(
                 owner=request.user,
                 title__iexact=title,
@@ -108,11 +128,16 @@ def listing_create_view(request):
                 messages.error(request, f"Duplicate Entry Detected! You already have an active listing for '{title}' in {district.title()}.")
                 return render(request, 'listings/listing_form.html', {'form': form})
             
+            # Calculate the fee structure variables to hook into invoice pipelines
+            fee_info = get_listing_fee(category)
+            fee_due = fee_info['fee_usd']
+            
+            # Proceed with form commit tracking
             new_listing = form.save(commit=False)
             new_listing.owner = request.user
             new_listing.save()
             
-            messages.success(request, "Asset registered! Complete listing invoice to publish live.")
+            messages.success(request, f"Asset registered (Fee: ${fee_due:.2f} USD)! Complete listing invoice to publish live.")
             return redirect('payments:checkout', listing_id=new_listing.id)
     else:
         form = ListingForm()
@@ -171,31 +196,3 @@ def set_language_view(request):
                 request.session['_language'] = lang_code
                 
     return response
-
-# Fragment for listings/views.py
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .billing import check_posting_limit, get_listing_fee
-
-def create_listing_view(request):
-    if request.method == 'POST':
-        category = request.POST.get('category')
-        
-        # Run our automated limit interceptor check
-        is_allowed, total_posts, max_limit = check_posting_limit(request.user, category)
-        
-        if not is_allowed:
-            # Enforce automatic suspension block rule
-            messages.error(
-                request, 
-                f"🚫 Limit Reached: You have reached your max allocation limit of {max_limit} posts per month "
-                f"for this asset classification type. Posting access will automatically restore as older ads expire."
-            )
-            return redirect('listings:list')
-            
-        # If passed, calculate the upfront fee due
-        fee_info = get_listing_fee(category)
-        fee_due = fee_info['fee_usd']
-        
-        # Proceed with form save tracking...
-        # Then redirect directly onto your incoming payment screen pipeline!

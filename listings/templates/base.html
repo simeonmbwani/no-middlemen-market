@@ -339,7 +339,7 @@
             })
             .catch(err => console.log('Async notification background sync failed container skip.'));
         }
-        setInterval(checkUnreadDirectMessages, 10000);
+        setInterval(checkUnreadDirectMessages, 45000);
         document.addEventListener('DOMContentLoaded', checkUnreadDirectMessages);
     </script>
     {% endif %}
