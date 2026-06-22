@@ -21,6 +21,7 @@
             --border-line: #cbd5e1;
             --input-bg: #ffffff;
             --input-text: #0f172a;
+            --top-bar-bg: #ffffff;
         }
         [data-theme="dark"] { 
             --bg-main: #0d0f12; 
@@ -30,6 +31,7 @@
             --border-line: #334155; 
             --input-bg: #1e293b; 
             --input-text: #f8fafc; 
+            --top-bar-bg: #101214;
         }
         
         body { 
@@ -61,13 +63,13 @@
             color: var(--text-muted) !important; 
         }
 
-        /* Fixed Placement Elements Mapping */
+        /* Fixed Placement Elements Mapping (Removed Hardcoded Colors) */
         .mobile-top-bar { 
             position: fixed; 
             top: 0; 
             width: 100%;
             max-width: 480px;
-            background-color: #101214; 
+            background-color: var(--top-bar-bg) !important; 
             border-bottom: 2px solid #198754; 
             z-index: 1050; 
         }
@@ -78,8 +80,8 @@
             width: 100%;
             max-width: 480px;
             height: 65px; 
-            background-color: #101214 !important; 
-            border-top: 1px solid rgba(255,255,255,0.1); 
+            background-color: var(--top-bar-bg) !important; 
+            border-top: 1px solid var(--border-line); 
             z-index: 1050; 
             display: flex; 
             align-items: center; 
@@ -92,9 +94,9 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            color: #94a3b8 !important;
+            color: var(--text-muted) !important;
         }
-        .bottom-nav-item i { font-size: 1.4rem; margin-bottom: 1px; color: #94a3b8 !important; display: block !important; }
+        .bottom-nav-item i { font-size: 1.4rem; margin-bottom: 1px; color: var(--text-muted) !important; display: block !important; }
         .bottom-nav-item.active, .bottom-nav-item.active i, .bottom-nav-item.active span { color: #2ecc71 !important; }
 
         /* Component Framework Extensions */
@@ -102,7 +104,7 @@
         .list-group-item { background: transparent !important; color: var(--text-main) !important; border: none !important; padding: 12px 24px; }
         .profile-card { background-color: var(--card-bg); border: 1px solid var(--border-line); border-radius: 16px; }
         .drawer-divider { border-top: 1px solid var(--border-line); margin: 8px 0; }
-        .drawer-slide { background-color: #101214 !important; max-width: 280px; }
+        .drawer-slide { background-color: var(--top-bar-bg) !important; max-width: 280px; }
         
         .filter-select { 
             background-color: var(--input-bg) !important; color: var(--input-text) !important; border: 1px solid var(--border-line) !important; font-size: 0.85rem; height: 42px;
@@ -192,7 +194,7 @@
         </div>
 
         <div class="mt-4 mb-4 px-3">
-            <div class="card border-0 shadow-sm rounded-4">
+            <div class="card border-0 shadow-sm rounded-4" style="background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important;">
                 <div class="card-body text-center p-3">
                     <h6 class="fw-bold text-success mb-2 font-monospace" style="font-size: 0.8rem; letter-spacing: 0.5px;">NO MIDDLEMEN MARKETPLACE</h6>
                     <div class="row g-2 small text-center px-1">
@@ -200,7 +202,7 @@
                         <div class="col-4"><a href="#" class="text-decoration-none text-muted" style="font-size: 0.72rem;">Trust Agreement</a></div>
                         <div class="col-4"><a href="#" class="text-decoration-none text-muted" style="font-size: 0.72rem;">Privacy Policy</a></div>
                     </div>
-                    <hr class="my-2 border-secondary opacity-25">
+                    <hr class="my-2 border-secondary opacity-25" style="border-color: var(--border-line) !important;">
                     <small class="text-muted d-block font-monospace" style="font-size: 0.65rem;">Version 1.0.4 · Decentralized P2P Infrastructure</small>
                 </div>
             </div>
@@ -249,7 +251,6 @@
             root.setAttribute("data-theme", savedTheme);
         });
 
-        // Universal theme setting tool hook
         function setTheme(mode) {
             document.getElementById("theme-root").setAttribute("data-theme", mode);
             localStorage.setItem("theme", mode);
