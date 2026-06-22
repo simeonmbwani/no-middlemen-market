@@ -6,9 +6,11 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_POST
 from django.utils.timezone import now
+from django.db.models import Sum
 
 from .forms import NationalIDUploadForm  # Form handles file validation inside accounts/forms.py
 from .models import NationalIDVerification
+from listings.models import Listing      # 👑 Fixed: Isolated production import schema matching your true class
 
 User = get_user_model()
 
@@ -16,7 +18,6 @@ User = get_user_model()
 class MarketplaceUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
-        # 🔧 FIXED: Added explicit mapping definitions so Django hashes and saves user passwords safely
         fields = ('username', 'email')
 
 
@@ -188,41 +189,10 @@ def settings_dashboard_view(request):
     return render(request, 'accounts/settings_dashboard.html')
 
 
-from django.contrib.auth import get_user_model
-from listings.models import Listing  # Adjust import based on your exact app/model names
-# from payments.models import Transaction  # Import when your payments app models are ready
-
-User = get_user_model()
-
-from django.contrib.auth import get_user_model
-
-# 🛑 CHANGE THIS LINE: 
-# Instead of 'Asset', import whatever your true model name is inside listings/models.py
-# For example, if your class is named Listing, change it to:
-from listings.models import Listing  
-
-User = get_user_model()
-
-from django.contrib.auth import get_user_model
-from listings.models import Listing  # 👑 FIXED: Changed from 'Asset' to 'Listing'
-
-User = get_user_model()
-
-from django.db.models import Sum
-from django.contrib.auth import get_user_model
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render
-from listings.models import Listing
-# from messaging.models import ChatRoom, Message # Add imports as your apps build out
-# from payments.models import Transaction
-# from reports.models import RedFlagReport, Violation
-
-User = get_user_model()
-
 @staff_member_required
 def erp_control_center_view(request):
     """
-    👑 MASTER BANKING ERP CONTROL SYSTEM: Real-Time Operational Agregator.
+    👑 MASTER BANKING ERP CONTROL SYSTEM: Real-Time Operational Aggregator.
     Loads real database tallies for all 20 integrated platform modules natively.
     """
     # 👥 Module 1: Live User Data Array
@@ -239,7 +209,6 @@ def erp_control_center_view(request):
     pending_approval = Listing.objects.filter(is_active=False, is_paid=True).count()
 
     # 💸 Module 4: Payment Center Ledger Calculations
-    # total_revenue = Transaction.objects.filter(status='success').aggregate(Sum('amount'))['amount__sum'] or 0
     total_revenue = 0.00  # Fallback tracker until payment migrations run
 
     # 📦 Compile all database states cleanly into a single context matrix
@@ -247,7 +216,7 @@ def erp_control_center_view(request):
         # Lists for tables
         'users_list': users_list,
         'listings_list': listings_list,
-        'audit_logs': [],  # Placed inside your SQLite Audit Tracking Database url string setup
+        'audit_logs': [],  
         
         # Dashboard Counter Metrics
         'total_users': total_users,
@@ -258,25 +227,6 @@ def erp_control_center_view(request):
         'suspended_count': suspended_count,
         'banned_count': banned_count,
         'total_revenue': total_revenue,
-        'unresolved_reports': 0,  # RedFlagReport.objects.filter(status='pending').count()
+        'unresolved_reports': 0,  
     }
     return render(request, 'admin/control_center.html', context)
-
-@staff_member_required
-def erp_user_management_view(request):
-    """
-    👥 MODULE 1: Dynamic User Management Control Panel.
-    Fetches real system profiles for administrative audit actions.
-    """
-    users_list = User.objects.all().order_by('-date_joined')
-    
-    context = {
-        'users_list': users_list,
-        'total_registered_count': users_list.count(),
-    }
-    return render(request, 'admin/user_management.html', context)
-
-# ==============================================================================
-# 👑 ERP MASTER CORE SIDEBAR MODULE MODULES (2 to 20)
-# ==============================================================================
-
