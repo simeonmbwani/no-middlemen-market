@@ -15,21 +15,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from accounts import views as account_views  # 👑 Imports your custom views layer directly
 
 urlpatterns = [
-path('admin/', admin.site.urls),
+    # 👑 HIJACK THE ADMIN ROUTE: Bypasses the default Django tables to serve your custom banking control panel
+    path('admin/', account_views.erp_control_center_view, name='erp_control_center'),
+    
+    # 🛒 Operational Platform Core Routing Elements
     path('', include('listings.urls', namespace='listings')),
     path('reports/', include('reports.urls', namespace='reports')),
     path('messages/', include('messaging.urls', namespace='messaging')),
     path('payments/', include('payments.urls', namespace='payments')),
     path('dashboard/', include('dashboard.urls', namespace='dashboard')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
-    path('messages/', include('messaging.urls')),
+    
+    # 📲 Progressive Web App Assets & Workers
     path('manifest.json', TemplateView.as_view(template_name='manifest.json', content_type='application/json')),
     path('service-worker.js', TemplateView.as_view(template_name='service-worker.js', content_type='application/javascript')),
 ]
