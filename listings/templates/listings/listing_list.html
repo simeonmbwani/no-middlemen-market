@@ -3,6 +3,7 @@
 {% block content %}
 <div class="container px-1">
 
+    <!-- 2. HERO SECTION -->
     <div class="text-center py-4 my-2 border-0 bg-transparent">
         <h1 class="fw-bold mb-1" style="font-size: 1.8rem; letter-spacing: -0.5px;">NO MIDDLEMEN</h1>
         <p class="lead mb-2 text-secondary" style="font-size: 0.9rem; font-weight: 500;">Rent, Lend and Share Assets Directly</p>
@@ -12,34 +13,35 @@
         </div>
     </div>
 
-    <div class="row g-2 mb-4">
-        <div class="col-3">
-            <div class="card border-0 rounded-4 shadow-sm" style="background-color: var(--card-bg) !important;">
-                <div class="card-body text-center py-3 px-1">
+    <!-- 📊 FIXED STATS MODULE: Restructured to 2-column blocks so items do not squish or overlap -->
+    <div class="row g-2 mb-4 px-1 text-center">
+        <div class="col-6">
+            <div class="card border-0 rounded-3 shadow-sm" style="background-color: var(--card-bg) !important;">
+                <div class="card-body py-2 px-1">
                     <h5 class="fw-bold text-success mb-0" style="font-size: 1.1rem; color: #2ecc71 !important;">5K+</h5>
                     <small class="text-muted d-block" style="font-size: 0.65rem;">Users</small>
                 </div>
             </div>
         </div>
-        <div class="col-3">
-            <div class="card border-0 rounded-4 shadow-sm" style="background-color: var(--card-bg) !important;">
-                <div class="card-body text-center py-3 px-1">
+        <div class="col-6">
+            <div class="card border-0 rounded-3 shadow-sm" style="background-color: var(--card-bg) !important;">
+                <div class="card-body py-2 px-1">
                     <h5 class="fw-bold text-success mb-0" style="font-size: 1.1rem; color: #2ecc71 !important;">2K+</h5>
                     <small class="text-muted d-block" style="font-size: 0.65rem;">Assets</small>
                 </div>
             </div>
         </div>
-        <div class="col-3">
-            <div class="card border-0 rounded-4 shadow-sm" style="background-color: var(--card-bg) !important;">
-                <div class="card-body text-center py-3 px-1">
+        <div class="col-6">
+            <div class="card border-0 rounded-3 shadow-sm" style="background-color: var(--card-bg) !important;">
+                <div class="card-body py-2 px-1">
                     <h5 class="fw-bold text-success mb-0" style="font-size: 1.1rem; color: #2ecc71 !important;">10</h5>
                     <small class="text-muted d-block" style="font-size: 0.65rem;">Provinces</small>
                 </div>
             </div>
         </div>
-        <div class="col-3">
-            <div class="card border-0 rounded-4 shadow-sm" style="background-color: var(--card-bg) !important;">
-                <div class="card-body text-center py-3 px-1">
+        <div class="col-6">
+            <div class="card border-0 rounded-3 shadow-sm" style="background-color: var(--card-bg) !important;">
+                <div class="card-body py-2 px-1">
                     <h5 class="fw-bold text-success mb-0" style="font-size: 1.1rem; color: #2ecc71 !important;">0</h5>
                     <small class="text-muted d-block" style="font-size: 0.65rem;">Middlemen</small>
                 </div>
@@ -47,7 +49,8 @@
         </div>
     </div>
 
-    <form method="GET" action="{% url 'listings:list' %}" class="row g-2 mb-4">
+    <!-- 🔍 4. SEARCH FILTERS WITH ALL 10 PROVINCES INTEGRATED -->
+    <form method="GET" action="{% url 'listings:list' %}" class="row g-2 mb-4 px-1">
         {% if request.GET.q %}
             <input type="hidden" name="q" value="{{ request.GET.q }}">
         {% endif %}
@@ -68,12 +71,16 @@
         <div class="col-5">
             <select name="province" class="form-select filter-select">
                 <option value="">Province ▼</option>
-                <option value="harare" {% if request.GET.province == 'harare' %}selected{% endif %}>Harare</option>
                 <option value="bulawayo" {% if request.GET.province == 'bulawayo' %}selected{% endif %}>Bulawayo</option>
+                <option value="harare" {% if request.GET.province == 'harare' %}selected{% endif %}>Harare</option>
                 <option value="manicaland" {% if request.GET.province == 'manicaland' %}selected{% endif %}>Manicaland</option>
+                <option value="mash_central" {% if request.GET.province == 'mash_central' %}selected{% endif %}>Mash Central</option>
+                <option value="mash_east" {% if request.GET.province == 'mash_east' %}selected{% endif %}>Mash East</option>
                 <option value="mash_west" {% if request.GET.province == 'mash_west' %}selected{% endif %}>Mash West</option>
-                <option value="midlands" {% if request.GET.province == 'midlands' %}selected{% endif %}>Midlands</option>
                 <option value="masvingo" {% if request.GET.province == 'masvingo' %}selected{% endif %}>Masvingo</option>
+                <option value="mat_north" {% if request.GET.province == 'mat_north' %}selected{% endif %}>Mat North</option>
+                <option value="mat_south" {% if request.GET.province == 'mat_south' %}selected{% endif %}>Mat South</option>
+                <option value="midlands" {% if request.GET.province == 'midlands' %}selected{% endif %}>Midlands</option>
             </select>
         </div>
         <div class="col-2">
@@ -83,18 +90,20 @@
         </div>
     </form>
 
+    <!-- 3. HORIZONTAL CATEGORIES (Fixed raw blue links styling conflict from image_ac0e5d.png) -->
     <h6 class="fw-bold mb-2 text-uppercase font-monospace text-muted" style="font-size: 0.65rem; tracking: 1px;">Categories</h6>
     <div class="category-swiper mb-4">
-        <a href="?category=property" class="category-chip">🏠 Property</a>
-        <a href="?category=vehicle" class="category-chip">🚗 Vehicles</a>
-        <a href="?category=mining_equipment" class="category-chip">⛏️ Mining</a>
-        <a href="?category=farming_equipment" class="category-chip">🚜 Farming</a>
-        <a href="?category=commerce_business" class="category-chip">🏪 Commerce</a>
-        <a href="?category=fishing" class="category-chip">🎣 Fishing</a>
-        <a href="?category=tourism" class="category-chip">🏕️ Tourism</a>
-        <a href="?category=equipment" class="category-chip">🔧 Equipment</a>
+        <a href="?category=property" class="category-chip text-decoration-none">🏠 Property</a>
+        <a href="?category=vehicle" class="category-chip text-decoration-none">🚗 Vehicles</a>
+        <a href="?category=mining_equipment" class="category-chip text-decoration-none">⛏️ Mining</a>
+        <a href="?category=farming_equipment" class="category-chip text-decoration-none">🚜 Farming</a>
+        <a href="?category=commerce_business" class="category-chip text-decoration-none">🏪 Commerce</a>
+        <a href="?category=fishing" class="category-chip text-decoration-none">🎣 Fishing</a>
+        <a href="?category=tourism" class="category-chip text-decoration-none">🏕️ Tourism</a>
+        <a href="?category=equipment" class="category-chip text-decoration-none">🔧 Equipment</a>
     </div>
 
+    <!-- 5. ASSET CARDS CONTAINER -->
     <h6 class="fw-bold mb-3 text-uppercase font-monospace text-muted" style="font-size: 0.65rem; tracking: 1px;">Latest Verified Listings</h6>
     <div class="row g-3">
         {% for item in listings %}
