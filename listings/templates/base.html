@@ -53,8 +53,8 @@
             min-height: 100vh;
             background-color: var(--bg-main);
             position: relative;
-            padding-top: 130px;
-            padding-bottom: 85px;
+            padding-top: 140px; /* Deepened padding to clear sticky header */
+            padding-bottom: 95px; /* Deepened padding to protect content from clumping over bottom navigation */
             box-shadow: 0 0 25px rgba(0,0,0,.4);
         }
 
@@ -89,6 +89,11 @@
             background-color: var(--top-bar-bg) !important; 
             border-bottom: 2px solid var(--success-color); 
             z-index: 1050; 
+        }
+        
+        /* Fixed top bar buttons adaptive theme color matching to resolve image_b705cf.png visibility drop */
+        .top-bar-btn {
+            color: var(--text-main) !important;
         }
         
         .mobile-bottom-nav { 
@@ -128,18 +133,21 @@
 
     <div class="app-viewport-wrapper">
 
+        <!-- 1. STICKY TOP HEADER -->
         <div class="mobile-top-bar px-3 py-2 shadow-sm">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-2">
-                    <button class="btn btn-link text-white p-0 fs-3" data-bs-toggle="offcanvas" data-bs-target="#leftDrawerMenu" aria-label="Open Navigation Menu">
+                    <!-- FIXED: Uses .top-bar-btn to pull contextual dark/light color metrics dynamically -->
+                    <button class="btn btn-link top-bar-btn p-0 fs-3" data-bs-toggle="offcanvas" data-bs-target="#leftDrawerMenu" aria-label="Open Navigation Menu">
                         <i class="bi bi-list"></i>
                     </button>
-                    <a href="{% url 'listings:list' %}" class="fw-bold text-decoration-none text-white font-monospace">
+                    <a href="{% url 'listings:list' %}" class="fw-bold text-decoration-none font-monospace" style="color: var(--text-main) !important;">
                         🛑 NO <span style="color: #2ecc71;">MIDDLEMEN</span>
                     </a>
                 </div>
                 
-                <a href="{% url 'dashboard:index' %}?tab=alerts" class="text-white position-relative" aria-label="View Alerts">
+                <!-- FIXED: Uses .top-bar-btn to remain cleanly readable regardless of background theme -->
+                <a href="{% url 'dashboard:index' %}?tab=alerts" class="top-bar-btn position-relative" aria-label="View Alerts">
                     <i class="bi bi-bell fs-4"></i>
                     <span class="badge rounded-pill bg-success position-absolute top-0 start-100 translate-middle" style="font-size: 0.55rem; padding: 0.25em 0.45em;">3</span>
                 </a>
@@ -154,6 +162,7 @@
             </form>
         </div>
 
+        <!-- 12. MOBILE LEFT SIDE SLIDE-IN DRAWER MENU -->
         <div class="offcanvas offcanvas-start drawer-slide text-bg-dark" tabindex="-1" id="leftDrawerMenu">
             <div class="offcanvas-header border-bottom border-secondary py-3">
                 <h5 class="offcanvas-title fw-bold text-success font-monospace">☰ MENU</h5>
@@ -200,10 +209,12 @@
             </div>
         </div>
 
+        <!-- APP CONTENT PORT -->
         <div class="container px-2">
             {% block content %}{% endblock %}
         </div>
 
+        <!-- APP FOOTER INDEX -->
         <div class="mt-4 mb-4 px-3">
             <div class="card border-0 shadow-sm rounded-4" style="background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important;">
                 <div class="card-body text-center p-3">
@@ -219,6 +230,7 @@
             </div>
         </div>
 
+        <!-- 7. FLOATING ACTION DROPDOWN BUTTON -->
         <div class="dropup position-fixed" style="bottom: 85px; right: 16px; z-index: 1040;">
             <button class="btn btn-success rounded-circle shadow d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; background-color: #198754 !important; border: none;" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Actions Toggle Link">
                 <i class="bi bi-plus-lg fs-4 text-white"></i>
@@ -230,6 +242,7 @@
             </ul>
         </div>
 
+        <!-- 6 & 15. STICKY MOBILE BOTTOM NAVIGATION BAR -->
         <div class="mobile-bottom-nav">
             <a href="{% url 'listings:list' %}" class="bottom-nav-item {% if request.path == '/' and not request.GET.browse %}active{% endif %}">
                 <i class="bi bi-house-door-fill"></i><span>Home</span>
@@ -255,17 +268,5 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const root = document.getElementById("theme-root");
-            const savedTheme = localStorage.getItem("theme") || "dark";
-            root.setAttribute("data-theme", savedTheme);
-        });
-
-        function setTheme(mode) {
-            document.getElementById("theme-root").setAttribute("data-theme", mode);
-            localStorage.setItem("theme", mode);
-        }
-    </script>
 </body>
 </html>
