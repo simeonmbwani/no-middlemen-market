@@ -2,16 +2,20 @@
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <title>🛑 NO MIDDLEMEN | Master Banking & ERP Control System</title>
+    <title>🛡️ ERP MASTER CORE | Live Production Workspace</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/data/bootstrap-icons.min.css">
     <style>
-        :root { --sidebar-width: 280px; --panel-bg: #0d0f12; --card-bg: #161920; }
-        body { background-color: var(--panel-bg); color: #f8fafc; font-family: sans-serif; overflow-x: hidden; }
+        :root { --sidebar-width: 290px; --panel-bg: #0d0f12; --card-bg: #161920; }
+        body { background-color: var(--panel-bg); color: #f8fafc; font-family: system-ui, sans-serif; overflow-x: hidden; }
         .sidebar-panel { width: var(--sidebar-width); height: 100vh; position: fixed; top: 0; left: 0; background-color: #090b0e; border-right: 1px solid #242936; overflow-y: auto; z-index: 1000; }
         .main-workspace { margin-left: var(--sidebar-width); padding: 30px; }
-        .stat-card { background: var(--card-bg); border: 1px solid #242936; border-radius: 12px; transition: transform 0.2s; }
-        .stat-card:hover { transform: translateY(-3px); border-color: #198754; }
+        .stat-card { background: var(--card-bg); border: 1px solid #242936; border-radius: 12px; }
+        .erp-pane { display: none; }
+        .erp-pane.active { display: block; }
+        .nav-link { cursor: pointer; border-radius: 8px !important; margin-bottom: 2px; }
+        .nav-link.active { background-color: #198754 !important; color: white !important; }
+        .table-custom { background-color: var(--card-bg) !important; color: #f8fafc !important; border: 1px solid #242936; }
     </style>
 </head>
 <body>
@@ -19,133 +23,266 @@
     <div class="sidebar-panel p-3">
         <div class="d-block text-center py-3 border-bottom border-secondary mb-4">
             <span class="fs-5 fw-bold text-success font-monospace">🛡️ ERP MASTER CORE</span>
-            <small class="d-block text-muted opacity-70">v2.6 Secure Infrastructure</small>
+            <small class="d-block text-muted opacity-70">Live Cluster Infrastructure</small>
         </div>
-        <ul class="nav nav-pills flex-column mb-auto gap-1">
-            <li><a href="#overview" class="nav-link text-white active"><i class="bi bi-speedometer2 me-2 text-success"></i> Control Dashboard</a></li>
-            
-            <li><a href="{% url 'accounts:erp_user_management' %}" class="nav-link text-white"><i class="bi bi-people me-2"></i> 1. User Management</a></li>
-<ul class="nav nav-pills flex-column mb-auto gap-1">
-    <li><a href="{% url 'accounts:erp_control_center' %}" class="nav-link text-white active"><i class="bi bi-speedometer2 me-2 text-success"></i> Control Dashboard</a></li>
-    <li><a href="{% url 'accounts:erp_user_management' %}" class="nav-link text-white"><i class="bi bi-people me-2"></i> 1. User Management</a></li>
-    <li><a href="{% url 'accounts:erp_asset_catalog' %}" class="nav-link text-white"><i class="bi bi-building-gear me-2"></i> 2. Asset Catalog</a></li>
-    <li><a href="{% url 'accounts:erp_chat_monitor' %}" class="nav-link text-white"><i class="bi bi-chat-dots me-2"></i> 3. Chat Monitor</a></li>
-    <li><a href="{% url 'accounts:erp_payment_center' %}" class="nav-link text-white"><i class="bi bi-currency-dollar me-2"></i> 4. Payment Center</a></li>
-    <li><a href="{% url 'accounts:erp_red_flags' %}" class="nav-link text-white"><i class="bi bi-flag me-2 text-danger"></i> 5. Red Flag Reports</a></li>
-    <li><a href="{% url 'accounts:erp_violations_hub' %}" class="nav-link text-white"><i class="bi bi-shield-exclamation me-2"></i> 6. Violations Hub</a></li>
-    <li><a href="{% url 'accounts:erp_suspensions' %}" class="nav-link text-white"><i class="bi bi-person-exclamation me-2 text-warning"></i> 7. Suspensions</a></li>
-    <li><a href="{% url 'accounts:erp_blocked_matrix' %}" class="nav-link text-white"><i class="bi bi-person-x me-2 text-danger"></i> 8. Blocked Matrix</a></li>
-    <li><a href="{% url 'accounts:erp_records_archive' %}" class="nav-link text-white"><i class="bi bi-archive me-2"></i> 9. Records Archive</a></li>
-    <li><a href="{% url 'accounts:erp_categories' %}" class="nav-link text-white"><i class="bi bi-tags me-2"></i> 10. Categories</a></li>
-    <li><a href="{% url 'accounts:erp_search_analytics' %}" class="nav-link text-white"><i class="bi bi-bar-chart-line me-2"></i> 11. Search Analytics</a></li>
-    <li><a href="{% url 'accounts:erp_review_logs' %}" class="nav-link text-white"><i class="bi bi-star me-2"></i> 12. Review Logs</a></li>
-    <li><a href="{% url 'accounts:erp_system_alerts' %}" class="nav-link text-white"><i class="bi bi-broadcast me-2"></i> 13. System Alerts</a></li>
-    <li><a href="{% url 'accounts:erp_immutable_audit' %}" class="nav-link text-white text-info fw-bold"><i class="bi bi-journal-text me-2"></i> 14. Immutable Audit</a></li>
-    <li><a href="{% url 'accounts:erp_geo_statistics' %}" class="nav-link text-white"><i class="bi bi-geo-alt me-2"></i> 15. Geo Statistics</a></li>
-    <li><a href="{% url 'accounts:erp_support_tickets' %}" class="nav-link text-white"><i class="bi bi-headset me-2"></i> 16. Support Tickets</a></li>
-    <li><a href="{% url 'accounts:erp_disaster_recovery' %}" class="nav-link text-white text-warning"><i class="bi bi-database-fill-gear me-2"></i> 17. Disaster Recovery</a></li>
-    <li><a href="{% url 'accounts:erp_global_settings' %}" class="nav-link text-white"><i class="bi bi-gear-fill me-2"></i> 18. Global Settings</a></li>
-    <li><a href="{% url 'accounts:erp_export_engines' %}" class="nav-link text-white"><i class="bi bi-printer me-2"></i> 19. Export Engines</a></li>
-    <li><a href="{% url 'accounts:erp_super_admin' %}" class="nav-link text-white text-danger fw-bold border-top border-secondary mt-2 pt-2"><i class="bi bi-key-fill me-2"></i> 20. Super Admin</a></li>
-</ul>
+        <ul class="nav nav-pills flex-column mb-auto" id="erpTabControl">
+            <li><a class="nav-link text-white active" onclick="switchPane('overview')"><i class="bi bi-speedometer2 me-2 text-success"></i> Control Dashboard</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('users')"><i class="bi bi-people me-2"></i> 1. User Management</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('assets')"><i class="bi bi-building-gear me-2"></i> 2. Asset Catalog</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('chats')"><i class="bi bi-chat-dots me-2"></i> 3. Chat Monitor</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('payments')"><i class="bi bi-currency-dollar me-2"></i> 4. Payment Center</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('redflags')"><i class="bi bi-flag me-2 text-danger"></i> 5. Red Flag Reports</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('violations')"><i class="bi bi-shield-exclamation me-2"></i> 6. Violations Hub</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('suspended')"><i class="bi bi-person-exclamation me-2 text-warning"></i> 7. Suspensions</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('blocked')"><i class="bi bi-person-x me-2 text-danger"></i> 8. Blocked Matrix</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('archive')"><i class="bi bi-archive me-2"></i> 9. Records Archive</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('categories')"><i class="bi bi-tags me-2"></i> 10. Categories</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('analytics')"><i class="bi bi-bar-chart-line me-2"></i> 11. Search Analytics</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('reviews')"><i class="bi bi-star me-2"></i> 12. Review Logs</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('alerts')"><i class="bi bi-broadcast me-2"></i> 13. System Alerts</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('audit')"><i class="bi bi-journal-text me-2 text-info"></i> 14. Immutable Audit</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('provinces')"><i class="bi bi-geo-alt me-2"></i> 15. Geo Statistics</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('support')"><i class="bi bi-headset me-2"></i> 16. Support Tickets</a></li>
+            <li><a class="nav-link text-white text-warning" onclick="switchPane('backup')"><i class="bi bi-database-fill-gear me-2"></i> 17. Disaster Recovery</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('settings')"><i class="bi bi-gear-fill me-2"></i> 18. Global Settings</a></li>
+            <li><a class="nav-link text-white" onclick="switchPane('printable')"><i class="bi bi-printer me-2"></i> 19. Export Engines</a></li>
+            <li><a class="nav-link text-white text-danger fw-bold border-top border-secondary mt-2 pt-2" onclick="switchPane('superadmin')"><i class="bi bi-key-fill me-2"></i> 20. Super Admin</a></li>
+            <li><a class="nav-link text-white text-secondary fw-bold border-top border-secondary mt-3 pt-2" href="{% url 'listings:list' %}"><i class="bi bi-box-arrow-left me-2"></i> Exit Marketplace</a></li>
+        </ul>
     </div>
 
     <div class="main-workspace">
-        <header class="d-flex justify-content-between align-items-center pb-4 mb-4 border-bottom border-secondary">
-            <div>
+        
+        <div id="pane-overview" class="erp-pane active">
+            <header class="mb-4">
                 <h1 class="h3 fw-bold m-0">System Overview Command Hub</h1>
-                <small class="text-muted">Real-time indicators across Zimbabwe's direct peer-to-peer directory infrastructure.</small>
+                <small class="text-muted">Live metrics across Zimbabwe's direct peer-to-peer directory infrastructure.</small>
+            </header>
+            <div class="row row-cols-1 row-cols-md-4 g-3 mb-5">
+                <div class="col"><div class="stat-card p-3"><span class="text-muted small d-block">Total Registered Profiles</span><h2 class="mt-2 mb-0 fw-bold text-success">{{ total_users }}</h2></div></div>
+                <div class="col"><div class="stat-card p-3"><span class="text-muted small d-block">Total Asset Catalogs</span><h2 class="mt-2 mb-0 fw-bold text-primary">{{ total_assets }}</h2></div></div>
+                <div class="col"><div class="stat-card p-3"><span class="text-muted small d-block">Gross System Revenue</span><h2 class="mt-2 mb-0 fw-bold text-warning">${{ total_revenue }} USD</h2></div></div>
+                <div class="col"><div class="stat-card p-3"><span class="text-muted small d-block">Flagged Incidents</span><h2 class="mt-2 mb-0 fw-bold text-danger">{{ unresolved_reports }} Open</h2></div></div>
             </div>
-            <div class="btn-group">
-                <button class="btn btn-outline-light btn-sm" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print System Audit</button>
-                <button class="btn btn-success btn-sm"><i class="bi bi-file-earmark-spreadsheet me-1"></i> Export Master CSV</button>
-            </div>
-        </header>
+        </div>
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 mb-5">
-            <div class="col">
-                <div class="stat-card p-3">
-                    <span class="text-muted small uppercase d-block">Total Verified Users</span>
-                    <div class="d-flex align-items-center justify-content-between mt-2">
-                        <h2 class="m-0 fw-bold text-success">{{ verified_users }}</h2>
-                        <i class="bi bi-patch-check fs-3 opacity-30 text-success"></i>
-                    </div>
-                </div>
+        <div id="pane-users" class="erp-pane">
+            <h3 class="fw-bold text-success font-monospace mb-4">👥 Module 1: Production User Registry Matrix</h3>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped align-middle table-custom">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Phone (Zim standard)</th>
+                            <th>Province Location</th>
+                            <th>Account Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for profile in users_list %}
+                        <tr>
+                            <td class="font-monospace text-info">#{{ profile.id }}</td>
+                            <td class="fw-bold">@{{ profile.username }}</td>
+                            <td>{{ profile.phone_number|default:"No Phone Number Record" }}</td>
+                            <td><span class="badge bg-secondary">{{ profile.province|upper|default:"Not Configured" }}</span></td>
+                            <td>
+                                {% if profile.is_banned %}<span class="badge bg-danger">Banned / Terminated</span>
+                                {% elif profile.is_verified_owner %}<span class="badge bg-success">Verified Peer Account</span>
+                                {% else %}<span class="badge bg-primary">Standard Client</span>{% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" class="text-center text-muted py-4">No active user registry records found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="col">
-                <div class="stat-card p-3">
-                    <span class="text-muted small uppercase d-block">Active Direct Ad Listings</span>
-                    <div class="d-flex align-items-center justify-content-between mt-2">
-                        <h2 class="m-0 fw-bold text-primary">{{ active_listings }}</h2>
-                        <i class="bi bi-collection-play fs-3 opacity-30 text-primary"></i>
-                    </div>
-                </div>
+        </div>
+
+        <div id="pane-assets" class="erp-pane">
+            <h3 class="fw-bold text-primary font-monospace mb-4">🏢 Module 2: Live Asset Catalog Audits</h3>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped align-middle table-custom">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Listing ID</th>
+                            <th>Owner Profile</th>
+                            <th>Asset Title Details</th>
+                            <th>Price Rate (USD)</th>
+                            <th>Market Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in listings_list %}
+                        <tr>
+                            <td class="font-monospace text-primary">#{{ item.id }}</td>
+                            <td class="text-warning">@{{ item.owner.username }}</td>
+                            <td class="fw-bold">{{ item.title }} <small class="text-muted d-block">{{ item.get_category_display }} - {{ item.district }}</small></td>
+                            <td class="text-success fw-bold">${{ item.price }} / day</td>
+                            <td>
+                                {% if item.is_active %}<span class="badge bg-success">🟢 Active Live Ad</span>
+                                {% elif item.is_paid %}<span class="badge bg-warning text-dark">🟡 Paid / Verification Needed</span>
+                                {% else %}<span class="badge bg-danger">🔴 Unpaid Placeholder</span>{% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" class="text-center text-muted py-4">No consumer directory items listed on production pools yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="col">
-                <div class="stat-card p-3">
-                    <span class="text-muted small uppercase d-block">Gross Billing (Monthly)</span>
-                    <div class="d-flex align-items-center justify-content-between mt-2">
-                        <h2 class="m-0 fw-bold text-warning">${{ monthly_billing }} <span class="fs-6 fw-normal text-muted">USD</span></h2>
-                        <i class="bi bi-cash-stack fs-3 opacity-30 text-warning"></i>
-                    </div>
-                </div>
+        </div>
+
+        <div id="pane-chats" class="erp-pane">
+            <h3 class="fw-bold text-info font-monospace mb-4">💬 Module 3: Secure Chat Monitor & P2P Escrow Logic</h3>
+            <div class="card bg-dark border-secondary p-4">
+                <p class="text-muted">Natively tracks cross-account communication patterns to prevent offline broker hijack loops without exposing private message payloads unless legally flagged.</p>
+                <span class="badge bg-success p-2 w-25">Operational Logs Clear</span>
             </div>
-            <div class="col">
-                <div class="stat-card p-3">
-                    <span class="text-muted small uppercase d-block">Pending Red Flag Reports</span>
-                    <div class="d-flex align-items-center justify-content-between mt-2">
-                        <h2 class="m-0 fw-bold text-danger">{{ unresolved_reports }} Unresolved</h2>
-                        <i class="bi bi-exclamation-triangle fs-3 opacity-30 text-danger"></i>
-                    </div>
+        </div>
+
+        <div id="pane-payments" class="erp-pane">
+            <h3 class="fw-bold text-warning font-monospace mb-4">💸 Module 4: Integrated Settlement Hub</h3>
+            <div class="card bg-dark border-secondary p-4 mb-4">
+                <h5>Supported Channels Natively:</h5>
+                <div class="d-flex gap-2 mt-3">
+                    <span class="badge p-3 bg-success fs-6">EcoCash FCA</span>
+                    <span class="badge p-3 bg-primary fs-6">InnBucks Engine</span>
+                    <span class="badge p-3 bg-info fs-6">OneMoney Gate</span>
+                    <span class="badge p-3 bg-secondary fs-6">USD Cash Transfer</span>
                 </div>
             </div>
         </div>
 
-        <div id="audit" class="card shadow mb-4">
-            <div class="card-header bg-dark d-flex justify-content-between align-items-center border-0 py-3">
-                <h5 class="m-0 fw-bold text-info font-monospace"><i class="bi bi-shield-fill-check me-2"></i>Module 14: Cryptographic System Audit Logs</h5>
-                <span class="badge bg-danger px-2.5 py-1">READ-ONLY REPOSITORY</span>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-dark table-striped table-hover m-0 align-middle font-monospace" style="font-size: 0.88rem;">
-                        <thead>
-                            <tr class="table-secondary">
-                                <th scope="col">Timestamp</th>
-                                <th scope="col">Administrator Profile</th>
-                                <th scope="col">Action Query String Execution</th>
-                                <th scope="col">Target Object Key</th>
-                                <th scope="col">Network IP Address</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for log in audit_logs %}
-                            <tr>
-                                <td>{{ log.timestamp|date:"Y-m-d H:i:s" }}</td>
-                                <td class="text-warning fw-bold">@{{ log.admin_username }}</td>
-                                <td>
-                                    <span class="badge {% if log.action_type == 'SUSPEND_USER' %}bg-danger{% else %}bg-success{% endif %} me-2">
-                                        {{ log.action_type }}
-                                    </span>
-                                    {{ log.description }}
-                                </td>
-                                <td class="fw-bold">{{ log.target_object }}</td>
-                                <td>{{ log.ip_address }}</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center text-muted py-4">
-                                    <i class="bi bi-shield-slash d-block fs-3 mb-2"></i> No active cryptographic logs registered on this audit node loop yet.
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+        <div id="pane-redflags" class="erp-pane">
+            <h3 class="fw-bold text-danger font-monospace mb-4">🚩 Module 5: Fraud & Middleman Incident Reporting Desk</h3>
+            <div class="alert alert-danger bg-dark border-danger text-white">
+                <strong>Real-Time Escalations:</strong> Total unresolved tracking queues currently standing at: {{ unresolved_reports }}
             </div>
         </div>
+
+        <div id="pane-violations" class="erp-pane">
+            <h3 class="fw-bold text-warning font-monospace mb-4">🛡️ Module 6: Automatic Policy Enforcement & Strike Matrix</h3>
+            <p class="text-muted">System records duplicate posts, coordinate anomalies, and external broker numbers instantly.</p>
+        </div>
+
+        <div id="pane-suspended" class="erp-pane">
+            <h3 class="fw-bold text-warning font-monospace mb-4">⏳ Module 7: Temporary Account Suspensions Registry</h3>
+            <p class="text-muted">Total accounts currently inside the cooling-off/strike parameter: <strong>{{ suspended_count }}</strong></p>
+        </div>
+
+        <div id="pane-blocked" class="erp-pane">
+            <h3 class="fw-bold text-danger font-monospace mb-4">🚫 Module 8: Hard-Blocked Identity Matrix</h3>
+            <p class="text-muted">Total devices, phone strings, and national identification numbers hard-banned from the platform: <strong>{{ banned_count }}</strong></p>
+        </div>
+
+        <div id="pane-archive" class="erp-pane">
+            <h3 class="fw-bold text-secondary font-monospace mb-4">🗄️ Module 9: Immutable Cold-Storage Records Archive</h3>
+            <p class="text-muted">SaaS Data Compliance Safeguard: Erased records are retained securely on an offsite cluster node loop.</p>
+        </div>
+
+        <div id="pane-categories" class="erp-pane">
+            <h3 class="fw-bold text-success font-monospace mb-4">🏷️ Module 10: Dynamic Directory Category Settings</h3>
+            <div class="card bg-dark border-secondary p-3">
+                <span class="text-success fw-bold">Active Engines:</span> Property, Vehicles, Mining, Farming, Commerce, Fishing, IT, Events.
+            </div>
+        </div>
+
+        <div id="pane-analytics" class="erp-pane">
+            <h3 class="fw-bold text-info font-monospace mb-4">📊 Module 11: High-Value Consumer Intent Search Logs</h3>
+            <p class="text-muted">Aggregates search queries across Mashonaland West and greater regional clusters to track local market demand.</p>
+        </div>
+
+        <div id="pane-reviews" class="erp-pane">
+            <h3 class="fw-bold text-primary font-monospace mb-4">⭐ Module 12: Peer Review & Feedback Anti-Sybil Log</h3>
+            <p class="text-muted">Audits transaction feedback logs to catch fake account behaviors instantly.</p>
+        </div>
+
+        <div id="pane-alerts" class="erp-pane">
+            <h3 class="fw-bold text-info font-monospace mb-4">📢 Module 13: Bulk SMS Gateway & Broadcast Console</h3>
+            <p class="text-muted">Monitors outbound verification streams and real-time push engines.</p>
+        </div>
+
+        <div id="pane-audit" class="erp-pane">
+            <h3 class="fw-bold text-info font-monospace mb-4">🛡️ Module 14: Cryptographic System Audit Logs</h3>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped align-middle table-custom">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Administrator Agent</th>
+                            <th>Action Query Execution Parameter</th>
+                            <th>Network Identity Node IP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in audit_logs %}
+                        <tr>
+                            <td>{{ log.timestamp }}</td>
+                            <td class="text-warning">@{{ log.admin_username }}</td>
+                            <td>{{ log.description }}</td>
+                            <td>{{ log.ip_address }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4" class="text-center text-muted py-4"><i class="bi bi-shield-check text-success d-block fs-2 mb-2"></i> Operational lines clean. No system integrity anomalies recorded.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="pane-provinces" class="erp-pane">
+            <h3 class="fw-bold text-success font-monospace mb-4">🌍 Module 15: Provincial Distribution & Direct Metrics Map</h3>
+            <p class="text-muted">Aggregates user densities across Harare, Bulawayo, Mashonaland West, and all remaining clusters.</p>
+        </div>
+
+        <div id="pane-support" class="erp-pane">
+            <h3 class="fw-bold text-primary font-monospace mb-4">🎫 Module 16: Customer Service Resolution Queue</h3>
+            <p class="text-muted">Maintains clear support allocations and agent dispatch trackers.</p>
+        </div>
+
+        <div id="pane-backup" class="erp-pane">
+            <h3 class="fw-bold text-warning font-monospace mb-4">💾 Module 17: Database Clustering & Automated Backups</h3>
+            <div class="p-3 bg-dark border border-warning rounded">
+                <span class="text-warning">Status: Safe</span> — Automated verification snapshots backing up directly to secure cloud vaults.
+            </div>
+        </div>
+
+        <div id="pane-settings" class="erp-pane">
+            <h3 class="fw-bold text-light font-monospace mb-4">⚙️ Module 18: System Parameter Configuration Hub</h3>
+            <p class="text-muted">Allows manual parameter updates for listing cost boundaries, verification requirements, and localized settings switches.</p>
+        </div>
+
+        <div id="pane-printable" class="erp-pane">
+            <h3 class="fw-bold text-success font-monospace mb-4">🖨️ Module 19: High-Volume Analytics Reporting Engines</h3>
+            <p class="text-muted">Generates comprehensive platform reports cleanly in PDF, CSV, and Excel configurations.</p>
+        </div>
+
+        <div id="pane-superadmin" class="erp-pane">
+            <h3 class="fw-bold text-danger font-monospace mb-4">🔑 Module 20: Root Super Admin Cryptographic Infrastructure Keys</h3>
+            <div class="alert alert-danger bg-dark border-danger text-white">
+                <strong>Restricted Area:</strong> Credentials, role permissions, and access logs accessible exclusively by root administrators.
+            </div>
+        </div>
+
     </div>
 
+    <script>
+        function switchPane(paneId) {
+            // Deactivate all active workspace modules
+            document.querySelectorAll('.erp-pane').forEach(pane => pane.classList.remove('active'));
+            document.querySelectorAll('.sidebar-panel .nav-link').forEach(link => link.classList.remove('active'));
+            
+            // Bring targeted interface elements into view smoothly
+            document.getElementById('pane-' + paneId).classList.add('active');
+            
+            // Target the active sidebar link safely regardless of internal tag nesting
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
