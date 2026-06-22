@@ -1,88 +1,86 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="row my-2">
-    <div class="col-12">
-        <form method="GET" action="{% url 'listings:list' %}" class="m-0">
-            <div class="input-group">
-                <span class="input-group-text bg-secondary border-0 text-white-50"><i class="bi bi-search"></i></span>
-                <input type="text" name="q" value="{{ request.GET.q }}" class="form-control border-0 bg-secondary text-white" placeholder="Search tractors, houses, tools...">
-            </div>
-        </form>
+<div class="container px-2">
+    
+    <!-- 2. HERO SECTION (Clean, Minimal, No Large Banners) -->
+    <div class="text-center py-4 my-2 border-0 bg-transparent">
+        <h1 class="fw-bold mb-1" style="font-size: 1.8rem; letter-spacing: -0.5px;">NO MIDDLEMEN</h1>
+        <p class="lead mb-2 text-secondary" style="font-size: 0.9rem; font-weight: 500;">Rent, Lend and Share Assets Directly</p>
+        <div class="d-flex justify-content-center gap-3">
+            <span class="small fw-semibold text-success"><i class="bi bi-patch-check-fill"></i> No Agents</span>
+            <span class="small fw-semibold text-success"><i class="bi bi-patch-check-fill"></i> No Hidden Fees</span>
+        </div>
     </div>
-</div>
 
-<div class="text-center py-4 my-2 border-0 bg-transparent">
-    <h1 class="fw-bold mb-1" style="font-size: 1.8rem; letter-spacing: -0.5px; color: var(--text-main) !important;">NO MIDDLEMEN</h1>
-    <p class="lead mb-2" style="font-size: 0.95rem; font-weight: 500; color: var(--text-muted) !important;">Rent, Lend and Share Assets Directly</p>
-    <div class="d-flex justify-content-center gap-3">
-        <span class="small fw-semibold text-success"><i class="bi bi-patch-check-fill"></i> No Agents</span>
-        <span class="small fw-semibold text-success"><i class="bi bi-patch-check-fill"></i> No Hidden Fees</span>
-    </div>
-</div>
+    <!-- 4. SEARCH FILTERS (Compact Dropdowns aligned to Mobile Screen Width) -->
+    <form method="GET" action="{% url 'listings:list' %}" class="row g-2 mb-4">
+        <div class="col-5">
+            <select name="category" class="form-select filter-select">
+                <option value="">Category ▼</option>
+                <option value="property" {% if request.GET.category == 'property' %}selected{% endif %}>Property</option>
+                <option value="vehicle" {% if request.GET.category == 'vehicle' %}selected{% endif %}>Vehicles</option>
+                <option value="mining_equipment" {% if request.GET.category == 'mining_equipment' %}selected{% endif %}>Mining</option>
+                <option value="farming_equipment" {% if request.GET.category == 'farming_equipment' %}selected{% endif %}>Farming</option>
+            </select>
+        </div>
+        <div class="col-5">
+            <select name="province" class="form-select filter-select">
+                <option value="">Province ▼</option>
+                <option value="harare" {% if request.GET.province == 'harare' %}selected{% endif %}>Harare</option>
+                <option value="mash_west" {% if request.GET.province == 'mash_west' %}selected{% endif %}>Mash West</option>
+                <option value="midlands" {% if request.GET.province == 'midlands' %}selected{% endif %}>Midlands</option>
+            </select>
+        </div>
+        <div class="col-2">
+            <button type="submit" class="btn btn-success btn-sm w-100 h-100 fw-bold rounded-3"><i class="bi bi-search"></i></button>
+        </div>
+    </form>
 
-<form method="GET" action="{% url 'listings:list' %}" class="row g-2 mb-3">
-    <div class="col-4">
-        <select name="category" class="form-select filter-select">
-            <option value="">Category ▼</option>
-            <option value="property" {% if request.GET.category == 'property' %}selected{% endif %}>Property</option>
-            <option value="vehicle" {% if request.GET.category == 'vehicle' %}selected{% endif %}>Vehicles</option>
-            <option value="mining_equipment" {% if request.GET.category == 'mining_equipment' %}selected{% endif %}>Mining</option>
-            <option value="farming_equipment" {% if request.GET.category == 'farming_equipment' %}selected{% endif %}>Farming</option>
-        </select>
+    <!-- 3. HORIZONTAL CATEGORIES (Swipe Corridor Grid) -->
+    <h6 class="fw-bold mb-2 text-uppercase font-monospace text-muted" style="font-size: 0.7rem; tracking: 1px;">Categories</h6>
+    <div class="category-swiper mb-4">
+        <a href="?category=property" class="category-chip">🏠 Property</a>
+        <a href="?category=vehicle" class="category-chip">🚗 Vehicles</a>
+        <a href="?category=mining_equipment" class="category-chip">⛏️ Mining</a>
+        <a href="?category=farming_equipment" class="category-chip">🚜 Farming</a>
+        <a href="?category=commerce_business" class="category-chip">🏪 Commerce</a>
+        <a href="?category=fishing" class="category-chip">🎣 Fishing</a>
     </div>
-    <div class="col-4">
-        <select name="province" class="form-select filter-select">
-            <option value="">Province ▼</option>
-            <option value="harare" {% if request.GET.province == 'harare' %}selected{% endif %}>Harare</option>
-            <option value="mash_west" {% if request.GET.province == 'mash_west' %}selected{% endif %}>Mash West</option>
-            <option value="midlands" {% if request.GET.province == 'midlands' %}selected{% endif %}>Midlands</option>
-        </select>
-    </div>
-    <div class="col-4">
-        <button type="submit" class="btn btn-success btn-sm w-100 fw-bold rounded-3 py-1.5" style="background-color: #198754 !important; border: none;"><i class="bi bi-funnel-fill"></i> Filter</button>
-    </div>
-</form>
 
-<div class="category-swiper mb-4">
-    <a href="?category=property" class="category-chip">🏠 Property</a>
-    <a href="?category=vehicle" class="category-chip">🚗 Vehicles</a>
-    <a href="?category=mining_equipment" class="category-chip">⛏️ Mining</a>
-    <a href="?category=farming_equipment" class="category-chip">🚜 Farming</a>
-    <a href="?category=commerce_business" class="category-chip">🏪 Commerce</a>
-    <a href="?category=fishing" class="category-chip">🎣 Fishing</a>
-</div>
-
-<h6 class="fw-bold mb-3 text-uppercase font-monospace" style="font-size: 0.8rem; color: var(--text-main) !important;">Latest Verified Listings</h6>
-<div class="row g-3">
-    {% for item in listings %}
-    <div class="col-12">
-        <div class="asset-mobile-card shadow-sm">
-            {% if item.image1 %}
-                <img src="{{ item.image1.url }}" class="img-fluid w-100" style="height: 220px; object-fit: cover;" alt="{{ item.title }}">
-            {% endif %}
-            <div class="p-3">
-                <div class="d-flex justify-content-between align-items-start mb-1">
-                    <h5 class="fw-bold m-0" style="font-size: 1.15rem; color: var(--text-main) !important;">{{ item.title }}</h5>
-                    <span class="text-success fw-bold fs-5" style="color: #2ecc71 !important;">${{ item.price }}<small style="font-size: 0.75rem;" class="text-muted">/day</small></span>
-                </div>
-                <p class="small mb-2" style="color: var(--text-muted) !important;"><i class="bi bi-geo-alt-fill text-danger me-1"></i>{{ item.district|title }}, {{ item.get_province_display }}</p>
-                <p class="small mb-3" style="color: var(--text-muted) !important; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ item.description }}</p>
-                <div class="d-flex justify-content-between border-top pt-2.5" style="border-color: var(--border-line) !important;">
-                    <button class="btn btn-sm btn-outline-secondary rounded-3 text-white"><i class="bi bi-heart"></i> Save</button>
-                    <a href="{% url 'dashboard:index' %}?start_chat_with={{ item.owner.id }}" class="btn btn-sm btn-success rounded-3 px-3 fw-bold" style="background-color: #198754 !important; border: none;"><i class="bi bi-chat-left-text"></i> Chat Owner</a>
+    <!-- 5. ASSET CARDS CONTAINER (Full Screen Mobile Width) -->
+    <h6 class="fw-bold mb-3 text-uppercase font-monospace text-muted" style="font-size: 0.7rem; tracking: 1px;">Latest Verified Listings</h6>
+    <div class="row g-3">
+        {% for item in listings %}
+        <div class="col-12">
+            <div class="asset-mobile-card shadow-sm">
+                {% if item.image1 %}
+                    <img src="{{ item.image1.url }}" class="img-fluid w-100" style="height: 210px; object-fit: cover;" alt="{{ item.title }}">
+                {% endif %}
+                
+                <div class="p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                        <h5 class="fw-bold m-0" style="font-size: 1.1rem;">{{ item.title }}</h5>
+                        <span class="text-success fw-bold fs-5">${{ item.price }}<small style="font-size: 0.7rem;" class="text-muted">/day</small></span>
+                    </div>
+                    
+                    <p class="small text-muted mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i>{{ item.district|title }}, {{ item.get_province_display }}</p>
+                    <p class="small mb-3 text-secondary" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ item.description }}</p>
+                    
+                    <div class="d-flex justify-content-between border-top pt-2">
+                        <button class="btn btn-sm btn-outline-secondary rounded-3"><i class="bi bi-heart me-1"></i> Save</button>
+                        <a href="{% url 'dashboard:index' %}?start_chat_with={{ item.owner.id }}" class="btn btn-sm btn-success rounded-3 px-3 fw-bold"><i class="bi bi-chat-left-text me-1"></i> Chat Owner</a>
+                    </div>
                 </div>
             </div>
         </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-box-seize text-muted fs-1 mb-2 d-block"></i>
+            <h5 class="fw-bold">No active listings match your filters.</h5>
+            <p class="small text-muted">Be the first to list an asset in this category!</p>
+        </div>
+        {% endfor %}
     </div>
-    {% empty %}
-    <div class="col-12 text-center py-5">
-        <i class="bi bi-box-seize text-muted fs-1 mb-2 d-block"></i>
-        <h5 class="fw-bold" style="color: var(--text-main) !important;">No active listings found.</h5>
-        <p class="small text-muted">Be the first to list an asset!</p>
-    </div>
-    {% endfor %}
 </div>
-
 {% endblock %}
