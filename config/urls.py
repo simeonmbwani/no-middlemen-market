@@ -19,13 +19,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
-from accounts import views as account_views  # 👑 Imports your custom views layer directly
+from accounts import views as account_views
 
 urlpatterns = [
-    # 👑 HIJACK THE ADMIN ROUTE: Bypasses the default Django tables to serve your custom banking control panel
+    # 👑 1. Your Custom ERP Hub remains the primary entry point for /admin/
     path('admin/', account_views.erp_control_center_view, name='erp_control_center'),
     
-    # 🛒 Operational Platform Core Routing Elements
+    # 🛡️ 2. KEEP NATIVE DJANGO ADMIN SAFE (Under a new name so namespaces don't break!)
+    path('admin-core/', admin.site.urls), 
+    
+    # 🛒 Rest of your operational apps
     path('', include('listings.urls', namespace='listings')),
     path('reports/', include('reports.urls', namespace='reports')),
     path('messages/', include('messaging.urls', namespace='messaging')),
@@ -33,7 +36,6 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls', namespace='dashboard')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     
-    # 📲 Progressive Web App Assets & Workers
     path('manifest.json', TemplateView.as_view(template_name='manifest.json', content_type='application/json')),
     path('service-worker.js', TemplateView.as_view(template_name='service-worker.js', content_type='application/javascript')),
 ]
