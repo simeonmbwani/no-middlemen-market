@@ -189,44 +189,20 @@ def settings_dashboard_view(request):
     return render(request, 'accounts/settings_dashboard.html')
 
 
+# The master controller view handles compiling all production tallies effortlessly:
 @staff_member_required
 def erp_control_center_view(request):
-    """
-    👑 MASTER BANKING ERP CONTROL SYSTEM: Real-Time Operational Aggregator.
-    Loads real database tallies for all 20 integrated platform modules natively.
-    """
-    # 👥 Module 1: Live User Data Array
     users_list = User.objects.all().order_by('-date_joined')
-    total_users = users_list.count()
-    verified_users = User.objects.filter(is_verified_owner=True).count()
-    suspended_count = User.objects.filter(strike_count__gte=3).count()
-    banned_count = User.objects.filter(is_banned=True).count()
-
-    # 🏢 Module 2 & 10: Asset Catalog & Categories Tracking
     listings_list = Listing.objects.all().order_by('-created_at')
-    total_assets = listings_list.count()
-    active_listings = Listing.objects.filter(is_active=True).count()
-    pending_approval = Listing.objects.filter(is_active=False, is_paid=True).count()
-
-    # 💸 Module 4: Payment Center Ledger Calculations
-    total_revenue = 0.00  # Fallback tracker until payment migrations run
-
-    # 📦 Compile all database states cleanly into a single context matrix
+    
     context = {
-        # Lists for tables
         'users_list': users_list,
         'listings_list': listings_list,
-        'audit_logs': [],  
-        
-        # Dashboard Counter Metrics
-        'total_users': total_users,
-        'verified_users': verified_users,
-        'total_assets': total_assets,
-        'active_listings': active_listings,
-        'pending_approval': pending_approval,
-        'suspended_count': suspended_count,
-        'banned_count': banned_count,
-        'total_revenue': total_revenue,
-        'unresolved_reports': 0,  
+        'total_users': users_list.count(),
+        'total_assets': listings_list.count(),
+        'total_revenue': 0.00,
+        'unresolved_reports': 0,
+        'suspended_count': User.objects.filter(strike_count__gte=3).count(),
+        'banned_count': User.objects.filter(is_banned=True).count(),
     }
     return render(request, 'admin/control_center.html', context)
