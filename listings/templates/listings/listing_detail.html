@@ -1,8 +1,10 @@
 {% block content %}
 <div class="container px-1">
 
+    <!-- 11. MAIN ASSET DETAILS CARD CONTAINER -->
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4" style="background-color: var(--card-bg) !important;">
 
+        <!-- CARD HEADER METRICS CONTAINER -->
         <div class="card-body pb-3">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
@@ -31,6 +33,7 @@
             </div>
         </div>
 
+        <!-- IMAGE CAROUSEL LAYER -->
         <div id="assetCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 {% if listing.image1 %}
@@ -69,6 +72,7 @@
             {% endif %}
         </div>
 
+        <!-- CORE ASSET DESCRIPTION -->
         <div class="card-body border-top" style="border-color: var(--border-line) !important;">
             <h5 class="fw-bold mb-2" style="font-size: 1rem;">Asset Description</h5>
             <p class="text-secondary small m-0" style="white-space: pre-wrap; line-height: 1.6;">
@@ -76,6 +80,7 @@
             </p>
         </div>
 
+        <!-- STRUCTURAL DATA INFORMATION GRID -->
         <div class="card-body border-top p-3" style="border-color: var(--border-line) !important;">
             <h5 class="fw-bold mb-3" style="font-size: 1rem;">Asset Information</h5>
             <div class="row g-2 text-center text-truncate small">
@@ -108,6 +113,7 @@
 
     </div>
 
+    <!-- OWNER PROFILE SUMMARY BLOCK -->
     <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important;">
         <div class="card-body d-flex align-items-center gap-3 p-3">
             <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold font-monospace" style="width: 52px; height: 52px; background-color: #198754 !important; font-size: 1.3rem;">
@@ -128,6 +134,7 @@
         </div>
     </div>
 
+    <!-- IN-LINE DIRECT P2P MESSAGING COMPONENT -->
     <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important;">
         <div class="card-header bg-success text-white py-2 px-3 rounded-top-4" style="background-color: #198754 !important;">
             <h6 class="mb-0 fw-bold small">Contact Owner</h6>
@@ -156,23 +163,27 @@
         </div>
     </div>
 
+    <!-- CORE LIVE LISTING STATS COUNTER -->
     <div class="row g-2 mb-4 text-center font-monospace small">
         <div class="col-3">
             <div class="p-2 rounded-3" style="background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important;">
                 <span class="text-muted d-block xsmall" style="font-size: 0.6rem;">👁 Views</span>
-                <strong style="font-size: 0.85rem;">254</strong>
+                <!-- 🔧 FIXED: Connected to real database hit counter variables -->
+                <strong style="font-size: 0.85rem;">{{ listing.views_count|default:"0" }}</strong>
             </div>
         </div>
         <div class="col-3">
             <div class="p-2 rounded-3" style="background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important;">
                 <span class="text-muted d-block xsmall" style="font-size: 0.6rem;">❤️ Saved</span>
-                <strong style="font-size: 0.85rem;">18</strong>
+                <!-- 🔧 FIXED: Evaluates how many profiles saved this specific primary key node -->
+                <strong style="font-size: 0.85rem;">{{ listing.saved_by.count|default:"0" }}</strong>
             </div>
         </div>
         <div class="col-3">
             <div class="p-2 rounded-3" style="background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important;">
                 <span class="text-muted d-block xsmall" style="font-size: 0.6rem;">💬 Chats</span>
-                <strong style="font-size: 0.85rem;">7</strong>
+                <!-- 🔧 FIXED: Calculates dynamic direct p2p text threads active on listing -->
+                <strong style="font-size: 0.85rem;">{{ listing.chats_count|default:"0" }}</strong>
             </div>
         </div>
         <div class="col-3">
@@ -183,6 +194,7 @@
         </div>
     </div>
 
+    <!-- USER REVIEWS ACCORDION BLOCK -->
     <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important;">
         <div class="card-body p-3">
             <h5 class="fw-bold mb-3" style="font-size: 1rem;">⭐ User Reviews</h5>
@@ -199,6 +211,7 @@
         </div>
     </div>
 
+    <!-- ACCESSIBILITY TRUST & SAFETY TIPS -->
     <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important;">
         <div class="card-body p-3">
             <h6 class="fw-bold text-success mb-2 font-monospace" style="font-size: 0.75rem;"><i class="bi bi-shield-shaded me-2"></i>🛡️ Safety Tips</h6>
@@ -211,6 +224,7 @@
         </div>
     </div>
 
+    <!-- SUBMIT ABUSE/INFRACTION REPORT -->
     <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important; border: 1px solid rgba(220,53,69,0.3) !important;">
         <div class="card-body p-3">
             <h6 class="fw-bold text-danger mb-1 font-monospace" style="font-size: 0.75rem;"><i class="bi bi-flag-fill me-2"></i>Report Abuse</h6>
@@ -234,6 +248,7 @@
         </div>
     </div>
 
+    <!-- SIMILAR RELATED ASSETS CORRIDOR FRAME -->
     <div class="mt-4 mb-2">
         <h6 class="fw-bold mb-3 text-uppercase font-monospace text-muted" style="font-size: 0.65rem; tracking: 1px;">🔄 Similar Assets Near You</h6>
         <div class="row g-2">
@@ -260,6 +275,7 @@
         </div>
     </div>
 
+    <!-- PERSISTENT FIXED MOBILE BOTTOM INTERACTION TRAY -->
     <div class="position-fixed bottom-0 start-50 translate-middle-x px-3 py-2 border-top shadow-lg" style="max-width: 480px; width: 100%; z-index: 1060; background-color: #101214 !important; border-color: var(--border-line) !important;">
         <div class="row g-2">
             <div class="col-3">
