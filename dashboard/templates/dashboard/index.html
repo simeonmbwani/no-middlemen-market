@@ -178,6 +178,8 @@
                     
                     <div class="scrollable-feed-panel" style="max-height: 380px; overflow-y: auto;">
                         {% append_messages for message in inquiries %}
+
+                        {% for message in inquiries %}   
                             <div class="p-3 mb-2 rounded-3 border position-relative" style="background-color: var(--bg-main) !important; border-color: var(--border-line) !important;">
                                 <div class="d-flex justify-content-between text-muted align-items-center" style="font-size: 0.7rem;">
                                     <strong>From: @{{ message.sender.username }}</strong>
