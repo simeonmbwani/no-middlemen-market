@@ -9,40 +9,61 @@
     <meta name="theme-color" content="#198754">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/data/bootstrap-icons.min.css">
     
     <style>
-        :root { --brand-success: #198754; --app-bg: #f8fafc; --card-light: #ffffff; }
-        [data-theme="dark"] { --app-bg: #0d0f12; --card-light: #161920; }
+        /* 🌗 THEME CONTRAST STABILIZATION MATRIX */
+        [data-theme="light"] { 
+            --bg-main: #f8f9fa; 
+            --text-main: #1e293b; 
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --border-line: #e2e8f0;
+            --input-bg: #ffffff;
+            --input-text: #1e293b;
+            --chip-bg: #ffffff;
+        }
+        [data-theme="dark"] { 
+            --bg-main: #0d0f12; 
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8;
+            --card-bg: #161920; 
+            --border-line: #242936; 
+            --input-bg: #1c212b;
+            --input-text: #f8fafc;
+            --chip-bg: #161920;
+        }
         
         body { 
-            background-color: var(--app-bg) !important; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            padding-top: 110px; /* Precise headroom tracking space for sticky top fields */
-            padding-bottom: 75px; /* Room for sticky navigation pad overlay */
+            background-color: var(--bg-main) !important; 
+            color: var(--text-main) !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            transition: background 0.15s ease, color 0.15s ease;
+            padding-top: 120px; 
+            padding-bottom: 75px; 
         }
 
-        /* 📱 MOBILE NAVIGATION BAR FIXATIONS */
-        .mobile-top-bar { background: linear-gradient(135deg, #1b1f24 0%, #101214 100%); border-bottom: 2px solid var(--brand-success); position: fixed; top: 0; width: 100%; z-index: 1050; }
+        /* Enforce theme variables over default styling elements globally */
+        h1, h2, h3, h4, h5, h6, p, span, label, td, th, .card-title { color: var(--text-main) !important; }
+        small, .text-muted { color: var(--text-muted) !important; }
+
+        .mobile-top-bar { background: #101214; border-bottom: 2px solid #198754; position: fixed; top: 0; width: 100%; z-index: 1050; }
         .mobile-bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: #101214; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1050; display: flex; align-items: center; justify-content: space-around; }
         
-        .bottom-nav-item { color: #94a3b8; text-decoration: none; font-size: 0.72rem; display: flex; flex-column: normal; flex-direction: column; align-items: center; transition: color 0.2s ease; }
+        .bottom-nav-item { color: #94a3b8; text-decoration: none; font-size: 0.72rem; display: flex; flex-direction: column; align-items: center; }
         .bottom-nav-item i { font-size: 1.35rem; margin-bottom: 2px; }
-        .bottom-nav-item.active, .bottom-nav-item:hover { color: var(--brand-success) !important; }
+        .bottom-nav-item.active { color: #2ecc71 !important; }
 
-        /* 🏎️ HORIZONTAL CATEGORY SWIPER CORRIDOR */
         .category-swiper { display: flex; overflow-x: auto; scrollbar-width: none; gap: 10px; padding: 10px 0; -webkit-overflow-scrolling: touch; }
         .category-swiper::-webkit-scrollbar { display: none; }
-        .category-chip { background: var(--card-light); border: 1px solid rgba(0,0,0,0.08); padding: 8px 16px; border-radius: 50px; white-space: nowrap; font-size: 0.88rem; font-weight: 600; text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .category-chip { background: var(--chip-bg); border: 1px solid var(--border-line); padding: 8px 16px; border-radius: 50px; white-space: nowrap; font-size: 0.88rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 
-        /* 🎴 WHATSAPP STYLED INTERACTIVE UTILITIES */
-        .btn-tap-target { border-radius: 50px !important; font-weight: 700; padding: 12px 24px; min-height: 48px; }
-        .asset-mobile-card { background: var(--card-light); border: 1px solid rgba(0,0,0,0.06); border-radius: 16px; overflow: hidden; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        /* Compact Custom Filter Fields */
+        .filter-select { background-color: var(--input-bg) !important; color: var(--input-text) !important; border: 1px solid var(--border-line) !important; font-size: 0.85rem; border-radius: 8px; padding: 6px 12px; }
         
-        /* Drawer animation mechanics */
+        /* Premium Asset Card Execution */
+        .asset-mobile-card { background: var(--card-bg) !important; border: 1px solid var(--border-line) !important; border-radius: 16px; overflow: hidden; margin-bottom: 16px; }
         .drawer-slide { background-color: #101214 !important; color: white !important; width: 280px !important; }
-        .drawer-slide .list-group-item { background: transparent !important; color: #cbd5e1 !important; border: none; padding: 14px 20px; font-weight: 500; }
-        .drawer-slide .list-group-item:hover { color: var(--brand-success) !important; background: rgba(25,135,84,0.1) !important; }
     </style>
 </head>
 <body>
@@ -51,63 +72,56 @@
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-link text-white p-0 fs-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftDrawerMenu"><i class="bi bi-list"></i></button>
-                <a href="{% url 'listings:list' %}" class="text-decoration-none fw-bold fs-5 text-white ms-1 font-monospace">🛑 NO <span style="color: #2ecc71;">MIDDLEMEN</span></a>
+                <a href="{% url 'listings:list' %}" class="text-decoration-none fw-bold fs-5 text-white ms-1">🛑 NO <span style="color: #2ecc71;">MIDDLEMEN</span></a>
             </div>
-            <div class="d-flex align-items-center gap-3">
-                <a href="{% url 'dashboard:index' %}?tab=alerts" class="text-white position-relative"><i class="bi bi-bell fs-4"></i><span class="position-absolute top-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle"></span></a>
-            </div>
+            <a href="{% url 'dashboard:index' %}?tab=alerts" class="text-white"><i class="bi bi-bell fs-4"></i></a>
         </div>
+        <!-- Search bar component -->
         <form method="GET" action="{% url 'listings:list' %}" class="mt-2 m-0">
             <div class="input-group input-group-sm">
                 <span class="input-group-text border-0 bg-secondary text-white-50"><i class="bi bi-search"></i></span>
-                <input type="text" name="q" class="form-control border-0 bg-secondary text-white" placeholder="Search tractors, houses, laptops directly..." style="font-size: 0.85rem;">
+                <input type="text" name="q" value="{{ request.GET.q }}" class="form-control border-0 bg-secondary text-white" placeholder="Search assets...">
             </div>
         </form>
     </div>
 
+    <!-- LEFT MOBILE MENU DRAWER -->
     <div class="offcanvas offcanvas-start drawer-slide" tabindex="-1" id="leftDrawerMenu">
-        <div class="offcanvas-header border-bottom border-secondary py-3">
-            <h5 class="offcanvas-title fw-bold text-success"><i class="bi bi-shield-check me-2"></i>MENU LAYOUT</h5>
+        <div class="offcanvas-header border-bottom border-secondary">
+            <h5 class="offcanvas-title fw-bold text-success">MENU</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body p-0">
             <div class="list-group list-group-flush">
-                <a href="{% url 'listings:list' %}" class="list-group-item"><i class="bi bi-house-door me-3"></i>Home Landing</a>
-                <a href="{% url 'listings:list' %}?browse=true" class="list-group-item"><i class="bi bi-grid-fill me-3"></i>Browse Assets Matrix</a>
-                <a href="{% url 'accounts:terms_faq' %}" class="list-group-item"><i class="bi bi-file-text me-3"></i>FAQ & Trust Rules</a>
-                <a href="{% url 'accounts:settings_dashboard' %}" class="list-group-item"><i class="bi bi-gear me-3"></i>Profile Settings</a>
+                <a href="{% url 'listings:list' %}" class="list-group-item bg-transparent text-white border-0 py-3 px-4"><i class="bi bi-house-door me-3"></i>Home</a>
+                <a href="{% url 'listings:list' %}?browse=true" class="list-group-item bg-transparent text-white border-0 py-3 px-4"><i class="bi bi-search me-3"></i>Browse Assets</a>
                 {% if user.is_authenticated and user.is_staff %}
-                    <a href="{% url 'accounts:erp_control_center' %}" class="list-group-item text-warning fw-bold"><i class="bi bi-shield-lock me-3"></i>Admin Mobile ERP Hub</a>
+                    <a href="{% url 'accounts:erp_control_center' %}" class="list-group-item bg-transparent text-warning border-0 py-3 px-4 fw-bold"><i class="bi bi-shield-lock me-3"></i>Admin Hub</a>
                 {% endif %}
             </div>
         </div>
     </div>
 
-    <main class="container px-3">
-        
-        {% if request.path == '/' or 'listings' in request.path %}
-        <div class="category-swiper my-2">
-            <a href="?category=house" class="category-chip">🏠 Property</a>
-            <a href="?category=car" class="category-chip">🚗 Vehicles</a>
-            <a href="?category=excavator" class="category-chip">⛏️ Mining</a>
-            <a href="?category=tractor_farm" class="category-chip">🚜 Farming</a>
-            <a href="?category=pos_machine" class="category-chip">🏪 Commerce</a>
-            <a href="?category=fish_boat" class="category-chip">🎣 Fishing</a>
-            <a href="?category=laptop" class="category-chip">💻 ICT Sets</a>
-        </div>
-        {% endif %}
-
+    <div class="container">
         {% block content %}{% endblock %}
-    </main>
+    </div>
 
-    <div class="mobile-bottom-nav shadow">
+    <!-- STICKY MOBILE BOTTOM NAVIGATION BAR -->
+    <div class="mobile-bottom-nav">
         <a href="{% url 'listings:list' %}" class="bottom-nav-item active"><i class="bi bi-house-door-fill"></i><span>Home</span></a>
         <a href="{% url 'listings:list' %}?browse=true" class="bottom-nav-item"><i class="bi bi-search"></i><span>Search</span></a>
-        <a href="{% url 'listings:create' %}" class="bottom-nav-item text-success fw-bold"><i class="bi bi-plus-circle-fill text-success fs-2"></i><span>List</span></a>
+        <a href="{% url 'listings:create' %}" class="bottom-nav-item text-success"><i class="bi bi-plus-circle-fill fs-2"></i><span>List</span></a>
         <a href="{% url 'dashboard:index' %}?tab=messages" class="bottom-nav-item"><i class="bi bi-chat-dots"></i><span>Chats</span></a>
         <a href="{% url 'accounts:settings_dashboard' %}" class="bottom-nav-item"><i class="bi bi-person-circle"></i><span>Account</span></a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Real-time theme checking engine synchronization
+        document.addEventListener('DOMContentLoaded', function () {
+            const cachedTheme = localStorage.getItem('user-theme') || 'light';
+            document.getElementById('theme-root').setAttribute('data-theme', cachedTheme);
+        });
+    </script>
 </body>
 </html>
