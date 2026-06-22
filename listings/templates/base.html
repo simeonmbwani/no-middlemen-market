@@ -119,7 +119,8 @@
                 <a href="{% url 'listings:list' %}" class="text-decoration-none fw-bold fs-5 text-white ms-1">🛑 NO <span style="color: #2ecc71;">MIDDLEMEN</span></a>
             </div>
            <!-- 🚨 Change this line inside your mobile-bottom-nav component: -->
-<a href="{% url 'messaging:chat_thread' %}" class="bottom-nav-item {% if 'messaging' in request.path %}active{% endif %}">
+<!-- 🚨 Change this specific block back to your valid dashboard namespace link: -->
+<a href="{% url 'dashboard:index' %}?tab=messages" class="bottom-nav-item {% if 'messages' in request.get_full_path %}active{% endif %}">
     <i class="bi bi-chat-dots-fill"></i><span>Chats</span>
 </a>
         </div>
