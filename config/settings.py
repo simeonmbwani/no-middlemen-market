@@ -45,6 +45,9 @@ USE_TZ = True
 SECRET_KEY = 'django-insecure-(ud@7y%(g#22&pbaw(#f2@!r=6v7os6n#nn^a66x=wz6fkkqn1'
 DEBUG = True
 
+# ⚡ SECURITY UPGRADE: Forces all internal and asset paths to render over secure HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.onrender.com', '.pythonanywhere.com']
 
 CSRF_TRUSTED_ORIGINS = [
