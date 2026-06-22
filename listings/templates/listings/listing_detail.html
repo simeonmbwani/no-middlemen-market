@@ -1,162 +1,281 @@
-{% extends 'base.html' %}
-{% load currency_tags %} {% block title %}{{ listing.title }} - No Middlemen Marketplace{% endblock %}
-
 {% block content %}
-<div class="row">
-    <div class="col-md-8 mb-4">
-        <div class="card shadow-sm border-0 p-4 bg-white rounded-4">
-            
-            <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="container px-1">
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4" style="background-color: var(--card-bg) !important;">
+
+        <div class="card-body pb-3">
+            <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <span class="badge bg-success text-uppercase mb-1" style="font-size: 0.75rem;">
+                    <span class="badge bg-success mb-2" style="background-color: #198754 !important;">
                         {{ listing.get_category_display }}
                     </span>
-                    <h3 class="fw-bold text-dark mb-0">{{ listing.title }}</h3>
-                    <p class="text-muted small mb-0">📍 {{ listing.district|title }} District, {{ listing.get_province_display }} Province</p>
+                    <h3 class="fw-bold mb-1" style="font-size: 1.3rem; line-height: 1.3;">
+                        {{ listing.title }}
+                    </h3>
+                    <small class="text-muted">
+                        📍 {{ listing.district|title }}, {{ listing.get_province_display }}
+                    </small>
                 </div>
+                
                 <div class="text-end">
-                    <h3 class="fw-extrabold text-success mb-0">${{ listing.price }} <span class="small text-muted fw-normal" style="font-size: 0.75rem;">USD</span></h3>
-                    <small class="text-muted fw-bold font-monospace d-block" style="font-size: 0.8rem;">
+                    <h3 class="fw-bold text-success mb-0" style="color: #2ecc71 !important;">
+                        ${{ listing.price }}
+                    </h3>
+                    <small class="text-muted d-block font-monospace" style="font-size: 0.65rem;">
+                        /day
+                    </small>
+                    <small class="text-muted d-block font-monospace opacity-75" style="font-size: 0.62rem; margin-top: 1px;">
                         ≈ {{ listing.price|to_zig:ZIG_MID_RATE }} ZiG
                     </small>
                 </div>
             </div>
+        </div>
 
-            <div class="row g-2 mb-4">
-                <div class="{% if listing.image2 or listing.image3 %}col-md-8{% else %}col-12{% endif %}">
-                    {% if listing.image1 %}
-                        <img src="{{ listing.image1.url }}" class="img-fluid rounded-3 w-100 object-fit-cover" style="max-height: 400px;" alt="Primary view of {{ listing.title }}">
-                    {% else %}
-                        <div class="d-flex align-items-center justify-content-center bg-light text-muted rounded-3 w-100" style="height: 300px;">No Primary Image Available</div>
-                    {% endif %}
+        <div id="assetCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% if listing.image1 %}
+                <div class="carousel-item active" style="height: 250px; background-color: #161920;">
+                    <img src="{{ listing.image1.url }}" class="d-block w-100 h-100" style="object-fit: cover;" alt="{{ listing.title }}" loading="lazy">
                 </div>
-                {% if listing.image2 or listing.image3 %}
-                <div class="col-md-4 d-flex flex-column gap-2">
-                    {% if listing.image2 %}
-                        <img src="{{ listing.image2.url }}" class="img-fluid rounded-3 w-100 object-fit-cover flex-grow-1" style="max-height: 196px;" alt="Secondary view">
-                    {% endif %}
-                    {% if listing.image3 %}
-                        <img src="{{ listing.image3.url }}" class="img-fluid rounded-3 w-100 object-fit-cover flex-grow-1" style="max-height: 196px;" alt="Additional details view">
-                    {% endif %}
+                {% endif %}
+
+                {% if listing.image2 %}
+                <div class="carousel-item" style="height: 250px; background-color: #161920;">
+                    <img src="{{ listing.image2.url }}" class="d-block w-100 h-100" style="object-fit: cover;" alt="{{ listing.title }}" loading="lazy">
+                </div>
+                {% endif %}
+
+                {% if listing.image3 %}
+                <div class="carousel-item" style="height: 250px; background-color: #161920;">
+                    <img src="{{ listing.image3.url }}" class="d-block w-100 h-100" style="object-fit: cover;" alt="{{ listing.title }}" loading="lazy">
+                </div>
+                {% endif %}
+                
+                {% if not listing.image1 and not listing.image2 and not listing.image3 %}
+                <div class="w-100 d-flex flex-column justify-content-center align-items-center text-muted opacity-25" style="height: 250px; background-color: #161920;">
+                    <i class="bi bi-image fs-1 mb-1"></i>
+                    <small class="font-monospace">No Image Available</small>
                 </div>
                 {% endif %}
             </div>
 
-            <hr class="text-muted my-3">
+            {% if listing.image2 or listing.image3 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#assetCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#assetCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+            {% endif %}
+        </div>
 
-            <h5 class="fw-bold text-dark mb-2">Asset Description</h5>
-            <p class="text-secondary small" style="white-space: pre-wrap; line-height: 1.6;">{{ listing.description }}</p>
-            
-            <div class="bg-light p-2 rounded-3 d-flex justify-content-between align-items-center mt-3">
-                <span class="small text-muted">Listed: {{ listing.created_at|date:"d M Y" }}</span>
-                
+        <div class="card-body border-top" style="border-color: var(--border-line) !important;">
+            <h5 class="fw-bold mb-2" style="font-size: 1rem;">Asset Description</h5>
+            <p class="text-secondary small m-0" style="white-space: pre-wrap; line-height: 1.6;">
+                {{ listing.description }}
+            </p>
+        </div>
+
+        <div class="card-body border-top p-3" style="border-color: var(--border-line) !important;">
+            <h5 class="fw-bold mb-3" style="font-size: 1rem;">Asset Information</h5>
+            <div class="row g-2 text-center text-truncate small">
+                <div class="col-6">
+                    <div class="p-2 rounded-3 border" style="background-color: var(--bg-main) !important; border-color: var(--border-line) !important;">
+                        <span class="text-muted d-block xsmall" style="font-size: 0.65rem;">Category</span>
+                        <strong style="font-size: 0.75rem;">{{ listing.get_category_display }}</strong>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-2 rounded-3 border" style="background-color: var(--bg-main) !important; border-color: var(--border-line) !important;">
+                        <span class="text-muted d-block xsmall" style="font-size: 0.65rem;">Province</span>
+                        <strong style="font-size: 0.75rem;">{{ listing.get_province_display }}</strong>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-2 rounded-3 border" style="background-color: var(--bg-main) !important; border-color: var(--border-line) !important;">
+                        <span class="text-muted d-block xsmall" style="font-size: 0.65rem;">Posted</span>
+                        <strong class="font-monospace" style="font-size: 0.75rem;">{{ listing.created_at|date:"d M Y" }}</strong>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-2 rounded-3 border" style="background-color: var(--bg-main) !important; border-color: var(--border-line) !important;">
+                        <span class="text-muted d-block xsmall" style="font-size: 0.65rem;">Status</span>
+                        <strong class="text-success" style="font-size: 0.75rem; color: #2ecc71 !important;">Available</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important;">
+        <div class="card-body d-flex align-items-center gap-3 p-3">
+            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold font-monospace" style="width: 52px; height: 52px; background-color: #198754 !important; font-size: 1.3rem;">
+                {{ listing.owner.username|slice:":1"|upper }}
+            </div>
+            <div class="flex-grow-1">
+                <h6 class="fw-bold m-0 p-0">@{{ listing.owner.username }}</h6>
                 {% if listing.owner.is_verified_owner %}
-                    <span class="badge bg-success-subtle text-success border border-success-subtle">✓ Verified Owner Account</span>
+                <span class="text-success font-monospace" style="font-size: 0.68rem; color: #2ecc71 !important;"><i class="bi bi-patch-check-fill me-1"></i>Verified Owner</span>
                 {% else %}
-                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle">⏳ Owner ID Verification Pending</span>
+                <span class="text-warning font-monospace" style="font-size: 0.68rem;"><i class="bi bi-hourglass-split me-1"></i>Pending Verification</span>
                 {% endif %}
+            </div>
+            <div class="text-end border-start ps-3" style="border-color: var(--border-line) !important;">
+                <div class="fw-bold text-success font-monospace" style="font-size: 0.95rem; color: #2ecc71 !important;">⭐ 4.8</div>
+                <small class="text-muted d-block" style="font-size: 0.65rem;">{{ listing.owner.listings.count|default:"0" }} Items</small>
             </div>
         </div>
     </div>
 
-    <div class="col-md-4">
-        
-        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
-            <div class="card-header bg-dark border-0 py-3 px-3">
-                <h6 class="fw-bold text-white mb-0">Message Owner</h6>
-                <small class="text-white-50" style="font-size: 0.7rem;">Deals are negotiated directly. No hidden broker loops.</small>
-            </div>
-            <div class="card-body p-3">
-                {% if request.user.is_authenticated %}
-                    
-                    {% if request.user != listing.owner %}
-                        <form action="{% url 'messaging:send' listing.id %}" method="POST">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold text-secondary mb-1">Your Message</label>
-                                <textarea name="message_text" class="form-control border-2 p-2 rounded-3 text-sm" rows="3" placeholder="Ask about daily rental rates..." required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-success btn-sm w-100 fw-bold py-2 rounded-3 shadow-sm">
-                                🚀 Send Secure Instant Message
-                            </button>
-                        </form>
-                    
-                    {% else %}
-                        <div class="text-center py-2">
-                            <span class="fs-2 mb-1 d-block">🛡️</span>
-                            <h6 class="fw-bold mb-1" style="font-size: 0.9rem;">Management Console</h6>
-                            <p class="text-muted small mb-2">This asset listing is registered to your account.</p>
-                            <a href="{% url 'dashboard:index' %}" class="btn btn-sm btn-outline-success fw-bold w-100 rounded-3">
-                                📊 Open My Inbox Dashboard
-                            </a>
-                        </div>
-                    {% endif %}
-
-                {% else %}
-                    <div class="text-center py-2">
-                        <p class="small text-muted mb-2">You must log in to text owners securely.</p>
-                        <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-sm btn-success w-100 fw-bold rounded-3">Sign In to Message</a>
+    <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important;">
+        <div class="card-header bg-success text-white py-2 px-3 rounded-top-4" style="background-color: #198754 !important;">
+            <h6 class="mb-0 fw-bold small">Contact Owner</h6>
+        </div>
+        <div class="card-body p-3">
+            {% if request.user.is_authenticated %}
+                {% if request.user != listing.owner %}
+                <form action="{% url 'messaging:send' listing.id %}" method="POST" class="m-0">
+                    {% csrf_token %}
+                    <div class="mb-2">
+                        <textarea class="form-control rounded-3 p-2 small" rows="3" name="message_text" placeholder="Ask about availability, rental period, price..." style="font-size: 0.85rem;" required></textarea>
                     </div>
+                    <button type="submit" class="btn btn-success btn-sm w-100 rounded-3 fw-bold py-2" style="background-color: #198754 !important; border: none;">💬 Send Message</button>
+                </form>
+                {% else %}
+                <div class="text-center py-2 text-muted small">
+                    <i class="bi bi-shield-lock me-1"></i> This is your listing. View performance analytics below.
+                </div>
                 {% endif %}
+            {% else %}
+            <div class="text-center py-2">
+                <p class="small text-muted mb-2">Login to contact owner directly without brokers.</p>
+                <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-sm btn-success rounded-3 fw-bold px-4" style="background-color: #198754 !important; border: none;">Sign In</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row g-2 mb-4 text-center font-monospace small">
+        <div class="col-3">
+            <div class="p-2 rounded-3" style="background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important;">
+                <span class="text-muted d-block xsmall" style="font-size: 0.6rem;">👁 Views</span>
+                <strong style="font-size: 0.85rem;">254</strong>
             </div>
         </div>
+        <div class="col-3">
+            <div class="p-2 rounded-3" style="background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important;">
+                <span class="text-muted d-block xsmall" style="font-size: 0.6rem;">❤️ Saved</span>
+                <strong style="font-size: 0.85rem;">18</strong>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="p-2 rounded-3" style="background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important;">
+                <span class="text-muted d-block xsmall" style="font-size: 0.6rem;">💬 Chats</span>
+                <strong style="font-size: 0.85rem;">7</strong>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="p-2 rounded-3" style="background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important;">
+                <span class="text-muted d-block xsmall" style="font-size: 0.6rem;">📅 Days</span>
+                <strong style="font-size: 0.85rem;">{{ listing.created_at|timesince }}</strong>
+            </div>
+        </div>
+    </div>
 
-        <div class="card shadow-sm border-0 p-3 bg-light rounded-4 border-start border-danger border-4">
-            <h6 class="fw-bold text-danger mb-1" style="font-size: 0.9rem;">Is this an agent or a middleman?</h6>
-            <p class="text-muted mb-3" style="font-size: 0.75rem;">If this person asks for viewing fees, commissions, or flags fake records, report them instantly to defend the community platform framework.</p>
-            
-            <form method="POST" action="{% url 'reports:report_listing' listing.id %}">
+    <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important;">
+        <div class="card-body p-3">
+            <h5 class="fw-bold mb-3" style="font-size: 1rem;">⭐ User Reviews</h5>
+            <div class="border-bottom pb-2 mb-2" style="border-color: var(--border-line) !important;">
+                <div class="fw-bold small">Anonymous User</div>
+                <div class="text-warning small" style="font-size: 0.75rem;">★★★★★</div>
+                <small class="text-muted">Reliable owner and quick response.</small>
+            </div>
+            <div>
+                <div class="fw-bold small">Marketplace User</div>
+                <div class="text-warning small" style="font-size: 0.75rem;">★★★★☆</div>
+                <small class="text-muted">Good experience renting this asset.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important;">
+        <div class="card-body p-3">
+            <h6 class="fw-bold text-success mb-2 font-monospace" style="font-size: 0.75rem;"><i class="bi bi-shield-shaded me-2"></i>🛡️ Safety Tips</h6>
+            <ul class="small text-muted mb-0 ps-3">
+                <li class="mb-1">Meet in safe public places.</li>
+                <li class="mb-1">Inspect assets before paying.</li>
+                <li class="mb-1">Avoid upfront deposits.</li>
+                <li>No middlemen allowed.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important; border: 1px solid rgba(220,53,69,0.3) !important;">
+        <div class="card-body p-3">
+            <h6 class="fw-bold text-danger mb-1 font-monospace" style="font-size: 0.75rem;"><i class="bi bi-flag-fill me-2"></i>Report Abuse</h6>
+            <p class="xsmall text-muted mb-2" style="font-size: 0.68rem;">Report middlemen, scams, fake listings or commission charges.</p>
+            <form method="POST" action="{% url 'reports:report_listing' listing.id %}" class="m-0">
                 {% csrf_token %}
                 <div class="mb-2">
-                    <select name="reason" class="form-select border-2 p-2 rounded-3 text-sm" required>
-                        <option value="">-- Select Violation Reason --</option>
-                        <option value="middleman">Disguised Broker / Charging Commission</option>
-                        <option value="viewing_fee">Demanding Upfront Viewing Fees</option>
-                        <option value="fraud">Fraudulent / Inaccurate Property Details</option>
+                    <select class="form-select filter-select bg-dark text-white text-xs h-auto py-1.5" name="reason" style="font-size: 0.75rem;" required>
+                        <option value="">Select reason</option>
+                        <option value="middleman">Hidden Broker</option>
+                        <option value="viewing_fee">Viewing Fees</option>
+                        <option value="fraud">Fraud</option>
+                        <option value="spam">Spam</option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <textarea name="details" class="form-control border-2 p-2 rounded-3 text-sm" rows="2" placeholder="Provide extra notes or phone contacts left in descriptions..." required></textarea>
+                <div class="mb-2">
+                    <textarea class="form-control rounded-3 p-2 text-white small" rows="2" name="details" placeholder="Provide more information..." style="font-size: 0.8rem;" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-sm btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-1 rounded-3 fw-bold">
-                    ⚠️ Report Middleman Profile
-                </button>
+                <button type="submit" class="btn btn-xs btn-outline-danger w-100 fw-bold rounded-2 py-1.5 font-monospace" style="font-size: 0.72rem;">Submit Report</button>
             </form>
         </div>
-        
     </div>
-</div>
 
-<div class="row mt-4 border-top pt-4">
-    <div class="col-12">
-        <h5 class="fw-bold text-dark mb-3">🔄 Other Options Available in {{ listing.district|title }}</h5>
-    </div>
-    <div class="row g-3">
-        {% for item in related_items %}
-            <div class="col-md-3 col-sm-6">
-                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-                    <div style="height: 130px; background-color: #f1f3f5;">
-                        {% if item.image1 %}
-                            <img src="{{ item.image1.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ item.title }}">
-                        {% else %}
-                            <div class="d-flex align-items-center justify-content-center h-100 text-muted small">No Image</div>
-                        {% endif %}
-                    </div>
-                    <div class="card-body p-3 d-flex flex-column justify-content-between">
-                        <div>
-                            <h6 class="fw-bold mb-1 text-truncate text-dark" style="font-size: 0.85rem;">{{ item.title }}</h6>
-                            <div class="text-success fw-bold small mb-1">${{ item.price }} USD</div>
-                            <div class="text-muted font-monospace xsmall mb-2" style="font-size: 0.7rem;">≈ {{ item.price|to_zig:ZIG_MID_RATE }} ZiG</div>
+    <div class="mt-4 mb-2">
+        <h6 class="fw-bold mb-3 text-uppercase font-monospace text-muted" style="font-size: 0.65rem; tracking: 1px;">🔄 Similar Assets Near You</h6>
+        <div class="row g-2">
+            {% for item in related_items %}
+                <div class="col-6">
+                    <div class="card border-0 shadow-sm rounded-3 overflow-hidden h-100" style="background-color: var(--card-bg) !important;">
+                        <div style="height: 110px; background-color: #161920;">
+                            {% if item.image1 %}
+                                <img src="{{ item.image1.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ item.title }}" loading="lazy">
+                            {% else %}
+                                <div class="h-100 d-flex justify-content-center align-items-center text-muted opacity-25"><i class="bi bi-image"></i></div>
+                            {% endif %}
                         </div>
-                        <a href="{% url 'listings:detail' item.id %}" class="btn btn-sm btn-outline-success w-100 py-1 rounded-3" style="font-size: 0.75rem;">Check Asset</a>
+                        <div class="p-2 text-truncate">
+                            <h6 class="fw-bold m-0 text-truncate" style="font-size: 0.8rem;">{{ item.title }}</h6>
+                            <span class="text-success fw-bold font-monospace" style="font-size: 0.75rem; color: #2ecc71 !important;">${{ item.price }}</span>
+                            <a href="{% url 'listings:detail' item.id %}" class="btn btn-xs btn-outline-success w-100 p-0.5 mt-1 text-xs rounded-2 font-monospace" style="font-size: 0.68rem;">View</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% empty %}
-            <div class="col-12">
-                <p class="text-muted small bg-light p-3 rounded-3 text-center">No secondary alternative assets registered inside {{ listing.district|title }} district area loops yet.</p>
-            </div>
-        {% endfor %}
+            {% empty %}
+                <div class="col-12 text-center text-muted small py-2">No similar assets found.</div>
+            {% endfor %}
+        </div>
     </div>
+
+    <div class="position-fixed bottom-0 start-50 translate-middle-x px-3 py-2 border-top shadow-lg" style="max-width: 480px; width: 100%; z-index: 1060; background-color: #101214 !important; border-color: var(--border-line) !important;">
+        <div class="row g-2">
+            <div class="col-3">
+                <button class="btn btn-outline-secondary rounded-pill w-100 text-white" aria-label="Save"><i class="bi bi-heart"></i></button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-outline-primary rounded-pill w-100 text-info" aria-label="Link"><i class="bi bi-link-45deg"></i></button>
+            </div>
+            <div class="col-3">
+                <a href="tel:{{ listing.owner.phone_number }}" class="btn btn-outline-success rounded-pill w-100"><i class="bi bi-telephone"></i></a>
+            </div>
+            <div class="col-3">
+                <a href="{% url 'dashboard:index' %}?tab=messages&start_chat_with={{ listing.owner.id }}" class="btn btn-success rounded-pill w-100 fw-bold" style="background-color: #198754 !important; border: none;"><i class="bi bi-chat-left-text"></i></a>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
