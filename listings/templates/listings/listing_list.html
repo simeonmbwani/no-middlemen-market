@@ -2,45 +2,57 @@
 
 {% block content %}
 
-<!-- 3. COMPACT SEARCH FILTERS ENGINE (Zimbabwe Geolocation Options) -->
-<form method="GET" action="{% url 'listings:list' %}" class="row g-2 mb-3 mt-1">
+<div class="text-center py-4 my-2 rounded-4 p-3 border-0 bg-transparent">
+    <h1 class="fw-black mb-1" style="font-size: 1.85rem; letter-spacing: -0.5px;">NO MIDDLEMEN</h1>
+    <p class="lead mb-3 text-secondary" style="font-size: 0.95rem; font-weight: 500;">Rent, Lend and Share Assets Directly</p>
+    <div class="d-flex justify-content-center gap-3 border-bottom pb-4" style="border-color: var(--border-line) !important;">
+        <span class="small fw-semibold text-success"><i class="bi bi-check-circle-fill me-1"></i> No Agents</span>
+        <span class="small fw-semibold text-success"><i class="bi bi-check-circle-fill me-1"></i> No Hidden Fees</span>
+    </div>
+</div>
+
+<form method="GET" action="{% url 'listings:list' %}" class="row g-2 mb-4 mt-1">
     <div class="col-4">
         <select name="category" class="form-select filter-select">
             <option value="">Category ▼</option>
-            <option value="property">Property</option>
-            <option value="vehicle">Vehicles</option>
-            <option value="farming_equipment">Farming</option>
-            <option value="mining_equipment">Mining</option>
+            <option value="property" {% if request.GET.category == 'property' %}selected{% endif %}>Property</option>
+            <option value="vehicle" {% if request.GET.category == 'vehicle' %}selected{% endif %}>Vehicles</option>
+            <option value="mining_equipment" {% if request.GET.category == 'mining_equipment' %}selected{% endif %}>Mining</option>
+            <option value="farming_equipment" {% if request.GET.category == 'farming_equipment' %}selected{% endif %}>Farming</option>
+            <option value="commerce_business" {% if request.GET.category == 'commerce_business' %}selected{% endif %}>Commerce</option>
+            <option value="fishing" {% if request.GET.category == 'fishing' %}selected{% endif %}>Fishing</option>
         </select>
     </div>
     <div class="col-4">
         <select name="province" class="form-select filter-select">
             <option value="">Province ▼</option>
-            <option value="harare">Harare</option>
-            <option value="mash_west">Mash West</option>
-            <option value="midlands">Midlands</option>
-            <option value="bulawayo">Bulawayo</option>
+            <option value="harare" {% if request.GET.province == 'harare' %}selected{% endif %}>Harare</option>
+            <option value="bulawayo" {% if request.GET.province == 'bulawayo' %}selected{% endif %}>Bulawayo</option>
+            <option value="mash_west" {% if request.GET.province == 'mash_west' %}selected{% endif %}>Mash West</option>
+            <option value="midlands" {% if request.GET.province == 'midlands' %}selected{% endif %}>Midlands</option>
+            <option value="manicaland" {% if request.GET.province == 'manicaland' %}selected{% endif %}>Manicaland</option>
+            <option value="masvingo" {% if request.GET.province == 'masvingo' %}selected{% endif %}>Masvingo</option>
         </select>
     </div>
     <div class="col-4">
-        <button type="submit" class="btn btn-success btn-sm w-100 fw-bold rounded-3 py-1.5"><i class="bi bi-funnel-fill me-1"></i> Filter</button>
+        <button type="submit" class="btn btn-success btn-sm w-100 fw-bold rounded-3 py-1.5"><i class="bi bi-search me-1"></i> Search</button>
     </div>
 </form>
 
-<!-- 3. HORIZONTAL CATEGORY SWIPER CHIPS -->
+<h6 class="fw-bold mb-2 text-uppercase font-monospace" style="font-size: 0.75rem; tracking: 1px;">Categories</h6>
 <div class="category-swiper mb-4">
     <a href="?category=property" class="category-chip">🏠 Property</a>
     <a href="?category=vehicle" class="category-chip">🚗 Vehicles</a>
     <a href="?category=mining_equipment" class="category-chip">⛏️ Mining</a>
     <a href="?category=farming_equipment" class="category-chip">🚜 Farming</a>
+    <a href="?category=commerce_business" class="category-chip">🏪 Commerce</a>
+    <a href="?category=fishing" class="category-chip">🎣 Fishing</a>
 </div>
 
-<!-- 5. ASSET CARDS CONTAINER (Full Screen Mobile Width) -->
 <div class="row">
     {% for item in listings %}
     <div class="col-12">
         <div class="asset-mobile-card shadow-sm">
-            <!-- Asset Thumbnail Media Frame -->
             {% if item.image1 %}
                 <img src="{{ item.image1.url }}" class="img-fluid w-100" style="height: 210px; object-fit: cover;" alt="{{ item.title }}">
             {% endif %}
@@ -62,7 +74,6 @@
         </div>
     </div>
     {% empty %}
-    <!-- 17. EMPTY STATE SAFEGUARD MODULE -->
     <div class="col-12 text-center py-5">
         <i class="bi bi-box-seize text-muted fs-1 mb-2 d-block"></i>
         <h5 class="fw-bold">No active listings match your filters.</h5>
