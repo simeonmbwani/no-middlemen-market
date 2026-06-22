@@ -92,9 +92,22 @@
         .category-swiper::-webkit-scrollbar { display: none; }
         .category-chip { background: var(--chip-bg) !important; border: 1px solid var(--border-line) !important; padding: 8px 16px; border-radius: 50px; white-space: nowrap; font-size: 0.88rem; font-weight: 600; text-decoration: none !important; color: var(--text-main) !important; display: inline-flex; align-items: center; gap: 6px; }
 
-        .filter-select { background-color: var(--input-bg) !important; color: var(--input-text) !important; border: 1px solid var(--border-line) !important; font-size: 0.85rem; height: 42px; }
-        .asset-mobile-card { background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important; border-radius: 16px; overflow: hidden; margin-bottom: 16px; }
-        .drawer-slide { background-color: #101214 !important; color: #ffffff !important; width: 280px !important; }
+       .filter-select { 
+    background-color: var(--input-bg) !important; 
+    color: var(--input-text) !important; 
+    border: 1px solid var(--border-line) !important; 
+    font-size: 0.85rem; 
+    height: 42px;
+    /* 🚨 FORCE NATIVE SELECT ARROW VISIBILITY IN DARK THEMES */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.75rem center !important;
+    background-size: 16px 12px !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    padding-right: 2rem !important;
+}
     </style>
 </head>
 <body>
