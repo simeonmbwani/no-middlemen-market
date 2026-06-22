@@ -25,27 +25,29 @@
             <li><a href="#overview" class="nav-link text-white active"><i class="bi bi-speedometer2 me-2 text-success"></i> Control Dashboard</a></li>
             
             <li><a href="{% url 'accounts:erp_user_management' %}" class="nav-link text-white"><i class="bi bi-people me-2"></i> 1. User Management</a></li>
-            
-            <li><a href="#assets" class="nav-link text-white"><i class="bi bi-building-gear me-2"></i> 2. Asset Catalog</a></li>
-            <li><a href="#chats" class="nav-link text-white"><i class="bi bi-chat-dots me-2"></i> 3. Chat Monitor</a></li>
-            <li><a href="#payments" class="nav-link text-white"><i class="bi bi-currency-dollar me-2"></i> 4. Payment Center</a></li>
-            <li><a href="#redflags" class="nav-link text-white"><i class="bi bi-flag me-2 text-danger"></i> 5. Red Flag Reports</a></li>
-            <li><a href="#violations" class="nav-link text-white"><i class="bi bi-shield-exclamation me-2"></i> 6. Violations Hub</a></li>
-            <li><a href="#suspended" class="nav-link text-white"><i class="bi bi-person-exclamation me-2 text-warning"></i> 7. Suspensions</a></li>
-            <li><a href="#blocked" class="nav-link text-white"><i class="bi bi-person-x me-2 text-danger"></i> 8. Blocked Matrix</a></li>
-            <li><a href="#archive" class="nav-link text-white"><i class="bi bi-archive me-2"></i> 9. Records Archive</a></li>
-            <li><a href="#categories" class="nav-link text-white"><i class="bi bi-tags me-2"></i> 10. Categories</a></li>
-            <li><a href="#analytics" class="nav-link text-white"><i class="bi bi-bar-chart-line me-2"></i> 11. Search Analytics</a></li>
-            <li><a href="#reviews" class="nav-link text-white"><i class="bi bi-star me-2"></i> 12. Review Logs</a></li>
-            <li><a href="#notifications" class="nav-link text-white"><i class="bi bi-broadcast me-2"></i> 13. System Alerts</a></li>
-            <li><a href="#audit" class="nav-link text-white text-info fw-bold"><i class="bi bi-journal-text me-2"></i> 14. Immutable Audit</a></li>
-            <li><a href="#provinces" class="nav-link text-white"><i class="bi bi-geo-alt me-2"></i> 15. Geo Statistics</a></li>
-            <li><a href="#support" class="nav-link text-white"><i class="bi bi-headset me-2"></i> 16. Support Tickets</a></li>
-            <li><a href="#backup" class="nav-link text-white text-warning"><i class="bi bi-database-fill-gear me-2"></i> 17. Disaster Recovery</a></li>
-            <li><a href="#settings" class="nav-link text-white"><i class="bi bi-gear-fill Tri me-2"></i> 18. Global Settings</a></li>
-            <li><a href="#printable" class="nav-link text-white"><i class="bi bi-printer me-2"></i> 19. Export Engines</a></li>
-            <li><a href="#superadmin" class="nav-link text-white text-danger fw-bold border-top border-secondary mt-2 pt-2"><i class="bi bi-key-fill me-2"></i> 20. Super Admin</a></li>
-        </ul>
+<ul class="nav nav-pills flex-column mb-auto gap-1">
+    <li><a href="{% url 'accounts:erp_control_center' %}" class="nav-link text-white active"><i class="bi bi-speedometer2 me-2 text-success"></i> Control Dashboard</a></li>
+    <li><a href="{% url 'accounts:erp_user_management' %}" class="nav-link text-white"><i class="bi bi-people me-2"></i> 1. User Management</a></li>
+    <li><a href="{% url 'accounts:erp_asset_catalog' %}" class="nav-link text-white"><i class="bi bi-building-gear me-2"></i> 2. Asset Catalog</a></li>
+    <li><a href="{% url 'accounts:erp_chat_monitor' %}" class="nav-link text-white"><i class="bi bi-chat-dots me-2"></i> 3. Chat Monitor</a></li>
+    <li><a href="{% url 'accounts:erp_payment_center' %}" class="nav-link text-white"><i class="bi bi-currency-dollar me-2"></i> 4. Payment Center</a></li>
+    <li><a href="{% url 'accounts:erp_red_flags' %}" class="nav-link text-white"><i class="bi bi-flag me-2 text-danger"></i> 5. Red Flag Reports</a></li>
+    <li><a href="{% url 'accounts:erp_violations_hub' %}" class="nav-link text-white"><i class="bi bi-shield-exclamation me-2"></i> 6. Violations Hub</a></li>
+    <li><a href="{% url 'accounts:erp_suspensions' %}" class="nav-link text-white"><i class="bi bi-person-exclamation me-2 text-warning"></i> 7. Suspensions</a></li>
+    <li><a href="{% url 'accounts:erp_blocked_matrix' %}" class="nav-link text-white"><i class="bi bi-person-x me-2 text-danger"></i> 8. Blocked Matrix</a></li>
+    <li><a href="{% url 'accounts:erp_records_archive' %}" class="nav-link text-white"><i class="bi bi-archive me-2"></i> 9. Records Archive</a></li>
+    <li><a href="{% url 'accounts:erp_categories' %}" class="nav-link text-white"><i class="bi bi-tags me-2"></i> 10. Categories</a></li>
+    <li><a href="{% url 'accounts:erp_search_analytics' %}" class="nav-link text-white"><i class="bi bi-bar-chart-line me-2"></i> 11. Search Analytics</a></li>
+    <li><a href="{% url 'accounts:erp_review_logs' %}" class="nav-link text-white"><i class="bi bi-star me-2"></i> 12. Review Logs</a></li>
+    <li><a href="{% url 'accounts:erp_system_alerts' %}" class="nav-link text-white"><i class="bi bi-broadcast me-2"></i> 13. System Alerts</a></li>
+    <li><a href="{% url 'accounts:erp_immutable_audit' %}" class="nav-link text-white text-info fw-bold"><i class="bi bi-journal-text me-2"></i> 14. Immutable Audit</a></li>
+    <li><a href="{% url 'accounts:erp_geo_statistics' %}" class="nav-link text-white"><i class="bi bi-geo-alt me-2"></i> 15. Geo Statistics</a></li>
+    <li><a href="{% url 'accounts:erp_support_tickets' %}" class="nav-link text-white"><i class="bi bi-headset me-2"></i> 16. Support Tickets</a></li>
+    <li><a href="{% url 'accounts:erp_disaster_recovery' %}" class="nav-link text-white text-warning"><i class="bi bi-database-fill-gear me-2"></i> 17. Disaster Recovery</a></li>
+    <li><a href="{% url 'accounts:erp_global_settings' %}" class="nav-link text-white"><i class="bi bi-gear-fill me-2"></i> 18. Global Settings</a></li>
+    <li><a href="{% url 'accounts:erp_export_engines' %}" class="nav-link text-white"><i class="bi bi-printer me-2"></i> 19. Export Engines</a></li>
+    <li><a href="{% url 'accounts:erp_super_admin' %}" class="nav-link text-white text-danger fw-bold border-top border-secondary mt-2 pt-2"><i class="bi bi-key-fill me-2"></i> 20. Super Admin</a></li>
+</ul>
     </div>
 
     <div class="main-workspace">

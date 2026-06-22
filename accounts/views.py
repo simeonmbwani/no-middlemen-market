@@ -251,3 +251,102 @@ def erp_user_management_view(request):
         'total_registered_count': users_list.count(),
     }
     return render(request, 'admin/user_management.html', context)
+
+# ==============================================================================
+# 👑 ERP MASTER CORE SIDEBAR MODULE MODULES (2 to 20)
+# ==============================================================================
+
+@staff_member_required
+def erp_asset_catalog_view(request):
+    """Module 2: Asset Catalog Management Hub"""
+    return render(request, 'admin/modules/asset_catalog.html', {'listings': Listing.objects.all()[:100]})
+
+@staff_member_required
+def erp_chat_monitor_view(request):
+    """Module 3: Chat Monitoring & Trust Engine"""
+    return render(request, 'admin/modules/chat_monitor.html')
+
+@staff_member_required
+def erp_payment_center_view(request):
+    """Module 4: Billing, Revenue, and Payment Gateway Operations"""
+    return render(request, 'admin/modules/payment_center.html')
+
+@staff_member_required
+def erp_red_flags_view(request):
+    """Module 5: Fraud & Abuse Escalation Incident Reports"""
+    return render(request, 'admin/modules/red_flags.html')
+
+@staff_member_required
+def erp_violations_hub_view(request):
+    """Module 6: Policy Violations & Automatic Penalty Log"""
+    return render(request, 'admin/modules/violations_hub.html')
+
+@staff_member_required
+def erp_suspensions_view(request):
+    """Module 7: Temporary Profile Suspensions Ledger"""
+    return render(request, 'admin/modules/suspensions.html')
+
+@staff_member_required
+def erp_blocked_matrix_view(request):
+    """Module 8: Hard-Blocked IP, Phone, and National ID Matrix"""
+    return render(request, 'admin/modules/blocked_matrix.html')
+
+@staff_member_required
+def erp_records_archive_view(request):
+    """Module 9: Immutable Deleted Records Cold Archive Recovery"""
+    return render(request, 'admin/modules/records_archive.html')
+
+@staff_member_required
+def erp_categories_view(request):
+    """Module 10: Dynamic Directory Category Configuration Center"""
+    return render(request, 'admin/modules/categories.html')
+
+@staff_member_required
+def erp_search_analytics_view(request):
+    """Module 11: Regional Search Intent & Trend Analytics"""
+    return render(request, 'admin/modules/search_analytics.html')
+
+@staff_member_required
+def erp_review_logs_view(request):
+    """Module 12: Peer Review Audit & Rating Fraud Logs"""
+    return render(request, 'admin/modules/review_logs.html')
+
+@staff_member_required
+def erp_system_alerts_view(request):
+    """Module 13: SMS/Email Alerts Dispatch Controls"""
+    return render(request, 'admin/modules/system_alerts.html')
+
+@staff_member_required
+def erp_immutable_audit_view(request):
+    """Module 14: Cryptographic Admin Action System Audit Trail"""
+    return render(request, 'admin/modules/immutable_audit.html')
+
+@staff_member_required
+def erp_geo_statistics_view(request):
+    """Module 15: Provincial & District Revenue Heatmaps"""
+    return render(request, 'admin/modules/geo_statistics.html')
+
+@staff_member_required
+def erp_support_tickets_view(request):
+    """Module 16: Customer Support Ticket Desk & Staff Dispatch"""
+    return render(request, 'admin/modules/support_tickets.html')
+
+@staff_member_required
+def erp_disaster_recovery_view(request):
+    """Module 17: Database Backup & Hot Restore Operations"""
+    return render(request, 'admin/modules/disaster_recovery.html')
+
+@staff_member_required
+def erp_global_settings_view(request):
+    """Module 18: Operational Parameter, Fee Structure & Maintenance Flags"""
+    return render(request, 'admin/modules/global_settings.html')
+
+@staff_member_required
+def erp_export_engines_view(request):
+    """Module 19: Printable Audits, Excel/CSV/PDF Export Generators"""
+    return render(request, 'admin/modules/export_engines.html')
+
+@staff_member_required
+def erp_super_admin_view(request):
+    """Module 20: Restricted Root Admin Roles, Access Permissions & Token Manager"""
+    return render(request, 'admin/modules/super_admin.html')

@@ -36,4 +36,27 @@ urlpatterns = [
     path('password-reset/complete/', 
          auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'), 
          name='password_reset_complete'),
+    # ... your existing login, register, and control-center paths ...
+    path('admin/users/', views.erp_user_management_view, name='erp_user_management'),
+    
+    # 👑 THE COMPLETELY WIRED MULTI-MODULE URL SCHEME
+    path('admin/assets/', views.erp_asset_catalog_view, name='erp_asset_catalog'),
+    path('admin/chats/', views.erp_chat_monitor_view, name='erp_chat_monitor'),
+    path('admin/payments-core/', views.erp_payment_center_view, name='erp_payment_center'),
+    path('admin/red-flags/', views.erp_red_flags_view, name='erp_red_flags'),
+    path('admin/violations/', views.erp_violations_hub_view, name='erp_violations_hub'),
+    path('admin/suspensions/', views.erp_suspensions_view, name='erp_suspensions'),
+    path('admin/blocked-matrix/', views.erp_blocked_matrix_view, name='erp_blocked_matrix'),
+    path('admin/archive/', views.erp_records_archive_view, name='erp_records_archive'),
+    path('admin/categories/', views.erp_categories_view, name='erp_categories'),
+    path('admin/search-analytics/', views.erp_search_analytics_view, name='erp_search_analytics'),
+    path('admin/reviews/', views.erp_review_logs_view, name='erp_review_logs'),
+    path('admin/alerts/', views.erp_system_alerts_view, name='erp_system_alerts'),
+    path('admin/audit-logs/', views.erp_immutable_audit_view, name='erp_immutable_audit'),
+    path('admin/geo-stats/', views.erp_geo_statistics_view, name='erp_geo_statistics'),
+    path('admin/support-tickets/', views.erp_support_tickets_view, name='erp_support_tickets'),
+    path('admin/disaster-recovery/', views.erp_disaster_recovery_view, name='erp_disaster_recovery'),
+    path('admin/global-settings/', views.erp_global_settings_view, name='erp_global_settings'),
+    path('admin/exports/', views.erp_export_engines_view, name='erp_export_engines'),
+    path('admin/super-root/', views.erp_super_admin_view, name='erp_super_admin'),
 ]
