@@ -87,50 +87,64 @@ def user_dashboard_view(request):
         # Sort whole active inbox stack so freshest messages always show first
         active_chats.sort(key=lambda x: x['updated_at'], reverse=True)
 
-        # Single Chat Conversation Panel Log View
+      # Single Chat Conversation Panel Log View
         start_chat_with = request.GET.get('chat_id') or request.GET.get('start_chat_with')
         if start_chat_with:
-            # 📬 POST HANDLE: Process inbound message transmissions from input form bar
+            # Check if this request is a background AJAX background engine sequence request
+            is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest' or 'sync' in request.GET
+            
+            # 📬 POST HANDLE: Process inbound message transmissions smoothly via background fetch pipelines
             if request.method == 'POST':
                 body_text = request.POST.get('message_text', '').strip()
                 if body_text:
-                    # Find an associated listing to tie this message record metadata context together
-                    associated_listing = Listing.objects.filter(Q(owner=user) | Q(owner_id=start_chat_with)).first()
+                    # Find any listing shared between the two users to preserve required database foreign key constraints
+                    associated_listing = Listing.objects.filter(
+                        Q(owner=user) | Q(owner_id=start_chat_with)
+                    ).first()
+                    
                     if associated_listing:
-                        MessageInquiry.objects.create(
+                        new_msg = MessageInquiry.objects.create(
                             sender=user,
                             listing=associated_listing,
                             message_text=body_text
                         )
+                        if is_ajax:
+                            from django.http import JsonResponse
+                            return JsonResponse({'status': 'delivered', 'id': new_msg.id})
                         return redirect(f"{request.path}?tab=messages&chat_id={start_chat_with}")
 
+            # 🔧 FIXED: Filter message streams strictly by sender and recipient interaction vectors 
             messages_list = MessageInquiry.objects.filter(
                 (Q(sender=user) & Q(listing__owner_id=start_chat_with)) |
-                (Q(sender_id=start_chat_with) & Q(listing__owner=user))
-            ).order_by('created_at')
+                (Q(sender_id=start_chat_with) & Q(listing__owner=user)) |
+                (Q(sender=user) & Q(listing__id__in=Listing.objects.filter(owner_id=start_chat_with).values_list('id', flat=True))) |
+                (Q(sender_id=start_chat_with) & Q(listing__id__in=Listing.objects.filter(owner=user).values_list('id', flat=True)))
+            ).distinct().order_by('created_at')
             
             try:
                 partner = User.objects.get(id=start_chat_with)
-                # Mark these specific thread messages as read
+                # 🔧 FIXED: Mark records as read where your chat partner is the sender and you are the recipient
                 MessageInquiry.objects.filter(sender=partner, listing__owner=user, is_read=False).update(is_read=True)
             except User.DoesNotExist:
                 pass
 
-    # 6. Context Matrix Bundle Matching Index Keys Complete Mapping
-    context = {
-        'active_tab': active_tab,
-        'user_listings': user_listings,
-        'total_count': total_count,
-        'active_count': active_count,
-        'expired_count': expired_count,
-        'unpaid_bills_count': pending_count,
-        'inquiries': inquiries,
-        'my_sales': my_sales,
-        'my_purchases': my_purchases,
-        'payments': payments,
-        'active_chats': active_chats, 
-        'messages_list': messages_list,
-        'partner': partner,
-    }
-    
-    return render(request, 'dashboard/index.html', context)
+            # ⚙️ BACKGROUND JSON SYNC BLOCK ENGINE RESPONDER RULE INTERCEPTOR
+            if is_ajax and 'sync' in request.GET:
+                from django.http import JsonResponse
+                from django.template.loader import render_to_string
+                
+                # 🔧 FIXED: Target global incoming unread entries accurately based on recipient user constraints
+                global_unread_total = MessageInquiry.objects.filter(listing__owner=user, is_read=False).count()
+                inbound_received_count = messages_list.filter(sender_id=start_chat_with).count()
+                
+                # Assemble raw chat fragments array
+                html_contents = render_to_string('messaging/chat_bubbles.html', {
+                    'messages_list': messages_list,
+                    'request': request
+                })
+                
+                return JsonResponse({
+                    'html': html_contents,
+                    'inbound_count': inbound_received_count,
+                    'unread_total': global_unread_total
+                })

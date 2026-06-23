@@ -1,71 +1,107 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<div class="container px-2 pt-2" style="max-width: 600px;">
-    <div class="card bg-transparent border-0 d-flex flex-column" style="height: calc(100vh - 210px);">
-        
-        <!-- Chat Header (WhatsApp Style) -->
-        <div class="p-3 bg-dark border-bottom border-secondary d-flex align-items-center justify-content-between rounded-top-4" style="background-color: #161920 !important; border-color: var(--border-line) !important;">
-            <div class="d-flex align-items-center gap-2">
-                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold font-monospace" style="width: 40px; height: 40px; background-color: #198754 !important;">
-                    {{ partner.username|slice:":1"|upper|default:"U" }}
-                </div>
-                <div>
-                    <h6 class="fw-bold m-0 p-0 text-white" style="color: #f8fafc !important;">@{{ partner.username|default:"User" }}</h6>
-                    <small class="text-success font-monospace" style="color: #2ecc71 !important; font-size: 0.75rem;">● Active Chat Session</small>
+<div id="msg-corridor" class="p-3 flex-grow-1 overflow-y-auto d-flex flex-column gap-2" style="background-color: var(--bg-main); background-image: radial-gradient(rgba(25,135,84,0.04) 1px, transparent 0); background-size: 24px 24px;">
+    {% for message in messages_list %}
+        {% if message.sender == request.user %}
+            <div class="align-self-end p-2 shadow-sm position-relative text-white" style="background-color: #115e3b !important; max-width: 85%; min-width: 110px; border-radius: 12px 0px 12px 12px; padding-bottom: 20px !important;">
+                <p class="m-0 pe-2 text-white" style="font-size: 0.92rem; line-height: 1.4; color: #ffffff !important;">{{ message.message_text }}</p>
+                <div class="position-absolute bottom-0 end-0 pe-2 pb-0.5 d-flex align-items-center gap-1 opacity-75" style="font-size: 0.65rem;">
+                    <span class="font-monospace text-white-50">{{ message.created_at|date:"H:i" }}</span>
+                    <i class="bi bi-check2-all text-info"></i>
                 </div>
             </div>
-            <div class="d-flex gap-3 text-secondary fs-5">
-                <a href="tel:{{ partner.phone_number|default:'' }}" class="text-success text-decoration-none"><i class="bi bi-telephone-fill"></i></a>
-                <i class="bi bi-three-dots-vertical text-muted"></i>
-            </div>
-        </div>
-
-        <!-- Messaging Corridor -->
-        <div class="p-3 flex-grow-1 overflow-y-auto d-flex flex-column gap-2" style="background-color: var(--bg-main); background-image: radial-gradient(rgba(25,135,84,0.04) 1px, transparent 0); background-size: 24px 24px;">
-            {% for message in messages_list %}
-                {% if message.sender == request.user %}
-                    <!-- Outgoing Message Bubble (Right Side - WhatsApp Dark Green Accent) -->
-                    <div class="align-self-end p-2 shadow-sm position-relative text-white" style="background-color: #115e3b !important; max-width: 85%; min-width: 110px; border-radius: 12px 0px 12px 12px; padding-bottom: 20px !important;">
-                        <!-- 🔧 FIXED: Changed from message.description to message.message_text -->
-                        <p class="m-0 pe-2 text-white" style="font-size: 0.92rem; line-height: 1.4; color: #ffffff !important;">{{ message.message_text }}</p>
-                        <div class="position-absolute bottom-0 end-0 pe-2 pb-0.5 d-flex align-items-center gap-1 opacity-75" style="font-size: 0.65rem;">
-                            <span class="font-monospace text-white-50">{{ message.created_at|date:"H:i" }}</span>
-                            <i class="bi bi-check2-all text-info"></i>
-                        </div>
-                    </div>
-                {% else %}
-                    <!-- Incoming Message Bubble (Left Side - Match Theme Card Background) -->
-                    <div class="align-self-start p-2 shadow-sm border position-relative" style="background-color: var(--card-bg) !important; border-color: var(--border-line) !important; max-width: 85%; min-width: 110px; border-radius: 0px 12px 12px 12px; padding-bottom: 20px !important;">
-                        <!-- 🔧 FIXED: Changed from message.description to message.message_text -->
-                        <p class="m-0 pe-2" style="font-size: 0.92rem; line-height: 1.4; color: var(--text-main) !important;">{{ message.message_text }}</p>
-                        <div class="position-absolute bottom-0 end-0 pe-2 pb-0.5 font-monospace" style="font-size: 0.65rem; color: var(--text-muted) !important;">
-                            {{ message.created_at|date:"H:i" }}
-                        </div>
-                    </div>
-                {% endif %}
-            {% empty %}
-                <div class="text-center my-auto py-5">
-                    <i class="bi bi-chat-left-dots text-success fs-1 d-block mb-2 opacity-50"></i>
-                    <h6 class="fw-bold">No direct messages yet</h6>
-                    <p class="small text-muted mb-0 px-4">Ask about availability, pricing updates, or item location coordinates directly.</p>
+        {% else %}
+            <div class="align-self-start p-2 shadow-sm border position-relative" style="background-color: var(--card-bg) !important; border-color: var(--border-line) !important; max-width: 85%; min-width: 110px; border-radius: 0px 12px 12px 12px; padding-bottom: 20px !important;">
+                <p class="m-0 pe-2" style="font-size: 0.92rem; line-height: 1.4; color: var(--text-main) !important;">{{ message.message_text }}</p>
+                <div class="position-absolute bottom-0 end-0 pe-2 pb-0.5 font-monospace" style="font-size: 0.65rem; color: var(--text-muted) !important;">
+                    {{ message.created_at|date:"H:i" }}
                 </div>
-            {% endfor %}
+            </div>
+        {% endif %}
+    {% empty %}
+        <div id="empty-state" class="text-center my-auto py-5">
+            <i class="bi bi-chat-left-dots text-success fs-1 d-block mb-2 opacity-50"></i>
+            <h6 class="fw-bold">No direct messages yet</h6>
         </div>
-
-        <!-- Message Input Bar Form Component Layer -->
-        <form method="POST" action="" class="p-2 bg-dark d-flex align-items-center gap-2 rounded-bottom-4 m-0" style="background-color: #161920 !important; border-top: 1px solid var(--border-line) !important;">
-            {% csrf_token %}
-            <button type="button" class="btn btn-link text-muted p-1" aria-label="Attach File"><i class="bi bi-paperclip fs-5"></i></button>
-            
-            <!-- 🔧 FIXED: input field name binds perfectly to request.POST.get('message_text') -->
-            <input type="text" name="message_text" class="form-control form-control-sm border-0 text-white bg-secondary bg-opacity-25 py-2 rounded-4" placeholder="Type message directly..." style="font-size: 0.9rem;" required autocomplete="off">
-            
-            <button type="submit" class="btn btn-success rounded-circle d-flex align-items-center justify-content-center p-2 shadow" style="width: 38px; height: 38px; background-color: #198754 !important; border: none;" aria-label="Send Message">
-                <i class="bi bi-send-fill text-white fs-6"></i>
-            </button>
-        </form>
-
-    </div>
+    {% endfor %}
 </div>
-{% endblock %}
+
+<form id="chat-form" method="POST" class="p-2 bg-dark d-flex align-items-center gap-2 rounded-bottom-4 m-0" style="background-color: #161920 !important; border-top: 1px solid var(--border-line) !important;">
+    {% csrf_token %}
+    <button type="button" class="btn btn-link text-muted p-1" aria-label="Attach File"><i class="bi bi-paperclip fs-5"></i></button>
+    <input type="text" id="chat-input" name="message_text" class="form-control form-control-sm border-0 text-white bg-secondary bg-opacity-25 py-2 rounded-4" placeholder="Type message directly..." style="font-size: 0.9rem;" required autocomplete="off">
+    <button type="submit" class="btn btn-success rounded-circle d-flex align-items-center justify-content-center p-2 shadow" style="width: 38px; height: 38px; background-color: #198754 !important; border: none;" aria-label="Send Message">
+        <i class="bi bi-send-fill text-white fs-6"></i>
+    </button>
+</form>
+
+<script>
+    const corridor = document.getElementById('msg-corridor');
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+    
+    // Auto-scroll to lowest message boundary
+    corridor.scrollTop = corridor.scrollHeight;
+
+    // 1. ASYNCHRONOUS SUBMIT PIPELINE
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const text = input.value.trim();
+        if(!text) return;
+
+        const formData = new FormData(form);
+
+        // Instantly append local bubble preview for zero-latency feedback loop
+        const now = new Date();
+        const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        
+        const previewBubble = `
+            <div class="align-self-end p-2 shadow-sm position-relative text-white animate-fade-in" style="background-color: #115e3b !important; max-width: 85%; min-width: 110px; border-radius: 12px 0px 12px 12px; padding-bottom: 20px !important;">
+                <p class="m-0 pe-2 text-white" style="font-size: 0.92rem; line-height: 1.4; color: #ffffff !important;">${text}</p>
+                <div class="position-absolute bottom-0 end-0 pe-2 pb-0.5 d-flex align-items-center gap-1 opacity-75" style="font-size: 0.65rem;">
+                    <span class="font-monospace text-white-50">${timeStr}</span>
+                    <i class="bi bi-check2"></i>
+                </div>
+            </div>`;
+        
+        const emptyState = document.getElementById('empty-state');
+        if(emptyState) emptyState.remove();
+        
+        corridor.insertAdjacentHTML('beforeend', previewBubble);
+        corridor.scrollTop = corridor.scrollHeight;
+        input.value = '';
+
+        // Deliver background POST operation request container payload
+        fetch(window.location.href, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+    });
+
+    // 2. RUN BACKGROUND TIMEOUT LOOP POLLING FOR NEW INBOUND MESSAGES
+    setInterval(function() {
+        fetch(window.location.href + '&sync=true', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.html) {
+                // If new message lengths differ, inject dynamic elements
+                const currentBubbles = corridor.querySelectorAll('.align-self-start').length;
+                if(data.inbound_count > currentBubbles) {
+                    corridor.innerHTML = data.html;
+                    corridor.scrollTop = corridor.scrollHeight;
+                }
+            }
+            // 🔴 Sync Chat Badge counters globally inside base app layout navigation bars instantly
+            const badges = document.querySelectorAll('.badge.bg-danger');
+            badges.forEach(badge => {
+                if(data.unread_total > 0) {
+                    badge.style.display = 'inline-block';
+                    badge.textContent = data.unread_total;
+                } else {
+                    badge.style.display = 'none';
+                }
+            });
+        });
+    }, 3000); // Dynamic checks fire cleanly every 3 seconds context windows
+</script>

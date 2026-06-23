@@ -1,0 +1,18 @@
+{% for message in messages_list %}
+    {% if message.sender == request.user %}
+        <div class="align-self-end p-2 shadow-sm position-relative text-white" style="background-color: #115e3b !important; max-width: 85%; min-width: 110px; border-radius: 12px 0px 12px 12px; padding-bottom: 20px !important;">
+            <p class="m-0 pe-2 text-white" style="font-size: 0.92rem; line-height: 1.4; color: #ffffff !important;">{{ message.message_text }}</p>
+            <div class="position-absolute bottom-0 end-0 pe-2 pb-0.5 d-flex align-items-center gap-1 opacity-75" style="font-size: 0.65rem;">
+                <span class="font-monospace text-white-50">{{ message.created_at|date:"H:i" }}</span>
+                <i class="bi bi-check2-all text-info"></i>
+            </div>
+        </div>
+    {% else %}
+        <div class="align-self-start p-2 shadow-sm border position-relative" style="background-color: var(--card-bg) !important; border-color: var(--border-line) !important; max-width: 85%; min-width: 110px; border-radius: 0px 12px 12px 12px; padding-bottom: 20px !important;">
+            <p class="m-0 pe-2" style="font-size: 0.92rem; line-height: 1.4; color: var(--text-main) !important;">{{ message.message_text }}</p>
+            <div class="position-absolute bottom-0 end-0 pe-2 pb-0.5 font-monospace" style="font-size: 0.65rem; color: var(--text-muted) !important;">
+                {{ message.created_at|date:"H:i" }}
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
