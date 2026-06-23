@@ -4,6 +4,7 @@
 <div class="container px-2 pt-2" style="max-width: 600px;">
     <div class="card bg-transparent border-0 d-flex flex-column" style="height: calc(100vh - 210px);">
         
+        <!-- Chat Header (WhatsApp Style) -->
         <div class="p-3 bg-dark border-bottom border-secondary d-flex align-items-center justify-content-between rounded-top-4" style="background-color: #161920 !important; border-color: var(--border-line) !important;">
             <div class="d-flex align-items-center gap-2">
                 <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold font-monospace" style="width: 40px; height: 40px; background-color: #198754 !important;">
@@ -20,19 +21,24 @@
             </div>
         </div>
 
+        <!-- Messaging Corridor -->
         <div class="p-3 flex-grow-1 overflow-y-auto d-flex flex-column gap-2" style="background-color: var(--bg-main); background-image: radial-gradient(rgba(25,135,84,0.04) 1px, transparent 0); background-size: 24px 24px;">
             {% for message in messages_list %}
                 {% if message.sender == request.user %}
+                    <!-- Outgoing Message Bubble (Right Side - WhatsApp Dark Green Accent) -->
                     <div class="align-self-end p-2 shadow-sm position-relative text-white" style="background-color: #115e3b !important; max-width: 85%; min-width: 110px; border-radius: 12px 0px 12px 12px; padding-bottom: 20px !important;">
-                        <p class="m-0 pe-2 text-white" style="font-size: 0.92rem; line-height: 1.4; color: #ffffff !important;">{{ message.description }}</p>
+                        <!-- 🔧 FIXED: Changed from message.description to message.message_text -->
+                        <p class="m-0 pe-2 text-white" style="font-size: 0.92rem; line-height: 1.4; color: #ffffff !important;">{{ message.message_text }}</p>
                         <div class="position-absolute bottom-0 end-0 pe-2 pb-0.5 d-flex align-items-center gap-1 opacity-75" style="font-size: 0.65rem;">
                             <span class="font-monospace text-white-50">{{ message.created_at|date:"H:i" }}</span>
                             <i class="bi bi-check2-all text-info"></i>
                         </div>
                     </div>
                 {% else %}
+                    <!-- Incoming Message Bubble (Left Side - Match Theme Card Background) -->
                     <div class="align-self-start p-2 shadow-sm border position-relative" style="background-color: var(--card-bg) !important; border-color: var(--border-line) !important; max-width: 85%; min-width: 110px; border-radius: 0px 12px 12px 12px; padding-bottom: 20px !important;">
-                        <p class="m-0 pe-2" style="font-size: 0.92rem; line-height: 1.4; color: var(--text-main) !important;">{{ message.description }}</p>
+                        <!-- 🔧 FIXED: Changed from message.description to message.message_text -->
+                        <p class="m-0 pe-2" style="font-size: 0.92rem; line-height: 1.4; color: var(--text-main) !important;">{{ message.message_text }}</p>
                         <div class="position-absolute bottom-0 end-0 pe-2 pb-0.5 font-monospace" style="font-size: 0.65rem; color: var(--text-muted) !important;">
                             {{ message.created_at|date:"H:i" }}
                         </div>
@@ -47,10 +53,14 @@
             {% endfor %}
         </div>
 
+        <!-- Message Input Bar Form Component Layer -->
         <form method="POST" action="" class="p-2 bg-dark d-flex align-items-center gap-2 rounded-bottom-4 m-0" style="background-color: #161920 !important; border-top: 1px solid var(--border-line) !important;">
             {% csrf_token %}
             <button type="button" class="btn btn-link text-muted p-1" aria-label="Attach File"><i class="bi bi-paperclip fs-5"></i></button>
-            <input type="text" name="description" class="form-control form-control-sm border-0 text-white bg-secondary bg-opacity-25 py-2 rounded-4" placeholder="Type message directly..." style="font-size: 0.9rem;" required autocomplete="off">
+            
+            <!-- 🔧 FIXED: input field name binds perfectly to request.POST.get('message_text') -->
+            <input type="text" name="message_text" class="form-control form-control-sm border-0 text-white bg-secondary bg-opacity-25 py-2 rounded-4" placeholder="Type message directly..." style="font-size: 0.9rem;" required autocomplete="off">
+            
             <button type="submit" class="btn btn-success rounded-circle d-flex align-items-center justify-content-center p-2 shadow" style="width: 38px; height: 38px; background-color: #198754 !important; border: none;" aria-label="Send Message">
                 <i class="bi bi-send-fill text-white fs-6"></i>
             </button>

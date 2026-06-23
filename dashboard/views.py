@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.db.models import Q, Max, Count
+from django.db.models import Q
 
 # Core Application Model Imports
 from listings.models import Listing
@@ -41,7 +41,7 @@ def user_dashboard_view(request):
     # 4. Standard Gateway Financial Transactions Statements Audit Logs
     payments = Payment.objects.filter(owner=user).order_by('-created_at')[:5]
 
-    # 💬 5. GROUPED P2P CHAT ENGINE LOGIC (Feeds active_chats straight to template)
+    # 💬 5. GROUPED P2P CHAT ENGINE LOGIC
     active_chats = []
     messages_list = []
     partner = None
@@ -74,9 +74,9 @@ def user_dashboard_view(request):
                     ).count()
 
                     active_chats.append({
-                        'id': p_user.id, # Tracks context tab filtering query targets
+                        'id': p_user.id, 
                         'participant': p_user,
-                        'last_message_text': last_msg.description, # Pulls description text row string safely
+                        'last_message_text': last_msg.message_text,  # 🔧 FIXED: Correct field mapped here
                         'last_message_sender': last_msg.sender,
                         'unread_messages_count': unread_count,
                         'updated_at': last_msg.created_at,
@@ -90,6 +90,20 @@ def user_dashboard_view(request):
         # Single Chat Conversation Panel Log View
         start_chat_with = request.GET.get('chat_id') or request.GET.get('start_chat_with')
         if start_chat_with:
+            # 📬 POST HANDLE: Process inbound message transmissions from input form bar
+            if request.method == 'POST':
+                body_text = request.POST.get('message_text', '').strip()
+                if body_text:
+                    # Find an associated listing to tie this message record metadata context together
+                    associated_listing = Listing.objects.filter(Q(owner=user) | Q(owner_id=start_chat_with)).first()
+                    if associated_listing:
+                        MessageInquiry.objects.create(
+                            sender=user,
+                            listing=associated_listing,
+                            message_text=body_text
+                        )
+                        return redirect(f"{request.path}?tab=messages&chat_id={start_chat_with}")
+
             messages_list = MessageInquiry.objects.filter(
                 (Q(sender=user) & Q(listing__owner_id=start_chat_with)) |
                 (Q(sender_id=start_chat_with) & Q(listing__owner=user))
@@ -97,6 +111,8 @@ def user_dashboard_view(request):
             
             try:
                 partner = User.objects.get(id=start_chat_with)
+                # Mark these specific thread messages as read
+                MessageInquiry.objects.filter(sender=partner, listing__owner=user, is_read=False).update(is_read=True)
             except User.DoesNotExist:
                 pass
 
@@ -112,7 +128,7 @@ def user_dashboard_view(request):
         'my_sales': my_sales,
         'my_purchases': my_purchases,
         'payments': payments,
-        'active_chats': active_chats, # 👈 Delivers data cleanly directly to your template loop!
+        'active_chats': active_chats, 
         'messages_list': messages_list,
         'partner': partner,
     }
