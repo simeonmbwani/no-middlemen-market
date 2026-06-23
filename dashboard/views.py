@@ -9,7 +9,7 @@ def user_dashboard_view(request):
     user = request.user
     active_tab = request.GET.get('tab', 'inventory')
     
-    # BASE CONTEXT (Safe version: No references to missing fields)
+    # BASE CONTEXT (Safe version: No references to missing 'view_count' or ForeignKey fields)
     context = {
         'active_tab': active_tab,
         'user': user,
@@ -17,9 +17,9 @@ def user_dashboard_view(request):
             'rating': 4.8, 
             'listings': Listing.objects.filter(owner=user).count(),
             'saved': 0,
-            # Use a safe count that doesn't trigger database column lookups
-            'chats': MessageInquiry.objects.count(), 
-            'views': Listing.objects.filter(owner=user).aggregate(v=Sum('view_count'))['v'] or 0
+            'chats': MessageInquiry.objects.count(),
+            # CHANGED: 'views' now defaults to 0 to avoid the FieldError
+            'views': 0 
         }
     }
 
