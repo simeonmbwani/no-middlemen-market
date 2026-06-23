@@ -1,62 +1,21 @@
-{% extends "base.html" %}
-
-{% block title %}Chat{% endblock %}
-
-{% block content %}
-<div class="container px-2 pt-2" style="max-width: 650px;">
-    <div id="chat-container" class="card border-0 rounded-4 shadow-sm overflow-hidden" style="height: calc(100vh - 170px);">
-
-        <div class="px-3 py-3 border-bottom d-flex justify-content-between align-items-center" style="background:#161920;">
-            <div class="d-flex align-items-center gap-2">
-                <div class="bg-success rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
-                    {{ partner.username|slice:":1"|upper }}
-                </div>
-                <div>
-                    <div class="fw-bold text-white">@{{ partner.username }}</div>
-                    <small class="text-success">● Active now</small>
-                </div>
-            </div>
-            <div class="d-flex gap-3">
-                {% if partner.phone_number %}<a href="tel:{{ partner.phone_number }}" class="text-success"><i class="bi bi-telephone-fill"></i></a>{% endif %}
-                <i class="bi bi-three-dots-vertical text-light"></i>
-            </div>
+{% for message in messages_list %}
+    {% if message.sender == request.user %}
+    <div class="align-self-end shadow-sm text-white px-3 py-2" style="background:#198754; border-radius:14px 14px 0 14px; max-width:85%;">
+        {{ message.message_text }}
+        <div class="text-end mt-1" style="font-size:0.7rem;">
+            {{ message.created_at|date:"H:i" }}
+            <span class="{% if message.is_read %}text-warning{% else %}text-light{% endif %}">✓✓</span>
         </div>
-
-        <div id="chatBox" class="flex-grow-1 overflow-auto p-3 d-flex flex-column" 
-             style="background-color:var(--bg-main); background-image: radial-gradient(rgba(25,135,84,.05) 1px, transparent 0); background-size:24px 24px;">
-            {% include 'messaging/chat_bubbles.html' %}
-        </div>
-
-        <form id="chat-form" method="POST" class="border-top p-2">
-            {% csrf_token %}
-            <div class="input-group">
-                <button type="button" class="btn btn-light"><i class="bi bi-paperclip"></i></button>
-                <input type="text" name="message_text" id="chat-input" class="form-control rounded-start-pill" placeholder="Type a message..." autocomplete="off" required>
-                <button type="submit" class="btn btn-success rounded-end-pill px-4"><i class="bi bi-send-fill"></i></button>
-            </div>
-        </form>
     </div>
-</div>
-
-<script>
-    const chatBox = document.getElementById("chatBox");
-    const chatForm = document.getElementById("chat-form");
-    
-    // Auto-scroll to bottom
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    // Real-time polling
-    setInterval(() => {
-        fetch(window.location.href + '&sync=true', {
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.html && data.html.trim() !== chatBox.innerHTML.trim()) {
-                chatBox.innerHTML = data.html;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-        });
-    }, 3000);
-</script>
-{% endblock %}
+    {% else %}
+    <div class="align-self-start shadow-sm border px-3 py-2" style="background:var(--card-bg); border-color:var(--border-line)!important; border-radius:0 14px 14px 14px; max-width:85%;">
+        {{ message.message_text }}
+        <div class="text-end mt-1 text-muted" style="font-size:0.7rem;">{{ message.created_at|date:"H:i" }}</div>
+    </div>
+    {% endif %}
+{% empty %}
+    <div id="empty-state-wrapper" class="text-center py-5">
+        <i class="bi bi-chat-dots fs-1 text-success opacity-50"></i>
+        <p class="text-muted">No messages yet.</p>
+    </div>
+{% endfor %}
