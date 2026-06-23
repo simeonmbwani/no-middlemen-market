@@ -22,11 +22,17 @@ def listing_list_view(request):
     ⚡ OPTIMIZED: Uses select_related('owner') to pull user profiles in 1 single database trip,
     completely eliminating the sluggish load times for users.
     """
+    # 📱 FIXED: Lock default visits into the PWA mobile-first view layout wrapper
+    if 'browse' not in request.GET and not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        mutable_get = request.GET.copy()
+        mutable_get['browse'] = 'true'
+        request.GET = mutable_get
+
     # Start with active, fully paid verified owner entries joined with their owner profile variables
     queryset = Listing.objects.filter(is_active=True, is_paid=True).select_related('owner').order_by('-created_at')
     
-    # Extract structural query parameters from template inputs
-    search_text = request.GET.get('search_text', '').strip()
+    # 🔍 FIXED: Maps both 'q' (from mobile navigation top bar) and 'search_text' parameters seamlessly
+    search_text = request.GET.get('q', request.GET.get('search_text', '')).strip()
     selected_category = request.GET.get('category', '').strip()
     selected_province = request.GET.get('province', '').strip()
     selected_district = request.GET.get('district', '').strip()
