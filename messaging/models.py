@@ -14,7 +14,10 @@ class MessageInquiry(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='inquiries')
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_messages')
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_messages')
-    
+    # messaging/models.py
+class MessageInquiry(models.Model):
+    # ... existing fields ...
+    attachment = models.FileField(upload_to='chat_attachments/%Y/%m/%d/', blank=True, null=True)
     message_text = models.TextField(max_length=500, help_text="Keep text clear and concise.")
     
     # 🔧 NEW: Added WhatsApp-style delivery tracking flag status variables

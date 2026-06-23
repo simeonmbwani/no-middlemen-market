@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block title %}Messages - No Middlemen{% endblock %}
 
 {% block content %}
@@ -8,15 +7,13 @@
     <div class="card bg-transparent border-0 d-flex flex-column" style="height:calc(100vh - 210px);">
         
         <div class="p-3 border-bottom rounded-top-4" style="background:#161920; border-color:var(--border-line)!important;">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center gap-2">
-                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:45px;height:45px;background-color: #198754 !important;">
-                        {{ partner.username|slice:":1"|upper|default:"U" }}
-                    </div>
-                    <div>
-                        <h6 class="fw-bold mb-0 text-white">@{{ partner.username|default:"Secure Inbox" }}</h6>
-                        <small style="color:#2ecc71;">● Online</small>
-                    </div>
+            <div class="d-flex align-items-center gap-2">
+                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:45px;height:45px;background-color: #198754 !important;">
+                    {{ partner.username|slice:":1"|upper|default:"U" }}
+                </div>
+                <div>
+                    <h6 class="fw-bold mb-0 text-white">@{{ partner.username|default:"Secure Inbox" }}</h6>
+                    <small style="color:#2ecc71;">● Online</small>
                 </div>
             </div>
             <div class="mt-3 rounded-4 p-2" style="background:#0d1117;">
@@ -30,14 +27,20 @@
             {% include 'messaging/chat_bubbles.html' %}
         </div>
 
-        <form id="chat-form" method="POST" class="p-2 d-flex align-items-center gap-2 rounded-bottom-4 m-0" style="background:#161920; border-top:1px solid var(--border-line);">
+        <form id="chat-form" method="POST" enctype="multipart/form-data" class="p-2 d-flex align-items-center gap-2 rounded-bottom-4 m-0" style="background:#161920; border-top:1px solid var(--border-line);">
             {% csrf_token %}
-            <button class="btn btn-link text-secondary p-1" type="button" onclick="document.getElementById('file-attachment').click();"><i class="bi bi-paperclip fs-5"></i></button>
-            <input type="file" id="file-attachment" class="d-none">
             
-            <input type="text" id="chat-input" name="message_text" class="form-control border-0 rounded-pill bg-secondary bg-opacity-25 text-white py-2" placeholder="Type message..." autocomplete="off" required style="font-size: 0.9rem;">
+            <input type="file" name="attachment" id="file-attachment" class="d-none">
+            <button type="button" class="btn btn-link text-secondary p-1" onclick="document.getElementById('file-attachment').click();">
+                <i class="bi bi-paperclip fs-5"></i>
+            </button>
             
-            <button type="button" class="btn btn-link text-secondary p-1" onclick="alert('Mic Active');"><i class="bi bi-mic fs-5"></i></button>
+            <input type="text" name="message_text" id="chat-input" class="form-control rounded-pill bg-secondary bg-opacity-25 text-white border-0 py-2" placeholder="Type message..." autocomplete="off" required>
+            
+            <button type="button" class="btn btn-link text-secondary p-1" onclick="startSpeech();">
+                <i id="mic-icon" class="bi bi-mic fs-5"></i>
+            </button>
+            
             <button type="submit" class="btn btn-success rounded-circle d-flex align-items-center justify-content-center p-0" style="width:40px; height:40px; background-color: #198754 !important; border:none;">
                 <i class="bi bi-send-fill text-white"></i>
             </button>
@@ -49,8 +52,10 @@
         const form = document.getElementById('chat-form');
         const input = document.getElementById('chat-input');
         
+        // Auto-scroll
         corridor.scrollTop = corridor.scrollHeight;
 
+        // Form Submit
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             const formData = new FormData(form);
@@ -58,14 +63,28 @@
             .then(() => { input.value = ''; });
         });
 
+        // Polling
         setInterval(() => {
             fetch(window.location.href + '&sync=true', { headers: {'X-Requested-With': 'XMLHttpRequest'} })
             .then(res => res.json())
             .then(data => { if(data.html) corridor.innerHTML = data.html; });
         }, 3000);
+
+        // Speech Recognition
+        function startSpeech() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            const micIcon = document.getElementById('mic-icon');
+            recognition.start();
+            micIcon.classList.replace('bi-mic', 'bi-mic-mute');
+            recognition.onresult = (event) => {
+                input.value = event.results[0][0].transcript;
+                micIcon.classList.replace('bi-mic-mute', 'bi-mic');
+            };
+        }
     </script>
+    
     {% else %}
-    <div class="text-center py-5"><h4 class="fw-bold">No conversation selected</h4></div>
+    <div class="text-center py-5"><h4 class="fw-bold text-white">No conversation selected</h4></div>
     {% endif %}
 </div>
 {% endblock %}
