@@ -3,124 +3,161 @@
 {% block title %}{{ TEXT.list_asset }} - No Middlemen Marketplace{% endblock %}
 
 {% block content %}
-<div class="row g-4 my-2">
-    <div class="col-md-8">
-        <div class="card shadow border-0 p-4 rounded-4 bg-white">
-            <div class="d-flex align-items-center gap-2 mb-3">
-                <div class="bg-success text-white px-3 py-2 rounded-3 fw-bold">➕</div>
+<div class="container px-1">
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important;">
+        <div class="card-body p-3">
+            
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; background-color: rgba(25, 135, 84, 0.15) !important;">
+                    <i class="bi bi-plus-circle-fill fs-4" style="color: var(--success-color) !important;"></i>
+                </div>
                 <div>
-                    <h4 class="fw-bold text-dark mb-0">{{ TEXT.list_asset }}</h4>
-                    <p class="text-muted small mb-0">Direct peer-to-peer sharing ecosystem. No hidden agent loops.</p>
+                    <h4 class="fw-bold mb-0" style="font-size: 1.15rem; color: var(--text-main) !important;">{{ TEXT.list_asset }}</h4>
+                    <p class="small mb-0" style="font-size: 0.75rem; color: var(--text-muted) !important;">Direct peer-to-peer sharing ecosystem. No hidden agent loops.</p>
                 </div>
             </div>
-            
-            <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
+            <hr class="my-3 opacity-25" style="border-color: var(--border-line) !important;">
+
+            <form method="POST" enctype="multipart/form-data" class="m-0" novalidate>
                 {% csrf_token %}
-                
-                <h6 class="fw-bold text-success text-uppercase border-bottom pb-2 mb-3" style="font-size: 0.8rem;">📦 1. Core Identification Parameters</h6>
-                <div class="row g-3">
-                    <div class="col-md-8">
-                        <label class="form-label small fw-bold text-secondary mb-1">Asset Title Name</label>
-                        {{ form.title }}
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label small fw-bold text-secondary mb-1">Category Group</label>
-                        {{ form.category }}
-                    </div>
+
+                <h6 class="fw-bold text-uppercase font-monospace mb-3" style="font-size: 0.65rem; color: var(--success-color) !important; letter-spacing: 0.5px;">
+                    📦 1. Core Identification Parameters
+                </h6>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1" style="color: var(--text-main) !important;">Asset Title Name</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <div class="text-danger mt-1 font-monospace" style="font-size: 0.68rem;">{{ form.title.errors.0 }}</div>
+                    {% endif %}
                 </div>
 
-                <div class="row g-3 mt-2">
-                    <div class="col-md-4">
-                        <label class="form-label small fw-bold text-secondary mb-1">Price (USD / Day or Month)</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-2">$</span>
-                            {{ form.price }}
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label small fw-bold text-secondary mb-1">Target Province</label>
-                        {{ form.province }}
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label small fw-bold text-secondary mb-1">District Area</label>
-                        {{ form.district }}
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1" style="color: var(--text-main) !important;">Category Group</label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <div class="text-danger mt-1 font-monospace" style="font-size: 0.68rem;">{{ form.category.errors.0 }}</div>
+                    {% endif %}
                 </div>
 
-                <div class="mt-3">
-                    <label class="form-label small fw-bold text-secondary mb-1">Verifiable Asset Specifications</label>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1" style="color: var(--text-main) !important;">Price (USD / Day or Month)</label>
+                    <div class="input-group">
+                        <span class="input-group-text" style="background-color: var(--input-bg) !important; color: var(--text-muted) !important; border-color: var(--border-line) !important;">$</span>
+                        {{ form.price }}
+                    </div>
+                    {% if form.price.errors %}
+                        <div class="text-danger mt-1 font-monospace" style="font-size: 0.68rem;">{{ form.price.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <h6 class="fw-bold text-uppercase font-monospace my-3 pt-2" style="font-size: 0.65rem; color: var(--success-color) !important; letter-spacing: 0.5px;">
+                    📍 2. Location Metadata
+                </h6>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1" style="color: var(--text-main) !important;">Target Province</label>
+                    {{ form.province }}
+                    {% if form.province.errors %}
+                        <div class="text-danger mt-1 font-monospace" style="font-size: 0.68rem;">{{ form.province.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1" style="color: var(--text-main) !important;">District Area</label>
+                    {{ form.district }}
+                    {% if form.district.errors %}
+                        <div class="text-danger mt-1 font-monospace" style="font-size: 0.68rem;">{{ form.district.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1" style="color: var(--text-main) !important;">Verifiable Asset Specifications</label>
                     {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="text-danger mt-1 font-monospace" style="font-size: 0.68rem;">{{ form.description.errors.0 }}</div>
+                    {% endif %}
                 </div>
 
-                <h6 class="fw-bold text-success text-uppercase border-bottom pb-2 mt-4 mb-3" style="font-size: 0.8rem;">🖼️ 2. Data-Optimized Image Capture (Max 3)</h6>
-                <p class="text-muted" style="font-size: 0.75rem;">Images are heavily compressed to Quality 75 and capped at 1200x800 resolution to preserve internet bundles across Zimbabwe.</p>
-                <div class="row g-2">
-                    <div class="col-md-4">
-                        <div class="p-2 border rounded bg-light">
-                            <label class="small fw-bold text-dark d-block mb-1">Primary Face view *</label>
-                            {{ form.image1 }}
-                        </div>
+                <h6 class="fw-bold text-uppercase font-monospace my-3 pt-2" style="font-size: 0.65rem; color: var(--success-color) !important; letter-spacing: 0.5px;">
+                    🖼️ 3. Data-Optimized Image Capture (Max 3)
+                </h6>
+                <p class="mb-3" style="font-size: 0.72rem; color: var(--text-muted) !important; line-height: 1.4;">
+                    Images are compressed at Quality 75 and capped at 1200x800 resolution to optimize bandwidth overhead requirements across networks.
+                </p>
+
+                <div class="d-flex flex-column gap-2 mb-4">
+                    <div class="p-2 rounded-3 border" style="background-color: var(--bg-main) !important; border-color: var(--border-line) !important;">
+                        <label class="fw-bold d-block mb-1" style="font-size: 0.75rem; color: var(--text-main) !important;">Primary Face View *</label>
+                        {{ form.image1 }}
+                        {% if form.image1.errors %}
+                            <div class="text-danger mt-1 font-monospace" style="font-size: 0.68rem;">{{ form.image1.errors.0 }}</div>
+                        {% endif %}
                     </div>
-                    <div class="col-md-4">
-                        <div class="p-2 border rounded bg-light">
-                            <label class="small fw-bold text-muted d-block mb-1">Optional Aspect 2</label>
-                            {{ form.image2 }}
-                        </div>
+
+                    <div class="p-2 rounded-3 border" style="background-color: var(--bg-main) !important; border-color: var(--border-line) !important;">
+                        <label class="fw-bold d-block mb-1" style="font-size: 0.75rem; color: var(--text-muted) !important;">Optional Aspect 2</label>
+                        {{ form.image2 }}
+                        {% if form.image2.errors %}
+                            <div class="text-danger mt-1 font-monospace" style="font-size: 0.68rem;">{{ form.image2.errors.0 }}</div>
+                        {% endif %}
                     </div>
-                    <div class="col-md-4">
-                        <div class="p-2 border rounded bg-light">
-                            <label class="small fw-bold text-muted d-block mb-1">Optional Aspect 3</label>
-                            {{ form.image3 }}
-                        </div>
+
+                    <div class="p-2 rounded-3 border" style="background-color: var(--bg-main) !important; border-color: var(--border-line) !important;">
+                        <label class="fw-bold d-block mb-1" style="font-size: 0.75rem; color: var(--text-muted) !important;">Optional Aspect 3</label>
+                        {{ form.image3 }}
+                        {% if form.image3.errors %}
+                            <div class="text-danger mt-1 font-monospace" style="font-size: 0.68rem;">{{ form.image3.errors.0 }}</div>
+                        {% endif %}
                     </div>
                 </div>
 
-                <hr class="my-4">
+                <hr class="my-3 opacity-25" style="border-color: var(--border-line) !important;">
                 
-                <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm rounded-3">
+                <button type="submit" class="btn btn-success w-100 fw-bold py-2 rounded-3" style="background-color: var(--success-color) !important; border: none; color: #ffffff !important;">
                     🚀 Save Listing & Continue to Checkout
                 </button>
             </form>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card shadow border-0 p-3 rounded-4 bg-light text-dark h-100 border-start border-success border-4">
-            <h5 class="fw-bold text-success mb-2">Listing Rules</h5>
-            <p class="small text-secondary mb-3">Please verify your data aligns with community anti-middleman safety mandates before processing compilation pipelines.</p>
+    <div class="card border-0 shadow-sm rounded-4 mb-4" style="background-color: var(--card-bg) !important; border: 1px solid var(--border-line) !important;">
+        <div class="card-body p-3">
+            <h5 class="fw-bold mb-1" style="font-size: 1rem; color: var(--success-color) !important;">Listing Rules</h5>
+            <p class="small mb-3" style="color: var(--text-muted) !important; line-height: 1.4;">
+                Please verify your data aligns with community anti-middleman safety mandates before processing compilation pipelines.
+            </p>
             
-            <div class="list-group list-group-flush gap-2 bg-transparent">
-                <div class="list-group-item border-0 p-0 bg-transparent mb-2">
-                    <div class="d-flex gap-2">
-                        <span class="fs-4">🛡️</span>
-                        <div>
-                            <h6 class="fw-bold mb-0 small">Direct Accountability</h6>
-                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">Your registered National ID is automatically attached as the underlying guarantor behind this digital asset.</p>
-                        </div>
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex gap-3 align-items-start">
+                    <span class="fs-4" style="line-height: 1;">🛡️</span>
+                    <div>
+                        <h6 class="fw-bold mb-0" style="font-size: 0.85rem; color: var(--text-main) !important;">Direct Accountability</h6>
+                        <p class="mb-0" style="font-size: 0.75rem; color: var(--text-muted) !important; line-height: 1.4;">Your registered National ID is automatically attached as the underlying guarantor behind this digital asset.</p>
                     </div>
                 </div>
                 
-                <div class="list-group-item border-0 p-0 bg-transparent mb-2">
-                    <div class="d-flex gap-2">
-                        <span class="fs-4">💵</span>
-                        <div>
-                            <h6 class="fw-bold mb-0 small">Revenue Before Publishing</h6>
-                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">Listing fees are paid once up front. Borrowers and tenants search completely free of charge.</p>
-                        </div>
+                <div class="d-flex gap-3 align-items-start">
+                    <span class="fs-4" style="line-height: 1;">💵</span>
+                    <div>
+                        <h6 class="fw-bold mb-0" style="font-size: 0.85rem; color: var(--text-main) !important;">Revenue Before Publishing</h6>
+                        <p class="mb-0" style="font-size: 0.75rem; color: var(--text-muted) !important; line-height: 1.4;">Listing fees are paid once up front. Borrowers and tenants search completely free of charge.</p>
                     </div>
                 </div>
 
-                <div class="list-group-item border-0 p-0 bg-transparent">
-                    <div class="d-flex gap-2">
-                        <span class="fs-4">⚠️</span>
-                        <div>
-                            <h6 class="fw-bold mb-0 small">Duplicate Interception Engine</h6>
-                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">Uploading matching photos, descriptions, or the same title across multiple account IDs flags the system and will lock your dashboard profile.</p>
-                        </div>
+                <div class="d-flex gap-3 align-items-start">
+                    <span class="fs-4" style="line-height: 1;">⚠️</span>
+                    <div>
+                        <h6 class="fw-bold mb-0" style="font-size: 0.85rem; color: var(--text-main) !important;">Duplicate Interception Engine</h6>
+                        <p class="mb-0" style="font-size: 0.75rem; color: var(--text-muted) !important; line-height: 1.4;">Uploading matching photos, descriptions, or the same title across multiple account IDs flags the system and will lock your dashboard profile.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 {% endblock %}
