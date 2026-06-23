@@ -141,7 +141,8 @@
                     <button class="btn btn-link top-bar-btn p-0 fs-3" data-bs-toggle="offcanvas" data-bs-target="#leftDrawerMenu" aria-label="Open Navigation Menu">
                         <i class="bi bi-list"></i>
                     </button>
-                    <a href="{% url 'listings:list' %}" class="fw-bold text-decoration-none font-monospace" style="color: var(--text-main) !important;">
+                    <!-- FIXED: Added explicit ?browse=true routing to standard brand home links -->
+                    <a href="{% url 'listings:list' %}?browse=true" class="fw-bold text-decoration-none font-monospace" style="color: var(--text-main) !important;">
                         🛑 NO <span style="color: #2ecc71;">MIDDLEMEN</span>
                     </a>
                 </div>
@@ -156,6 +157,8 @@
             <form method="GET" action="{% url 'listings:list' %}" class="mt-2 m-0">
                 <div class="input-group input-group-sm">
                     <span class="input-group-text bg-secondary border-0 text-white-50"><i class="bi bi-search"></i></span>
+                    <!-- FIXED: Retained hidden browse variable token matching to protect filter queries -->
+                    <input type="hidden" name="browse" value="true">
                     <input type="text" name="q" value="{{ request.GET.q }}" class="form-control bg-secondary text-white" placeholder="Search assets directly...">
                     <button type="submit" class="btn btn-success px-3" style="background-color: #198754 !important; border: none;" aria-label="Submit Search Query"><i class="bi bi-funnel"></i></button>
                 </div>
@@ -178,7 +181,8 @@
                 </div>
                 
                 <div class="list-group list-group-flush">
-                    <a href="{% url 'listings:list' %}" class="list-group-item"><i class="bi bi-house-door me-3 text-success"></i>Home</a>
+                    <!-- FIXED: Forced explicit ?browse=true parameter on offcanvas navigation anchors -->
+                    <a href="{% url 'listings:list' %}?browse=true" class="list-group-item"><i class="bi bi-house-door me-3 text-success"></i>Home</a>
                     <a href="{% url 'listings:list' %}?browse=true" class="list-group-item"><i class="bi bi-search me-3"></i>Browse Assets</a>
                     <a href="#" class="list-group-item"><i class="bi bi-grid me-3"></i>Categories</a>
                     <a href="#" class="list-group-item"><i class="bi bi-bookmark-heart me-3"></i>Saved Assets</a>
@@ -244,10 +248,11 @@
 
         <!-- 6 & 15. STICKY MOBILE BOTTOM NAVIGATION BAR -->
         <div class="mobile-bottom-nav">
-            <a href="{% url 'listings:list' %}" class="bottom-nav-item {% if request.path == '/' and not request.GET.browse %}active{% endif %}">
+            <!-- FIXED: Appended dynamic browse logic string directly into the core bottom nav link array -->
+            <a href="{% url 'listings:list' %}?browse=true" class="bottom-nav-item {% if request.path == '/' and 'browse' in request.get_full_path %}active{% endif %}">
                 <i class="bi bi-house-door-fill"></i><span>Home</span>
             </a>
-            <a href="{% url 'listings:list' %}?browse=true" class="bottom-nav-item {% if 'browse' in request.get_full_path %}active{% endif %}">
+            <a href="{% url 'listings:list' %}?browse=true" class="bottom-nav-item {% if 'browse' in request.get_full_path and request.GET.q %}active{% endif %}">
                 <i class="bi bi-search"></i><span>Search</span>
             </a>
             <a href="{% url 'listings:create' %}" class="bottom-nav-item">
