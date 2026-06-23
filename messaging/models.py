@@ -2,25 +2,15 @@ from django.db import models
 from django.conf import settings
 from listings.models import Listing
 
-from django.db import models
-from django.conf import settings
-from listings.models import Listing
-
 class MessageInquiry(models.Model):
-    """
-    Lightweight, text-only inquiry system.
-    Strictly no attachments or media to enforce data saving.
-    """
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='inquiries')
-    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_messages')
-    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_messages')
-    # messaging/models.py
-class MessageInquiry(models.Model):
-    # ... existing fields ...
+    # Added null=True, blank=True to stop the 'NOT NULL' errors
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='inquiries', null=True, blank=True)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_messages', null=True, blank=True)
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_messages', null=True, blank=True)
+    
     attachment = models.FileField(upload_to='chat_attachments/%Y/%m/%d/', blank=True, null=True)
     message_text = models.TextField(max_length=500, help_text="Keep text clear and concise.")
     
-    # 🔧 NEW: Added WhatsApp-style delivery tracking flag status variables
     is_delivered = models.BooleanField(default=True)
     is_read = models.BooleanField(default=False)
     
@@ -31,4 +21,7 @@ class MessageInquiry(models.Model):
         verbose_name_plural = "Message Inquiries"
 
     def __str__(self):
-        return f"From {self.sender.username} to {self.receiver.username} re: {self.listing.title[:20]}"
+        # We need a safe string representation in case sender/receiver are null
+        sender_name = self.sender.username if self.sender else "Unknown"
+        listing_name = self.listing.title[:20] if self.listing else "No Listing"
+        return f"From {sender_name} re: {listing_name}"
