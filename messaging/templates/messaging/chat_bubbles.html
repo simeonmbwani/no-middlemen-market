@@ -1,29 +1,196 @@
-{% for message in messages_list %}
-    {% if message.sender == request.user %}
-    <div class="align-self-end shadow-sm position-relative text-white px-3 py-2" style="background:#115e3b; max-width:85%; border-radius:14px 14px 0 14px; padding-bottom: 24px !important;">
-        <p class="m-0 text-white" style="font-size: 0.92rem; line-height: 1.4;">{{ message.message_text }}</p>
-        <div class="position-absolute bottom-0 end-0 pe-2 pb-0.5 d-flex align-items-center gap-1" style="font-size: 0.65rem;">
-            <span class="font-monospace text-white-50">{{ message.created_at|date:"H:i" }}</span>
-            
-            {% if message.is_read %}
-                <span style="color: #e74c3c !important;"><i class="bi bi-check2-all"></i></span>
-            {% else %}
-                <span class="text-white-50"><i class="bi bi-check2-all"></i></span>
+{% extends "base.html" %}
+
+{% block title %}Chat{% endblock %}
+
+{% block content %}
+
+<div class="card border-0 rounded-4 shadow-sm overflow-hidden"
+     style="height: calc(100vh - 170px);">
+
+    <!-- HEADER -->
+    <div class="px-3 py-3 border-bottom d-flex justify-content-between align-items-center"
+         style="background:#161920;">
+
+        <div class="d-flex align-items-center gap-2">
+
+            <div class="bg-success rounded-circle text-white fw-bold d-flex align-items-center justify-content-center"
+                 style="width:45px;height:45px;">
+
+                {{ partner.username|slice:":1"|upper }}
+
+            </div>
+
+            <div>
+
+                <div class="fw-bold text-white">
+                    @{{ partner.username }}
+                </div>
+
+                <small class="text-success">
+
+                    {% if partner.is_verified_owner %}
+                        ✓ Verified Owner
+                    {% else %}
+                        Active now
+                    {% endif %}
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <div class="d-flex gap-3">
+
+            {% if partner.phone_number %}
+            <a href="tel:{{ partner.phone_number }}"
+               class="text-success">
+
+                <i class="bi bi-telephone-fill"></i>
+
+            </a>
             {% endif %}
+
+            <i class="bi bi-three-dots-vertical text-light"></i>
+
         </div>
+
     </div>
-    {% else %}
-    <div class="align-self-start shadow-sm border px-3 py-2" style="background:var(--card-bg); border-color:var(--border-line)!important; max-width:85%; border-radius:14px 14px 14px 0; padding-bottom: 24px !important;">
-        <p class="m-0" style="font-size: 0.92rem; line-height: 1.4; color: var(--text-main) !important;">{{ message.message_text }}</p>
-        <div class="position-absolute bottom-0 end-0 pe-2 pb-0.5 font-monospace text-muted" style="font-size: 0.65rem;">
-            {{ message.created_at|date:"H:i" }}
+
+
+    <!-- MESSAGES -->
+    <div id="chatBox"
+         class="flex-grow-1 overflow-auto p-3 d-flex flex-column"
+         style="
+         background-color:var(--bg-main);
+         background-image: radial-gradient(rgba(25,135,84,.05) 1px, transparent 0);
+         background-size:24px 24px;
+         ">
+
+        {% for message in messages_list %}
+
+            {% if message.sender == request.user %}
+
+            <!-- MY MESSAGE -->
+            <div class="align-self-end mb-3">
+
+                <div class="px-3 py-2 text-white shadow-sm"
+                     style="
+                     background:#198754;
+                     border-radius:16px 0 16px 16px;
+                     max-width:280px;
+                     ">
+
+                    {{ message.message_text }}
+
+                    <div class="small text-end mt-1 text-light">
+
+                        {{ message.created_at|date:"H:i" }}
+
+                        <span class="text-info">✓✓</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <!-- PARTNER MESSAGE -->
+            <div class="align-self-start mb-3">
+
+                <div class="px-3 py-2 shadow-sm"
+                     style="
+                     background:var(--card-bg);
+                     border-radius:0 16px 16px 16px;
+                     max-width:280px;
+                     ">
+
+                    {{ message.message_text }}
+
+                    <div class="small text-end mt-1 text-muted">
+
+                        {{ message.created_at|date:"H:i" }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        {% empty %}
+
+        <div class="my-auto text-center">
+
+            <i class="bi bi-chat-left-dots text-success fs-1"></i>
+
+            <h5 class="fw-bold mt-3">
+
+                Start Conversation
+
+            </h5>
+
+            <p class="text-muted">
+
+                Negotiate directly without middlemen.
+
+            </p>
+
         </div>
+
+        {% endfor %}
+
     </div>
-    {% endif %}
-{% empty %}
-<div id="empty-state-wrapper" class="text-center my-auto py-5">
-    <i class="bi bi-chat-dots fs-1 text-success opacity-50"></i>
-    <h6 class="fw-bold mt-3">No messages yet</h6>
-    <p class="text-muted small px-4">Conversations will synchronize here in real time.</p>
+
+
+    <!-- INPUT -->
+    <form method="POST"
+          class="border-top p-2">
+
+        {% csrf_token %}
+
+        <div class="input-group">
+
+            <button type="button"
+                    class="btn btn-light">
+
+                <i class="bi bi-paperclip"></i>
+
+            </button>
+
+            <input type="text"
+                   name="reply_text"
+                   class="form-control rounded-start-pill"
+                   placeholder="Type a message..."
+                   autocomplete="off"
+                   required>
+
+            <button class="btn btn-success rounded-end-pill px-4">
+
+                <i class="bi bi-send-fill"></i>
+
+            </button>
+
+        </div>
+
+    </form>
+
 </div>
-{% endfor %}
+
+
+<script>
+
+window.onload = function(){
+
+    let box = document.getElementById("chatBox");
+
+    box.scrollTop = box.scrollHeight;
+
+}
+
+</script>
+
+{% endblock %}
