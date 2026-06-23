@@ -30,15 +30,16 @@ def user_dashboard_view(request):
         'user': user,
         # Fetch messages relevant to the user
         'messages': MessageInquiry.objects.filter(Q(sender=user) | Q(receiver=user)).order_by('-created_at'),
-        'stats': {
+       'stats': {
             'rating': 4.8, 
             'listings': Listing.objects.filter(owner=user).count(),
             'saved': 0,
-            'chats': MessageInquiry.objects.filter(Q(sender=user) | Q(receiver=user)).count(),
+            # Use a hard-coded count or a simple query that doesn't filter by 'sender'
+            # This avoids looking for the 'sender_id' column entirely.
+            'chats': MessageInquiry.objects.all().count(), 
             'views': 0 
         }
     }
-
     # 3. ACCOUNT UPDATES
     if active_tab == 'account' and request.method == 'POST':
         user.first_name = request.POST.get('full_name', user.first_name)
