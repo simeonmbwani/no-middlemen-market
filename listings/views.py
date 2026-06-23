@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model  # 💡 Injected to query real system profile counts
+from django.contrib.auth import get_user_model  # 💡 Dynamically targets custom accounts.User model layout
 from django.contrib import messages
 from django.db.models import Q
 from django.utils import translation
@@ -60,12 +60,12 @@ def listing_list_view(request):
                                          .values_list('district', flat=True)\
                                          .distinct().order_by('district')
 
-    # 📊 DYNAMIC COUNTER CALCULATION: Replaces the hardcoded 5K+ with real database metrics
-    live_users_count = User.objects.count()
+    # 📊 DYNAMIC FIXED COUNTER: Direct inline manager lookup prevents lookup NameErrors completely
+    live_users_count = get_user_model().objects.count()
 
     context = {
         'listings': queryset,
-        'total_users_count': live_users_count,  # 👈 Passed seamlessly to your metrics card row layout!
+        'total_users_count': live_users_count,  # Passed seamlessly to your metrics card row layout!
         'category_choices': Listing.CATEGORY_CHOICES,  # Feeds nested select groupings
         'available_districts': available_districts,
         'ZIG_MID_RATE': getattr(settings, 'ZIG_MID_RATE', 25.00),  # Injected from global configuration metrics
